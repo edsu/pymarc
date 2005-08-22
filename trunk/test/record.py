@@ -27,7 +27,7 @@ class RecordTest( unittest.TestCase ):
 
     def testFieldNotFound( self ):
         record = Record()
-        self.assertTrue( len( record.fields ) == 0 )
+        self.assertEquals( len( record.fields ), 0 )
 
     def testFind( self ):
         record = Record() 
@@ -58,7 +58,7 @@ class RecordTest( unittest.TestCase ):
             data = [ 'a', 'Object Oriented' ] )
         record.addField( subject2 )
         found = record.getFields( '650', '651' )
-        self.assertTrue( len(found), 2 )
+        self.assertEquals( len(found), 2 )
 
     def testBadLeader( self ):
         record = Record()
@@ -72,21 +72,21 @@ class RecordTest( unittest.TestCase ):
 
     def testTitle( self ):
         record = Record()
-        self.assertTrue( record.title() == None )
+        self.assertEquals( record.title(), None )
         record.addField( Field( '245', [0,1], 
             subfields=[ 'a', "Foo :", 'b', 'bar' ] ) )
-        self.assertTrue( record.title() == 'Foo :bar' )
+        self.assertEquals( record.title(), 'Foo :bar' )
 
         record = Record()
         record.addField( Field( '245', [0,1], 
             subfields=[ 'a', "Farghin" ] ) )
-        self.assertTrue( record.title() == "Farghin" )
+        self.assertEquals( record.title(), "Farghin" )
 
     def testISBN( self ):
         record = Record()
-        self.assertTrue( record.isbn() == None ) 
+        self.assertEquals( record.isbn(), None ) 
         record.addField( Field( '020', [0,1], subfields=['a', '123456789' ] ) )
-        self.assertTrue( record.isbn() == '123456789' )
+        self.assertEquals( record.isbn(), '123456789' )
 
 
 def suite():

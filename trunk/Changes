@@ -1,4 +1,7 @@
-v0.5
+v0.6    
+        - fixed test suite to run under the unittest that ships with python2.3
+
+v0.5  Thu Feb 10 10:01:12 CST 2005
         - handle empty subfields
 
 v0.4  Wed Feb  2 22:29:33 CST 2005

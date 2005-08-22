@@ -15,8 +15,8 @@ class FieldTest( unittest.TestCase ):
          )
 
     def testString( self ):
-        self.assertTrue( self.field, 
-            "245 01 $aHuckleberry Finn: $bAn American Odyssey")
+        self.assertEquals( str(self.field), 
+            '245 01 $aHuckleberry Finn: $bAn American Odyssey')
 
     def testIndicators( self ):
         assert self.field.indicator1 is 0
@@ -46,13 +46,13 @@ class FieldTest( unittest.TestCase ):
         for subfield in self.field:
             string += subfield[0]
             string += subfield[1]
-        self.assertTrue( string == "aHuckleberry Finn: bAn American Odyssey" )
+        self.assertEquals( string, "aHuckleberry Finn: bAn American Odyssey" )
 
     def testValue( self ):
-        self.assertTrue( self.field.value(), 
-            "Huckleberry Finn: An American Odyssey" )
+        self.assertEquals( self.field.value(), 
+            'Huckleberry Finn: An American Odyssey' )
         controlField = Field( tag='001', data='foobar' )
-        self.assertTrue( controlField.value() == "foobar" )
+        self.assertEquals( controlField.value(), "foobar" )
 
 def suite():
     suite = unittest.makeSuite( FieldTest, 'test' )
