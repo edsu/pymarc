@@ -3,7 +3,7 @@ class pymarcException( Exception ):
 
 class RecordLengthInvalid( pymarcException):
     def __str__( self ):
-        return( "invalid record length in first 5 bytes of record" )
+        return( "Invalid record length in first 5 bytes of record" )
 
 class RecordLeaderInvalid( pymarcException ):
     def __str__ ( self ):
@@ -23,7 +23,7 @@ class BaseAddressInvalid( pymarcException ):
 
 class WriteNeedsRecord( pymarcException ):
     def __str__( self ):
-        return "write requires a pymarc.Record object as an argument"
+        return "Write requires a pymarc.Record object as an argument"
 
 class NoActiveFile( pymarcException ):
     def __str__( self ):

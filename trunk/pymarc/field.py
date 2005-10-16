@@ -21,7 +21,7 @@ class Field( object ):
             field = Field( tag='001', data='fol05731351' )
 
         """
-        tag = "%03d" % int(tag)
+        tag = "%03s" % tag
         if ( tag < '010' ):
             self.tag = tag
             self.data = data
