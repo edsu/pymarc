@@ -54,6 +54,10 @@ class FieldTest( unittest.TestCase ):
         controlField = Field( tag='001', data='foobar' )
         self.assertEquals( controlField.value(), "foobar" )
 
+    def testNonIntegerTag( self ):
+        # make sure this doesn't throw an exception
+        f = Field( tag="3 0", indicators=[0,1], subfields=['a', 'foo'] )
+
 def suite():
     suite = unittest.makeSuite( FieldTest, 'test' )
     return suite
