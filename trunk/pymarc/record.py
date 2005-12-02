@@ -39,7 +39,7 @@ class Record( object ):
     """
 
     def __init__( self, data='' ):
-        self.leader = ''
+        self.leader = ' ' * LEADER_LEN
         self.fields = list()
         self.pos = 0
         if len(data) > 0:

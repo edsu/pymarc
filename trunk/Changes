@@ -1,5 +1,7 @@
-v0.6    
+v0.6  Tue Nov 29 20:48:31 CST 2005
         - fixed test suite to run under the unittest that ships with python2.3
+        - allow non-integer field tags
+        - fixed MARCWriter and added test (thanks Mikel Larreategi)
 
 v0.5  Thu Feb 10 10:01:12 CST 2005
         - handle empty subfields

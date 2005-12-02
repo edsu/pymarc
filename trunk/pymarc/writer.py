@@ -38,7 +38,7 @@ class MARCWriter( Writer ):
             raise WriteNeedsRecord
         if type( self.fh ) != file:
             raise NoActiveFile
-        self.fh.write( record.encodeMARC() )
+        self.fh.write( record.asMARC21() )
 
     def close( self ):
         self.fh.close()
