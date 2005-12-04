@@ -22,9 +22,9 @@ if sys.version_info < (2, 3):
 
 setup( 
     name             = 'pymarc',
-    version          = '0.5',
+    version          = '0.6',
     url              = 'http://www.textualize.com/pymarc',
-    download_url     = 'http://www.textualize.com/pymarc/latest.tar.gz',
+    download_url     = 'http://www.textualize.com/archive/pymarc/latest.tar.gz',
     author           = 'Ed Summers',
     author_email     = 'ehs@pobox.com',
     license          = 'http://www.opensource.org/licenses/bsd-license.php',
