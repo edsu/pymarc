@@ -1,0 +1,31 @@
+v0.7    Mon Jan 23 15:08:55 EST 2006
+        - added addSubfield() to Subfield (thanks Kurt Nordstrom)
+
+v0.6  Tue Nov 29 20:48:31 CST 2005
+        - fixed test suite to run under the unittest that ships with python2.3
+        - allow non-integer field tags
+        - fixed MARCWriter and added test (thanks Mikel Larreategi)
+
+v0.5  Thu Feb 10 10:01:12 CST 2005
+        - handle empty subfields
+
+v0.4  Wed Feb  2 22:29:33 CST 2005
+        - fixed directory validation: thanks Aaron Lav
+        - added iterator for pymarc.Field for iterating through subfields
+        - added pymarc.Field.value() for getting a field value easily
+
+v0.3   Wed Jan  5 17:03:37 CST 2005
+        - changed mind about accessors (again):
+          removed getField() must use getFields()
+          renamed subfield() to getSubfields() and have it return a list
+        - added doctest support to pymarc/__init__.py
+        - added a test batch file of python data 
+
+v0.2    Tue Jan  4 21:01:22 CST 2005
+        - removed getField() and renamed getFields() to find()
+
+v0.11   Mon Jan  3 20:42:19 CST 2005
+        - fixed test suite execution
+
+v0.1    Wed Dec 29 19:54:23 CST 2004
+        - initial release
