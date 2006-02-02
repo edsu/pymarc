@@ -96,6 +96,15 @@ class Field( object ):
                 values.append( subfield[1] )
         return values 
 
+    def addSubfield( self, code, value ):
+        """
+        Adds a subfield code/value pair to the field.
+
+            field.addSubfield('u', 'http://www.loc.gov')
+        """
+        self.subfields.append(code)
+        self.subfields.append(value)
+
     def isControlField( self ):
         """
         returns true or false if the field is considered a control field.

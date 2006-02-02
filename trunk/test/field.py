@@ -58,6 +58,11 @@ class FieldTest( unittest.TestCase ):
         # make sure this doesn't throw an exception
         f = Field( tag="3 0", indicators=[0,1], subfields=['a', 'foo'] )
 
+    def testAddSubfield( self ):
+        f = Field( tag="245", indicators=[0,1], subfields=['a', 'foo'] )
+        f.addSubfield('a','bar')
+        self.assertEquals( f.__str__(), '245 01 $afoo$abar')
+
 def suite():
     suite = unittest.makeSuite( FieldTest, 'test' )
     return suite
