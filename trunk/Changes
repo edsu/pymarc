@@ -9,6 +9,10 @@ v0.8    Mon Jan 30 07:05:36 CST 2006
 
           reader = MARCReader(file('marc.dat'))
 
+          Thanks to Daniel Hoth for suggesting this. It just makes sense to 
+          be able to pass in MARC that you got from a Z39.50 network connection
+          or database, etc.
+
 v0.7    Mon Jan 23 15:08:55 EST 2006
         - added addSubfield() to Subfield (thanks Kurt Nordstrom)
 
