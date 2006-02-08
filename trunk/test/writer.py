@@ -8,7 +8,7 @@ class MARCWriterTest(unittest.TestCase):
     def testWrite(self):
 
         # write a record off to a file
-        writer = pymarc.MARCWriter('test/writer-test.dat')
+        writer = pymarc.MARCWriter(file('test/writer-test.dat','w'))
         record = pymarc.Record()
         field = pymarc.Field('245', ['0','0'], ['a', 'foo'])
         record.addField(field)
@@ -16,7 +16,7 @@ class MARCWriterTest(unittest.TestCase):
         writer.close()
 
         # read it back in
-        reader = pymarc.MARCReader('test/writer-test.dat')
+        reader = pymarc.MARCReader(file('test/writer-test.dat'))
         record = reader.next()
 
 def suite():

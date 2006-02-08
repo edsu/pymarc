@@ -9,7 +9,7 @@ class Encode( unittest.TestCase ):
         # get raw data from file 
         original = file( 'test/one.dat' ).read()
         # create a record object for the file
-        reader = MARCReader( "test/one.dat" )
+        reader = MARCReader(file('test/one.dat'))
         record = reader.next()
         # make sure original data is the same as 
         # the record encoded as MARC

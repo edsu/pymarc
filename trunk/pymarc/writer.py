@@ -1,6 +1,6 @@
 from pymarc import Record, Field, WriteNeedsRecord, NoActiveFile
 from types import *
-import string
+from cStringIO import StringIO
 
 class Writer( object ):
     
@@ -15,32 +15,35 @@ class MARCWriter( Writer ):
 
         from pymarc import MARCWriter
 
-        ## pass in a filename
-        writer = MARCWriter( 'file.dat' )
-        writer.write( record )
-    
-        ## pass in a file object
-        f = file( 'file.dat' );
-        writer = MARCWriter( f )
-        writer.write( record )
+        ## pass in a file
+        writer = MARCWriter(file('file.dat','w'))
+        writer.write(record)
+   
+        ## use StringIO if you want to write to a string
+        string = StringIO()
+        writer = MARCWriter(string)
+        writer.write(record)
+        print string
     """
 
-    def __init__( self, f ):
+    def __init__(self, f):
         """
-        The constructor which you can pass either the full path to a file
-        you want to write to, or a file object.
+        You need to pass in a file like object.
         """
-        if ( type( f ) == FileType ): self.fh = f
-        else: self.fh = file( f, 'w' )
+        self.fh = f
 
-    def write( self, record ):
-        if type( record ) != Record:
+    def write(self, record):
+        """
+        Writes a record.
+        """
+        if type(record) != Record:
             raise WriteNeedsRecord
-        if type( self.fh ) != file:
-            raise NoActiveFile
-        self.fh.write( record.asMARC21() )
+        self.fh.write(record.asMARC21())
 
     def close( self ):
+        """
+        Closes the file.
+        """
         self.fh.close()
         self.fh = None
 

@@ -2,7 +2,7 @@ from pymarc import Record, Field
 from constants import END_OF_RECORD
 from exceptions import *
 from types import *
-import string
+from cStringIO import StringIO
 
 class Reader( object ):
     """
@@ -19,26 +19,24 @@ class MARCReader( Reader ):
 
         from pymarc import MARCReader
 
-        ## pass in a filename
-        reader = MARCReader( 'file.dat' )
+        ## pass in a file object
+        reader = MARCReader(file('file.dat'))
         for record in reader:
             ...
-    
-        ## pass in a file object
-        f = file( 'file.dat' );
-        reader = MARCReader( f )
+
+         ## pass in marc in transmission format 
+        reader = MARCReader(rawmarc)
         for record in reader:
             ...
     
     """
 
-    def __init__( self, f ):
+    def __init__(self, f):
         """
-        The constructor which you can pass either the full path to a file
-        you want to read, or a file object.
+        The constructor which you can pass either raw marc or a file object.
         """
-        if ( type( f ) == FileType ): self.fh = f
-        else: self.fh = file( f, 'r' )
+        if (type(f) == FileType): self.fh = f
+        else: self.fh = StringIO(f)
 
     def next( self ):
         """

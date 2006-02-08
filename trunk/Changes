@@ -1,3 +1,14 @@
+v0.8    Mon Jan 30 07:05:36 CST 2006
+        - added the ability to read raw marc from strings THIS MAY BREAK
+          YOUR CODE. pymarc no longer supports passing file paths to the
+          MARCReader constructor. You need to simply change:
+
+          reader = MARCReader('marc.dat')
+
+          to:
+
+          reader = MARCReader(file('marc.dat'))
+
 v0.7    Mon Jan 23 15:08:55 EST 2006
         - added addSubfield() to Subfield (thanks Kurt Nordstrom)
 
