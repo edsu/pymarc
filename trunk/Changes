@@ -1,3 +1,7 @@
+v0.81   Mon Jan 30 16:33:36 EST 2006
+        - getFields() wasn't returning all the fields when no tag
+          was passed in.
+
 v0.8    Mon Jan 30 07:05:36 CST 2006
         - added the ability to read raw marc from strings THIS MAY BREAK
           YOUR CODE. pymarc no longer supports passing file paths to the

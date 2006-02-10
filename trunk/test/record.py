@@ -44,6 +44,8 @@ class RecordTest( unittest.TestCase ):
         found = record.getFields( '650' )
         self.assertEqual( found[0], subject1, 'getFields() item 1' )
         self.assertEqual( found[0], subject1, 'getFields() item 2' )
+        found = record.getFields()
+        self.assertEqual(len(found), 2, 'getFields() with no tag')
 
     def testMultiFind( self ):
         record = Record() 

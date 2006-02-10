@@ -100,6 +100,9 @@ class Record( object ):
         If no tag is passed in to fields() a list of all the fields will be 
         returned.
         """
+        if (len(args) == 0):
+            return self.fields
+
         found = list()
         for field in self.fields:
             if field.tag in args:
