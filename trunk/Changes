@@ -1,3 +1,7 @@
+v0.85   Fri Feb  3 13:08:35 EST 2006
+        - added default leader template for when records are created 
+          from scratch (thanks Kurt Nordstrom)
+
 v0.81   Mon Jan 30 16:33:36 EST 2006
         - getFields() wasn't returning all the fields when no tag
           was passed in.
