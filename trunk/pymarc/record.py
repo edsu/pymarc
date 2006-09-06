@@ -81,8 +81,7 @@ class Record( object ):
         addField() will add pymarc.Field objects to a Record object.
         Optionally you can pass in multiple fields.
         """
-        for field in fields:
-            self.fields.append( field )
+        self.fields.extend(fields)
 
     def getFields( self, *args ):
         """
@@ -103,11 +102,7 @@ class Record( object ):
         if (len(args) == 0):
             return self.fields
 
-        found = list()
-        for field in self.fields:
-            if field.tag in args:
-                found.append( field )
-        return found
+        return [f for f in self.fields if f.tag in args]
 
     def decodeMARC( self, marc ):
         """
