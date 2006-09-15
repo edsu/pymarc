@@ -1,3 +1,6 @@
+????
+        - various simplifications and pythonifications (thanks Dan Chudnov)
+
 v0.85   Fri Feb  3 13:08:35 EST 2006
         - added default leader template for when records are created 
           from scratch (thanks Kurt Nordstrom)
