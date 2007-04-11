@@ -1,5 +1,6 @@
-????
+v0.9    Tue Apr 10 21:54:02 EDT 2007
         - various simplifications and pythonifications (thanks Dan Chudnov)
+        - added easy_install support
 
 v0.85   Fri Feb  3 13:08:35 EST 2006
         - added default leader template for when records are created 

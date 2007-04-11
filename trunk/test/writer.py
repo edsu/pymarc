@@ -2,6 +2,7 @@ import util
 import unittest
 import pymarc
 import re
+import os
 
 class MARCWriterTest(unittest.TestCase):
 
@@ -18,6 +19,9 @@ class MARCWriterTest(unittest.TestCase):
         # read it back in
         reader = pymarc.MARCReader(file('test/writer-test.dat'))
         record = reader.next()
+
+        # remove it
+        os.remove('test/writer-test.dat')
 
 def suite():
     suite = unittest.makeSuite(MARCWriterTest, 'test')

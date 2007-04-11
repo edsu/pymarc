@@ -1,5 +1,9 @@
-import sys
-from distutils.core import setup
+# bootstrap easy_install
+import ez_setup
+ez_setup.use_setuptools()
+
+from setuptools import setup
+from sys import version_info
 
 classifiers = """\
 Intended Audience :: Education
@@ -13,7 +17,7 @@ Topic :: Text Processing :: General
 # workaround for older pythons that don't 
 # understand classifiers 
 
-if sys.version_info < (2, 3):
+if version_info < (2, 3):
     _setup = setup
     def setup(**kwargs):
         if kwargs.has_key("classifiers"):
@@ -22,7 +26,7 @@ if sys.version_info < (2, 3):
 
 setup( 
     name             = 'pymarc',
-    version          = '0.85',
+    version          = '0.9',
     url              = 'http://www.textualize.com/pymarc',
     download_url     = 'http://www.textualize.com/archive/pymarc/latest.tar.gz',
     author           = 'Ed Summers',
@@ -31,5 +35,6 @@ setup(
     packages         = [ 'pymarc' ],
     description      = "read, write and modify MARC bibliographic data",
     classifiers      = filter( None, classifiers.split("\n") ),
+    test_suite       = 'test'
 )
 
