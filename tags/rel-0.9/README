@@ -1,0 +1,30 @@
+DESCRIPTION
+-----------
+
+pymarc is a python library for working with MARC21 bibliographic data
+loosely based on the MARC/Perl suite of modules (http://marcpm.sf.net).
+More about pymarc can be found at http://www.textualize.com/pymarc
+
+INSTALLATION
+------------
+
+Run the pymarc test suite to make sure things are in order with the 
+distribution:
+
+    python test.py
+
+And then install:
+
+    python setup.py install
+
+For typical usage of this library look at the documentation in 
+pymarc/__init__.py
+
+TODO
+----
+
+- marc8/utf8 translation
+- marcxml support
+
+LICENSE: BSD 
+AUTHOR: Ed Summers <ehs@pobox.com>
