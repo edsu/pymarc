@@ -18,12 +18,11 @@ And then install:
     python setup.py install
 
 For typical usage of this library look at the documentation in 
-pymarc/__init__.py
+pymarc/__init__.py or at the unittests found in the test directory.
 
 TODO
 ----
 
-- marc8/utf8 translation
 - marcxml support
 
 LICENSE: BSD 
