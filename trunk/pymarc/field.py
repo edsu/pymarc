@@ -27,6 +27,7 @@ class Field( object ):
             self.data = data
         else: 
             self.tag = tag 
+            self.indicators = indicators
             self.indicator1 = indicators[0] 
             self.indicator2 = indicators[1] 
             self.subfields = subfields 
@@ -38,12 +39,25 @@ class Field( object ):
     def __str__( self ):
         """
         A Field object in a string context will return the tag, indicators
-        and subfield as a string.
+        and subfield as a string. This follows MARCMaker format; see [1]
+        and [2] for further reference. Special character mnemonic strings
+        have yet to be implemented (see [3]), so be forewarned. Note also
+        for complete MARCMaker compatibility, you will need to change your
+        newlines to DOS format ('\r\n').
+        
+        [1] http://www.loc.gov/marc/makrbrkr.html#mechanics
+        [2] http://search.cpan.org/~eijabb/MARC-File-MARCMaker/
+        [3] http://www.loc.gov/marc/mnemonics.html
         """
         if ( self.isControlField() ): 
-            text = "%s    %s" % ( self.tag, self.data )
+            text = "=%s  %s" % ( self.tag, self.data.replace(' ','\\') )
         else:
-            text = "%s %s%s " % ( self.tag, self.indicator1, self.indicator2 )
+            text = "=%s  " % ( self.tag )
+            for indicator in self.indicators:
+                if indicator in (' ','\\'):
+                    text += "\\"
+                else:
+                    text += "%s" % indicator
             for subfield in self:
                 text += ("$%s%s" % subfield) 
         return text
@@ -125,3 +139,24 @@ class Field( object ):
             marc += SUBFIELD_INDICATOR + subfield[0] + subfield[1]
         return marc + END_OF_FIELD
 
+    def formatField( self ):
+        """
+        Returns the field as a string without tag, indicators, and subfield indicators. Like pymarc.Field.value(), but prettier (adds spaces, formats subject headings).
+        """
+        if self.isControlField(): return self.data
+        fielddata = ''
+        for subfield in self:
+            if not self.isSubjectField():
+                fielddata += ' %s' % subfield[1]
+            else:
+                if subfield[0] not in ('v','x','y','z'):
+                    fielddata += ' %s' % subfield[1]
+                else: fielddata += ' -- %s' % subfield[1]
+        return fielddata.strip()
+    
+    def isSubjectField( self ):
+        """
+        returns True or False if the field is considered a subject field - used by formatField
+        """
+        if self.tag.startswith('6'): return True
+        return False

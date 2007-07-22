@@ -20,8 +20,8 @@ class MARCReaderFileTest( unittest.TestCase ):
 
     def test_string( self ):
         ## basic test of stringification
-        startsWithLeader = re.compile( "^LDR" )
-        hasNumericTag = re.compile( "\n\d\d\d " )
+        startsWithLeader = re.compile( "^=LDR" )
+        hasNumericTag = re.compile( "\n=\d\d\d " )
         for record in self.reader:
             text = str(record)
             self.failUnless( startsWithLeader.search(text), 'got leader')

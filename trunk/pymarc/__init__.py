@@ -56,7 +56,7 @@ by writing to the author.
 
 '''
 
-__version__ = '0.85'
+__version__ = '1.0'
 
 from record import *
 from field import * 

@@ -67,7 +67,7 @@ class RecordTest( unittest.TestCase ):
         self.failUnlessRaises( RecordLeaderInvalid, 
             record.decodeMARC, 'foo' )
 
-    def test_bad_base_ddress( self ):
+    def test_bad_base_address( self ):
         record = Record()
         self.failUnlessRaises( BaseAddressInvalid,
             record.decodeMARC, '00695cam  2200241Ia 45x00' )
@@ -89,7 +89,84 @@ class RecordTest( unittest.TestCase ):
         self.assertEquals( record.isbn(), None ) 
         record.addField( Field( '020', [0,1], subfields=['a', '123456789' ] ) )
         self.assertEquals( record.isbn(), '123456789' )
+    
+    def test_author( self ):
+        record = Record()
+        self.assertEquals( record.author(), None)
+        record.addField( Field( '100', [1,0], subfields=['a', 'Bletch, Foobie,', 'd', '1979-1981.'] ) )
+        self.assertEquals( record.author(), 'Bletch, Foobie, 1979-1981.')
+        
+        record = Record()
+        record.addField( Field( '130', [0,' '], subfields=['a', 'Bible.', 'l', 'Python.'] ) )
+        self.assertEquals( record.author(), None)
 
+    def test_uniformtitle( self ):
+        record = Record()
+        self.assertEquals( record.uniformtitle(), None )
+        record.addField( Field( '130', [0,' '], 
+            subfields=[ 'a', "Tosefta.", 'l', "English.", 'f', "1977." ] ) )
+        self.assertEquals( record.uniformtitle(), "Tosefta. English. 1977." )
+
+        record = Record()
+        record.addField( Field( '240', [1,4], 
+            subfields=[ 'a', "The Pickwick papers.", 'l', "French." ] ) )
+        self.assertEquals( record.uniformtitle(), "The Pickwick papers. French." )
+    
+    def test_subjects( self ):
+        record = Record()
+        r1 = '=630  0\\$aTosefta.$lEnglish.$f1977.'
+        r2 = '=600  10$aLe Peu, Pepe.'
+        shlist = [r1, r2]
+        self.assertEquals( record.subjects(), [] )
+        record.addField( Field( '630', [0,' '], 
+            subfields=[ 'a', "Tosefta.", 'l', "English.", 'f', "1977." ] ) )
+        record.addField( Field( '730', [0,' '], 
+            subfields=[ 'a', "Tosefta.", 'l', "English.", 'f', "1977." ] ) )
+        record.addField( Field( '600', [1,0], 
+            subfields=[ 'a', "Le Peu, Pepe." ] ) )
+        self.assertEquals( len( record.subjects() ), 2 )
+        self.assertEquals( record.subjects()[0].__str__(), r1 )
+        self.assertEquals( record.subjects()[1].__str__(), r2 )
+        rshlist = [rsh.__str__() for rsh in record.subjects()]
+        self.assertEquals( shlist, rshlist )
+     
+    def test_added_entries( self ):
+        record = Record()
+        ae1 = '=730  0\\$aTosefta.$lEnglish.$f1977.'
+        ae2 = '=700  10$aLe Peu, Pepe.'
+        aelist = [ae1, ae2]
+        self.assertEquals( record.addedentries(), [] )
+        record.addField( Field( '730', [0,' '], 
+            subfields=[ 'a', "Tosefta.", 'l', "English.", 'f', "1977." ] ) )
+        record.addField( Field( '700', [1,0], 
+            subfields=[ 'a', "Le Peu, Pepe." ] ) )
+        record.addField( Field( '245', [0,0],
+            subfields=[ 'a', "Le Peu's Tosefa." ] ) )
+        self.assertEquals( len( record.addedentries() ), 2 )
+        self.assertEquals( record.addedentries()[0].__str__(), ae1 )
+        self.assertEquals( record.addedentries()[1].__str__(), ae2 )
+        raelist = [rae.__str__() for rae in record.addedentries()]
+        self.assertEquals( aelist, raelist )
+
+    def test_location( self ):
+        record = Record()
+        loc1 = '=852  \\\\$aAmerican Institute of Physics.$bNiels Bohr Library and Archives.$eCollege Park, MD'
+        loc2 = '=852  01$aCtY$bMain$hLB201$i.M63'
+        loclist = [loc1, loc2]
+        self.assertEquals( record.location(), [] )
+        record.addField( Field('040', [' ',' '],
+            subfields=[ 'a', 'DLC', 'c', 'DLC' ] ) )
+        record.addField( Field('852', [' ',' '],
+            subfields=[ 'a', 'American Institute of Physics.',
+                'b', 'Niels Bohr Library and Archives.',
+                'e', 'College Park, MD' ] ) )
+        record.addField( Field('852', [0,1],
+            subfields=['a', 'CtY', 'b', 'Main', 'h', 'LB201', 'i', '.M63'] ) )
+        self.assertEquals( len( record.location() ), 2 )
+        self.assertEquals( record.location()[0].__str__(), loc1 )
+        self.assertEquals( record.location()[1].__str__(), loc2 )
+        rloclist = [rloc.__str__() for rloc in record.location()]
+        self.assertEquals( loclist, rloclist )
 
 def suite():
     suite = unittest.makeSuite( RecordTest, 'test' )

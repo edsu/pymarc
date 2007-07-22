@@ -6,6 +6,19 @@ v1.0    Wed Jul 18 14:55:19 EDT 2007
         - added some tests for new marc8_to_unicode functionality. Thanks
           to the Library of Congress for providing equivalent marc8 and 
           utf8 marc record batches to use for constructing test data
+        - The folowing changes are courtesy of Mark Matienzo:
+          - modified __str__ methods for Field and Record to produce 
+            data in MARCMaker [1] format. THIS MAY BREAK YOUR CODE. This is
+            not a complete implementation as support for special character
+            mnemonics [2] has yet to be added
+          - modified test cases for string conversion and added tests for
+            control fields
+          - added formatField() and isSubjectField() methods to Field and
+            the author(), uniformtitle(), subjects(), addedentries(),
+            and location() methods to Record, and tests for those methods
+
+        [1] http://www.loc.gov/marc/makrbrkr.html
+        [2] http://www.loc.gov/marc/mnemonics.html
 
 v0.9    Tue Apr 10 21:54:02 EDT 2007
         - various simplifications and pythonifications (thanks Dan Chudnov)

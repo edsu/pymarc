@@ -48,11 +48,13 @@ class Record( object ):
     def __str__( self ):
         """
         In a string context a Record object will return a prettified version
-        of the record resembling something like this:
+        of the record in MARCMaker format. See the docstring for Field.__str__
+        for more information.
         """
         # join is significantly faster than concatenation
-        text = "LDR %s\n" % self.leader
+        text = "=LDR  %s\n" % self.leader
         text += string.join( map( str, self.fields ), "\n" )
+        text += '\n'
         return text
 
     def __getitem__( self, tag ):
@@ -232,6 +234,49 @@ class Record( object ):
         return isbn
 
     def author( self ):
+        if self['100']:
+            return self['100'].formatField()
+        elif self['110']:
+            return self['110'].formatField()
+        elif self['111']:
+            return self['111'].formatField()
+        return None
+    
+    def uniformtitle( self ):
+        if self['130']:
+            return self['130'].formatField()
+        elif self['240']:
+            return self['240'].formatField()
+        return None
+
+    def subjects( self ):
+        """
+        Note: Fields 690-699 are considered "local" added entry fields but
+        occur with some frequency in OCLC and RLIN records.
+        """
+        subjlist = self.getFields (
+            '600', '610', '611', '630', '648', '650', '651', '653', '654',
+            '655', '656', '657', '658', '662', '690', '691', '696', '697',
+            '698', '699'
+          )
+        return subjlist
+    
+    def addedentries( self ):
+        """
+        Note: Fields 790-799 are considered "local" added entry fields but
+        occur with some frequency in OCLC and RLIN records.
+        """
+        aelist = self.getFields (
+            '700', '710', '711', '720', '730', '740', '752', '753', '754',
+            '790', '791', '792', '793', '796', '797', '798', '799'
+          )
+        return aelist
+    
+    def location( self ):
+        loc = self.getFields('852')
+        return loc
+
+    def notes( self ):
         # todo
         pass
 
@@ -242,12 +287,3 @@ class Record( object ):
     def pubyear( self ):
         # todo
         pass
-
-    def subjects( self ):
-        # todo
-        pass
-
-    def notes( self ):
-        # todo
-        pass
-
