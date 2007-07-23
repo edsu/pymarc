@@ -26,7 +26,7 @@ if version_info < (2, 3):
 
 setup( 
     name             = 'pymarc',
-    version          = '0.9',
+    version          = '1.0',
     url              = 'http://www.textualize.com/pymarc',
     download_url     = 'http://www.textualize.com/archive/pymarc/latest.tar.gz',
     author           = 'Ed Summers',
