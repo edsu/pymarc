@@ -64,7 +64,7 @@ from exceptions import *
 from reader import *
 from writer import *
 from constants import *
-from unicode import marc8_to_unicode
+from marc8 import marc8_to_unicode
 
 if __name__ == "__main__":
     import doctest
