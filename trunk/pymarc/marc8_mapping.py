@@ -1,7 +1,7 @@
 # see http://www.loc.gov/marc/specifications/speccharmarc8.html
 
 import unicodedata
-import marc_to_unicode
+import marc8_mapping 
 
 def marc8_to_unicode(marc8):
   converter = MARC8_to_Unicode()
@@ -56,7 +56,6 @@ class MARC8_to_Unicode:
                     self.g1 = ord(s[pos+2])
                     pos = pos + 3
                     continue
-
             
             mb_flag = self.is_multibyte(self.g0)
                 
@@ -76,14 +75,13 @@ class MARC8_to_Unicode:
 
             try:
                 if d > 0x80 and not mb_flag:
-                    (uni, cflag) = marc_to_unicode.codesets [self.g1] [d]
+                    (uni, cflag) = marc8_mapping.codesets [self.g1] [d]
                 else:
-                    (uni, cflag) = marc_to_unicode.codesets [self.g0] [d]
+                    (uni, cflag) = marc8_mapping.codesets [self.g0] [d]
             except KeyError, e:
                 print "couldn't find", self.g0, self.g1, d, str(e)
                 uni = ord(' ')
                 cflag = False
-                
                 
             if cflag:
                 combinings.append (unichr (uni))
@@ -92,6 +90,7 @@ class MARC8_to_Unicode:
                 if len (combinings) > 0:
                     uni_list += combinings
                     combinings = []
+
         # what to do if combining chars left over?
         uni_str = u"".join (uni_list)
         
@@ -100,11 +99,3 @@ class MARC8_to_Unicode:
             uni_str = unicodedata.normalize ('NFC', uni_str)
             
         return uni_str
-
-def test_convert (s, enc):
-    conv = MARC8_to_Unicode ()
-    converted = conv.translate (s)
-    converted = unicodedata.normalize ('NFC', converted)
-    print converted.encode (enc)
-
-    print repr (converted)

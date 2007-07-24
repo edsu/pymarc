@@ -1,3 +1,12 @@
+v1.0    Wed Jul 18 14:55:19 EDT 2007
+        - added marc8_to_unicode() support for applications that need to 
+          convert marc8 data to unicode ... many thanks for Aaron Lav 
+          for allowing relevant bits of code to be lifted from PyZ3950; 
+          also thanks to Mark Matienzo for the idea and for testing.
+        - added some tests for new marc8_to_unicode functionality. Thanks
+          to the Library of Congress for providing equivalent marc8 and 
+          utf8 marc record batches to use for constructing test data
+
 v0.9    Tue Apr 10 21:54:02 EDT 2007
         - various simplifications and pythonifications (thanks Dan Chudnov)
         - added easy_install support

@@ -6,7 +6,7 @@ from pymarc.exceptions import *
 
 class RecordTest( unittest.TestCase ):
 
-    def testAddField( self ):
+    def test_add_field( self ):
         record = Record()
         field = Field( 
             tag = '245', 
@@ -15,7 +15,7 @@ class RecordTest( unittest.TestCase ):
         record.addField( field )
         self.failUnless( field in record.fields, msg='found field' )
 
-    def testQuickAccess( self ):
+    def test_quick_access( self ):
         record = Record() 
         title = Field( 
             tag = '245', 
@@ -25,11 +25,11 @@ class RecordTest( unittest.TestCase ):
         self.assertEqual( record['245'], title, 'short access' )
         self.assertEqual( record['999'], None, 'short access with no field' )
 
-    def testFieldNotFound( self ):
+    def test_field_not_found( self ):
         record = Record()
         self.assertEquals( len( record.fields ), 0 )
 
-    def testFind( self ):
+    def test_find( self ):
         record = Record() 
         subject1 = Field( 
             tag = '650', 
@@ -47,7 +47,7 @@ class RecordTest( unittest.TestCase ):
         found = record.getFields()
         self.assertEqual(len(found), 2, 'getFields() with no tag')
 
-    def testMultiFind( self ):
+    def test_multi_find( self ):
         record = Record() 
         subject1 = Field( 
             tag = '650', 
@@ -62,17 +62,17 @@ class RecordTest( unittest.TestCase ):
         found = record.getFields( '650', '651' )
         self.assertEquals( len(found), 2 )
 
-    def testBadLeader( self ):
+    def test_bad_leader( self ):
         record = Record()
         self.failUnlessRaises( RecordLeaderInvalid, 
             record.decodeMARC, 'foo' )
 
-    def testBadBaseAddress( self ):
+    def test_bad_base_ddress( self ):
         record = Record()
         self.failUnlessRaises( BaseAddressInvalid,
             record.decodeMARC, '00695cam  2200241Ia 45x00' )
 
-    def testTitle( self ):
+    def test_title( self ):
         record = Record()
         self.assertEquals( record.title(), None )
         record.addField( Field( '245', [0,1], 
@@ -84,7 +84,7 @@ class RecordTest( unittest.TestCase ):
             subfields=[ 'a', "Farghin" ] ) )
         self.assertEquals( record.title(), "Farghin" )
 
-    def testISBN( self ):
+    def test_isbn( self ):
         record = Record()
         self.assertEquals( record.isbn(), None ) 
         record.addField( Field( '020', [0,1], subfields=['a', '123456789' ] ) )

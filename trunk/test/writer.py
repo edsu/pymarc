@@ -6,7 +6,7 @@ import os
 
 class MARCWriterTest(unittest.TestCase):
 
-    def testWrite(self):
+    def test_write(self):
 
         # write a record off to a file
         writer = pymarc.MARCWriter(file('test/writer-test.dat','w'))

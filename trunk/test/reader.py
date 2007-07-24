@@ -12,13 +12,13 @@ class MARCReaderFileTest( unittest.TestCase ):
     def setUp( self ):
         self.reader = pymarc.MARCReader(file('test/test.dat'))
 
-    def testIterator( self ):
+    def test_iterator( self ):
         count = 0
         for record in self.reader:
             count += 1
         self.assertEquals(count, 10, 'found expected amt of MARC21 records')
 
-    def testString( self ):
+    def test_string( self ):
         ## basic test of stringification
         startsWithLeader = re.compile( "^LDR" )
         hasNumericTag = re.compile( "\n\d\d\d " )

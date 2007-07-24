@@ -14,31 +14,31 @@ class FieldTest( unittest.TestCase ):
             ]
          )
 
-    def testString( self ):
+    def test_string( self ):
         self.assertEquals( str(self.field), 
             '245 01 $aHuckleberry Finn: $bAn American Odyssey')
 
-    def testIndicators( self ):
+    def test_indicators( self ):
         assert self.field.indicator1 is 0
         self.assertEqual( self.field.indicator2, 1 ) 
         
-    def testSubfieldsCreated( self ):
+    def test_subfields_created( self ):
         subfields = self.field.subfields
         self.assertEqual( len( subfields ), 4 )
 
-    def testSubfieldShort( self ):
+    def test_subfield_short( self ):
         self.assertEqual( self.field['a'], 'Huckleberry Finn: ' )
         self.assertEqual( self.field['z'], None )
 
-    def testSubfields( self ):
+    def test_subfields( self ):
         self.assertEqual( self.field.getSubfields( 'a' ), 
             ['Huckleberry Finn: '] )
 
-    def testSubfieldsMulti( self ):
+    def test_subfields_multi( self ):
         self.assertEqual( self.field.getSubfields( 'a','b' ), 
             ['Huckleberry Finn: ', 'An American Odyssey' ] )
 
-    def testEncode( self ):
+    def test_encode( self ):
         self.field.asMARC21()
 
     def testIterator( self ):
