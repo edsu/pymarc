@@ -32,24 +32,33 @@ class MARC8_to_Unicode:
 
     def is_multibyte (self, charset):
         return charset == 0x31
+
+    g0_set = set(['(', ',', '$'])
+    g1_set = set([')', '-', '$'])
         
     def translate (self, s):
         uni_list = []
         combinings = []
         pos = 0
         while pos < len (s):
+##            http://www.loc.gov/marc/specifications/speccharmarc8.html
             if s[pos] == '\x1b':
-                if (s[pos +1] == s[pos+2] and
-                    (s[pos +1] == '$' or s[pos+1] == '(')):
-                    # '$' for multiple bytes/char, '(' for single
-                    # XXX note that ',' is also acceptable for single, and
-                    # '$' for double.
-                    self.g0 = ord (s[pos+3])
-                    # XXX or !E two-char seq for ANSEL?
-                    # XXX or ')', '-', 1-char or '$)', '$-' for G1
-                    pos = pos + 4
+                next = s[pos+1]
+                if (next in self.g0_set):
+                    if s[pos+2] == ',' and next == '$':
+                        pos += 1
+                    self.g0 = ord(s[pos+2])
+                    pos = pos + 3
                     continue
-            mb_flag = self.is_multibyte (self.g0)
+                elif next in self.g1_set:
+                    if s[pos+2] == '-' and next == '$':
+                        pos += 1
+                    self.g1 = ord(s[pos+2])
+                    pos = pos + 3
+                    continue
+
+            
+            mb_flag = self.is_multibyte(self.g0)
                 
             if mb_flag:
                 d = (ord (s[pos]) * 65536 +
@@ -64,11 +73,17 @@ class MARC8_to_Unicode:
                 (d > 0x80 and d < 0xa0)):
                 uni = unichr (d)
                 continue
-            
-            if d > 0x80 and not mb_flag:
-                (uni, cflag) = marc_to_unicode.codesets [self.g1] [d]
-            else:
-                (uni, cflag) = marc_to_unicode.codesets [self.g0] [d]
+
+            try:
+                if d > 0x80 and not mb_flag:
+                    (uni, cflag) = marc_to_unicode.codesets [self.g1] [d]
+                else:
+                    (uni, cflag) = marc_to_unicode.codesets [self.g0] [d]
+            except KeyError, e:
+                print "couldn't find", self.g0, self.g1, d, str(e)
+                uni = ord(' ')
+                cflag = False
+                
                 
             if cflag:
                 combinings.append (unichr (uni))
@@ -86,4 +101,10 @@ class MARC8_to_Unicode:
             
         return uni_str
 
+def test_convert (s, enc):
+    conv = MARC8_to_Unicode ()
+    converted = conv.translate (s)
+    converted = unicodedata.normalize ('NFC', converted)
+    print converted.encode (enc)
 
+    print repr (converted)
