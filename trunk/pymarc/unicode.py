@@ -1,8 +1,11 @@
-from PyZ3951 import marc_to_unicode
-
 # see http://www.loc.gov/marc/specifications/speccharmarc8.html
 
 import unicodedata
+import marc_to_unicode
+
+def marc8_to_unicode(marc8):
+  converter = MARC8_to_Unicode()
+  return converter.translate(marc8)
 
 class MARC8_to_Unicode:
     """Converts MARC-8 to Unicode.  Note that currently, unicode strings
@@ -20,8 +23,6 @@ class MARC8_to_Unicode:
     standardize Unicode characters to allow round-trips from EACC,
     or if you need the private-use Unicode character translations,
     please inform me, asl2@pobox.com."""
-
-
     
     basic_latin = 0x42
     ansel = 0x45
@@ -84,46 +85,5 @@ class MARC8_to_Unicode:
             uni_str = unicodedata.normalize ('NFC', uni_str)
             
         return uni_str
-
-def test_convert (s, enc):
-    conv = MARC8_to_Unicode ()
-    converted = conv.translate (s)
-    converted = unicodedata.normalize ('NFC', converted)
-    print converted.encode (enc)
-
-    print repr (converted)
-
-        
-
-if __name__ == '__main__':
-    # My console is usually set to iso-8859-1.  Sorry if yours is different.
-    test_convert('''The  oldest cuisine in the world : cooking in
-    Mesopotamia  / Jean Bott\xe2ero ; translated by Teresa Lavender Fagan.''',
-                 'iso-8859-1')
-    
-    test_convert (
-        """$6 245-02/$1$a \x1b$$1!M>!`o!#!KPa!\\O!#!\x1b((B/$c \x1b$$1!1?!R_!#!-bb!#!!Gm!>`!#!\x1b((B; \x1b$$1!RY!YF!#!9Z6!#!!J(!Yi!#!\x1b((B;\x1b$$1!#!!BX!O>!#!!4`!4)!#!!\\e!#!!Hk!:M!#!\x1b((B... [et al.] ; \x1b$$1!Iq!MH!#!!9%!];!#!!KG!#!\x1b((B= Great garnishes / author, Huang Su-Huei ; translator, Yen-Jen Lai ; collaborators, Cheng-Tzu Chiu ... [et al.] ; photographers, Aki Ohno.""",
-        'utf-8')
-    
-
-    for f in sys.argv[1:]:
-        marc_file = open(f, 'rb')
-        marc_text = marc_file.read ()
-        while 1:
-            marc_data1 = MARC(marc_text)
-            print str (marc_data1)
-            new = marc_data1.get_MARC ()
-            marc_data2 = MARC (marc_text)
-            k1 = marc_data1.fields.keys ()
-            k2 = marc_data2.fields.keys ()
-            assert (k1 == k2)
-            for field in k1:
-                same = (marc_data1.fields [field] ==
-                        marc_data2.fields [field])
-                assert (same)
-            marc_text = marc_text[marc_data1.reclen:]
-            if len (marc_text) == 0:
-                break
-        marc_file.close ()
 
 
