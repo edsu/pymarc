@@ -3,9 +3,7 @@ DESCRIPTION
 
 pymarc is a python library for working with MARC21 bibliographic data
 loosely based on the MARC/Perl suite of modules (http://marcpm.sf.net).
-More about pymarc can be found at:
-
-  http://www.textualize.com/pymarc
+More about pymarc can be found at: http://www.textualize.com/pymarc
 
 INSTALLATION
 ------------
