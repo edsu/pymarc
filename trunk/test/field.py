@@ -63,32 +63,32 @@ class FieldTest( unittest.TestCase ):
     def test_encode( self ):
         self.field.asMARC21()
 
-    def testIterator( self ):
+    def test_iterator( self ):
         string = ""
         for subfield in self.field:
             string += subfield[0]
             string += subfield[1]
         self.assertEquals( string, "aHuckleberry Finn: bAn American Odyssey" )
 
-    def testValue( self ):
+    def test_value( self ):
         self.assertEquals( self.field.value(), 
             'Huckleberry Finn: An American Odyssey' )
         self.assertEquals( self.controlfield.value(), "831227m19799999nyu           ||| | ger  " )
 
-    def testNonIntegerTag( self ):
+    def test_non_integer_tag( self ):
         # make sure this doesn't throw an exception
         f = Field( tag="3 0", indicators=[0,1], subfields=['a', 'foo'] )
 
-    def testAddSubfield( self ):
+    def test_add_subfield( self ):
         f = Field( tag="245", indicators=[0,1], subfields=['a', 'foo'] )
         f.addSubfield('a','bar')
         self.assertEquals( f.__str__(), '=245  01$afoo$abar')
         
-    def testIsSubjectField( self ):
+    def test_is_subject_field( self ):
         self.assertEqual( self.subjectfield.isSubjectField(), True )
         self.assertEqual( self.field.isSubjectField(), False )
         
-    def testFormatField( self ):
+    def test_format_field( self ):
         self.assertEqual( self.subjectfield.formatField(),
             'Python (Computer program language) -- Poetry.' )
         self.assertEqual( self.field.formatField(), 'Huckleberry Finn:  An American Odyssey' )
