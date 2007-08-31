@@ -1,5 +1,5 @@
 v1.1
-        - added pymarc/marcxml.py for marcxml reading support
+        - added pymarc/marcxml.py for marcxml reading
         - added test of marcxml reading: test/xml_test.py
         - modified Field so that default indicators and subfields are 
           not set to a default array in the method signature. This causes
