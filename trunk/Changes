@@ -1,3 +1,11 @@
+v1.1
+        - added pymarc/marcxml.py for marcxml reading support
+        - added test of marcxml reading: test/xml_test.py
+        - modified Field so that default indicators and subfields are 
+          not set to a default array in the method signature. This causes
+          subtle bugs since new arrays are not contructed for 
+          repeated calls to the constructor.
+
 v1.0    Wed Jul 18 14:55:19 EDT 2007
         - added marc8_to_unicode() support for applications that need to 
           convert marc8 data to unicode ... many thanks for Aaron Lav 

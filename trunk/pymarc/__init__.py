@@ -43,7 +43,7 @@ by writing to the author.
 
     >>> from pymarc import Record, Field
     >>> record = Record()
-    >>> record.addField( \
+    >>> record.add_field( \
     ...     Field( \
     ...         tag = '245', 
     ...         indicators = ['0','1'],
@@ -52,7 +52,7 @@ by writing to the author.
     ...             'b', 'from journeyman to master /', 
     ...             'c', 'Andrew Hunt, David Thomas.' ] ) )
     >>> out = file( 'file.dat', 'w' )
-    >>> out.write( record.asMARC21() )
+    >>> out.write( record.as_marc21() )
 
 '''
 
@@ -65,6 +65,7 @@ from reader import *
 from writer import *
 from constants import *
 from marc8 import marc8_to_unicode
+from marcxml import parse_xml_to_array
 
 if __name__ == "__main__":
     import doctest

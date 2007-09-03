@@ -3,7 +3,7 @@ from exceptions import *
 
 class Field( object ):
 
-    def __init__( self, tag, indicators=[], subfields=[], data='' ):
+    def __init__( self, tag, indicators=None, subfields=None, data='' ):
         """
         Field() pass in the field tag, indicators and subfields for the tag.
  
@@ -21,6 +21,11 @@ class Field( object ):
             field = Field( tag='001', data='fol05731351' )
 
         """
+        if indicators == None: 
+          indicators = []
+        if subfields == None:
+          subfields = []
+
         tag = "%03s" % tag
         if ( tag < '010' ):
             self.tag = tag
