@@ -72,7 +72,6 @@ def parse_xml(file, handler):
   parser = make_parser()
   parser.setContentHandler(handler)
   parser.setFeature(feature_namespaces, 1)
-  parser.setFeature(feature_namespace_prefixes, 1)
   parser.parse(file)
 
 def parse_xml_to_array(file):
