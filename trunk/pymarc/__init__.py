@@ -65,7 +65,7 @@ from reader import *
 from writer import *
 from constants import *
 from marc8 import marc8_to_unicode
-from marcxml import parse_xml_to_array
+from marcxml import *
 
 if __name__ == "__main__":
     import doctest
