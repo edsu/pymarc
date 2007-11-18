@@ -1,7 +1,13 @@
 from unittest import TestCase
-from pymarc import parse_xml_to_array, Record
+from pymarc import map_xml, parse_xml_to_array, Record
 
 class XmlTest(TestCase):
+
+  def test_map_xml(self):
+    self.seen = 0
+    def count(r): self.seen += 1
+    map_xml('test/batch.xml', count)
+    self.assertEqual(2, self.seen)
 
   def test_parse_to_array(self):
     records = parse_xml_to_array('test/batch.xml')
