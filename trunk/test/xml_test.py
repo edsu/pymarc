@@ -6,7 +6,7 @@ class XmlTest(TestCase):
   def test_map_xml(self):
     self.seen = 0
     def count(r): self.seen += 1
-    map_xml('test/batch.xml', count)
+    map_xml(count, 'test/batch.xml')
     self.assertEqual(2, self.seen)
 
   def test_parse_to_array(self):

@@ -1,3 +1,6 @@
+v1.3 Tue Nov 20 08:48:51 EST 2007
+- added map_xml to pymarc/marcxml.py for a more functional processing
+
 v1.2 Tue Sep  4 08:22:44 EDT 2007
 - added pymarc/marcxml.py for marcxml reading support
 - added test of marcxml reading: test/xml_test.py
