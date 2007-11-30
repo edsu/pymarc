@@ -9,6 +9,12 @@ class XmlTest(TestCase):
     map_xml(count, 'test/batch.xml')
     self.assertEqual(2, self.seen)
 
+  def test_multi_map_xml(self):
+    self.seen = 0
+    def count(r): self.seen += 1
+    map_xml(count, 'test/batch.xml', 'test/batch.xml')
+    self.assertEqual(4, self.seen)
+
   def test_parse_to_array(self):
     records = parse_xml_to_array('test/batch.xml')
     self.assertEqual(len(records), 2)

@@ -26,7 +26,7 @@ if version_info < (2, 3):
 
 setup( 
     name             = 'pymarc',
-    version          = '1.3',
+    version          = '1.4',
     url              = 'http://cheeseshop.python.org/pypi/pymarc',
     author           = 'Ed Summers',
     author_email     = 'ehs@pobox.com',

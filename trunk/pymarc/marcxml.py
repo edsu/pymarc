@@ -74,7 +74,7 @@ def parse_xml(file, handler):
   parser.setFeature(feature_namespaces, 1)
   parser.parse(file)
 
-def map_xml(f, file):
+def map_xml(f, *files):
   """
   map a function onto the file, so that for each record that is
   parsed the function f will get called with the extracted record
@@ -87,7 +87,8 @@ def map_xml(f, file):
   parser = make_parser()
   handler = XmlHandler()
   handler.process_record = f
-  parse_xml(file, handler)
+  for file in files:
+    parse_xml(file, handler)
 
 def parse_xml_to_array(file):
   """
