@@ -1,0 +1,96 @@
+v1.4 Tue Nov 27 13:44:41 EST 2007
+- map_xml can take multiple files
+
+v1.3 Tue Nov 20 08:48:51 EST 2007
+- added map_xml to pymarc/marcxml.py for a more functional processing
+
+v1.2 Tue Sep  4 08:22:44 EDT 2007
+- added pymarc/marcxml.py for marcxml reading support
+- added test of marcxml reading: test/xml_test.py
+- modified Field so that default indicators and subfields are 
+  not set to a default array in the method signature. This causes
+  subtle bugs since new arrays are not contructed for 
+  repeated calls to the constructor.
+
+v1.1 Wed Aug 15 08:34:39 EDT 2007
+- updated the homepage for the package
+
+v1.0 Wed Jul 18 14:55:19 EDT 2007
+- added marc8_to_unicode() support for applications that need to 
+  convert marc8 data to unicode ... many thanks for Aaron Lav 
+  for allowing relevant bits of code to be lifted from PyZ3950; 
+  also thanks to Mark Matienzo for the idea and for testing.
+- added some tests for new marc8_to_unicode functionality. Thanks
+  to the Library of Congress for providing equivalent marc8 and 
+  utf8 marc record batches to use for constructing test data
+- The folowing changes are courtesy of Mark Matienzo:
+  - modified __str__ methods for Field and Record to produce 
+    data in MARCMaker [1] format. THIS MAY BREAK YOUR CODE. This is
+    not a complete implementation as support for special character
+    mnemonics [2] has yet to be added
+  - modified test cases for string conversion and added tests for
+    control fields
+  - added formatField() and isSubjectField() methods to Field and
+    the author(), uniformtitle(), subjects(), addedentries(),
+    and location() methods to Record, and tests for those methods
+
+  [1] http://www.loc.gov/marc/makrbrkr.html
+  [2] http://www.loc.gov/marc/mnemonics.html
+
+v0.9 Tue Apr 10 21:54:02 EDT 2007
+- various simplifications and pythonifications (thanks Dan Chudnov)
+- added easy_install support
+
+v0.85 Fri Feb  3 13:08:35 EST 2006
+- added default leader template for when records are created 
+  from scratch (thanks Kurt Nordstrom)
+
+v0.81 Mon Jan 30 16:33:36 EST 2006
+- getFields() wasn't returning all the fields when no tag was passed in.
+
+v0.8 Mon Jan 30 07:05:36 CST 2006
+- added the ability to read raw marc from strings THIS MAY BREAK
+  YOUR CODE. pymarc no longer supports passing file paths to the
+  MARCReader constructor. You need to simply change:
+
+  reader = MARCReader('marc.dat')
+
+  to:
+
+  reader = MARCReader(file('marc.dat'))
+
+  Thanks to Daniel Hoth for suggesting this. It just makes sense to 
+  be able to pass in MARC that you got from a Z39.50 network connection
+  or database, etc.
+
+v0.7 Mon Jan 23 15:08:55 EST 2006
+- added addSubfield() to Subfield (thanks Kurt Nordstrom)
+
+v0.6 Tue Nov 29 20:48:31 CST 2005
+- fixed test suite to run under the unittest that ships with python2.3
+- allow non-integer field tags
+- fixed MARCWriter and added test (thanks Mikel Larreategi)
+
+v0.5 Thu Feb 10 10:01:12 CST 2005
+- handle empty subfields
+
+v0.4 Wed Feb  2 22:29:33 CST 2005
+- fixed directory validation: thanks Aaron Lav
+- added iterator for pymarc.Field for iterating through subfields
+- added pymarc.Field.value() for getting a field value easily
+
+v0.3 Wed Jan  5 17:03:37 CST 2005
+- changed mind about accessors (again):
+  removed getField() must use getFields()
+  renamed subfield() to getSubfields() and have it return a list
+- added doctest support to pymarc/__init__.py
+- added a test batch file of python data 
+
+v0.2 Tue Jan  4 21:01:22 CST 2005
+- removed getField() and renamed getFields() to find()
+
+v0.11 Mon Jan  3 20:42:19 CST 2005
+- fixed test suite execution
+
+v0.1 Wed Dec 29 19:54:23 CST 2004
+- initial release
