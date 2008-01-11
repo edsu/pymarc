@@ -1,7 +1,8 @@
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces, \
   feature_namespace_prefixes
-from pymarc import Record, Field
+from pymarc import Record, Field, MARC8_to_Unicode
+import elementtree.ElementTree as ET
 
 class XmlHandler(ContentHandler):
   """
@@ -97,4 +98,39 @@ def parse_xml_to_array(file):
   handler = XmlHandler()
   parse_xml(file, handler)
   return handler.records
+
+def record_to_xml(record):
+  """
+  converts a record object to a chunk of xml
+  """
+
+  # helper for converting non-unicode data to unicode
+  # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
+  marc8 = MARC8_to_Unicode()
+  def translate(x):
+    if type(x) == unicode: return x
+    else: return marc8.translate(x)
+
+  root = ET.Element('record')
+  leader = ET.SubElement(root, 'leader')
+  leader.text = record.leader
+  for field in record:
+    if field.isControlField():
+      f = ET.SubElement(root, 'controlfield')
+      f.set('tag', field.tag)
+      f.text = translate(field.data)
+    else:
+      f = ET.SubElement(root, 'datafield')
+      f.set('tag', field.tag)
+      f.set('ind1', field.indicators[0])
+      f.set('ind2', field.indicators[1])
+      for subfield in field:
+        sf = ET.SubElement(f, 'subfield')
+        sf.set('code', subfield[0])
+        sf.text = translate(subfield[1])
+
+  return ET.tostring(root)
+
+
+  
 

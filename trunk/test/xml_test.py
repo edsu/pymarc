@@ -1,5 +1,6 @@
 from unittest import TestCase
-from pymarc import map_xml, parse_xml_to_array, Record
+from pymarc import map_xml, parse_xml_to_array, record_to_xml, Record
+from cStringIO import StringIO
 
 class XmlTest(TestCase):
 
@@ -37,4 +38,29 @@ class XmlTest(TestCase):
     self.assertEqual(f.indicator2, '4')
     self.assertEqual(f['a'], u'The Great Ray Charles')
     self.assertEqual(f['h'], u'[sound recording].')
-     
+
+  def test_xml(self):
+    # read in xml to a record
+    r1 = parse_xml_to_array('test/batch.xml')[0]
+    # generate xml
+    xml = record_to_xml(r1)
+    # parse generated xml 
+    r2 = parse_xml_to_array(StringIO(xml))[0]
+
+    # compare original and resulting record
+    self.assertEqual(r1.leader, r2.leader)
+
+    f1 = r1.getFields()
+    f2 = r2.getFields()
+    self.assertEqual(len(f1), len(f2))
+
+    pos = 0
+    while pos < len(f1):
+      self.assertEqual(f1[pos].tag, f2[pos].tag)
+      if f1[pos].isControlField():
+        self.assertEqual(f1[pos].data, f2[pos].data)
+      else:
+        self.assertEqual(f1[pos].getSubfields(), f2[pos].getSubfields())
+        self.assertEqual(f1[pos].indicators, f2[pos].indicators)
+      pos += 1
+

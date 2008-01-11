@@ -1,3 +1,7 @@
+v1.5 Wed Jan  2 21:54:56 EST 2008
+- added pymarc.marcxml.record_to_xml for converting a record to marcxml
+  and corresponding test in test/xml_test.py
+
 v1.4 Tue Nov 27 13:44:41 EST 2007
 - map_xml can take multiple files
 
