@@ -1,3 +1,8 @@
+v1.7 Wed Jan 30 21:52:48 EST 2008
+- documentation fixes (thanks Gabe Farrell)
+- fixed marc8 stderr printing, and added quiet argument to MARC8_to_Unicode
+  for people who'd rather not see warnings on STDERR.
+
 v1.6 Thu Jan 24 14:17:18 EST 2008
 - marc8 now prints warnings on stderr rather than stdout
 

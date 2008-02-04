@@ -14,19 +14,9 @@ Programming Language :: Python
 Topic :: Text Processing :: General
 """
 
-# workaround for older pythons that don't 
-# understand classifiers 
-
-if version_info < (2, 3):
-    _setup = setup
-    def setup(**kwargs):
-        if kwargs.has_key("classifiers"):
-            del kwargs["classifiers"]
-        _setup(**kwargs)
-
 setup( 
     name             = 'pymarc',
-    version          = '1.6',
+    version          = '1.7',
     url              = 'http://cheeseshop.python.org/pypi/pymarc',
     author           = 'Ed Summers',
     author_email     = 'ehs@pobox.com',
@@ -36,4 +26,3 @@ setup(
     classifiers      = filter( None, classifiers.split("\n") ),
     test_suite       = 'test'
 )
-

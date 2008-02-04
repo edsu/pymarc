@@ -15,7 +15,7 @@ by writing to the author.
    are curious this example uses the batch file available in the distribution.
 
     >>> from pymarc import MARCReader
-    >>> reader = MARCReader( 'test/marc.dat' )
+    >>> reader = MARCReader(open('test/marc.dat'))
     >>> for record in reader: 
     ...    print record['245']['a']
     The pragmatic programmer :
@@ -43,16 +43,18 @@ by writing to the author.
 
     >>> from pymarc import Record, Field
     >>> record = Record()
-    >>> record.add_field( \
-    ...     Field( \
+    >>> record.addField(
+    ...     Field(
     ...         tag = '245', 
     ...         indicators = ['0','1'],
-    ...         subfields = [ \
+    ...         subfields = [
     ...             'a', 'The pragmatic programmer : ',
     ...             'b', 'from journeyman to master /', 
-    ...             'c', 'Andrew Hunt, David Thomas.' ] ) )
-    >>> out = file( 'file.dat', 'w' )
-    >>> out.write( record.as_marc21() )
+    ...             'c', 'Andrew Hunt, David Thomas.'
+    ...         ]))
+    >>> out = open('file.dat', 'w')
+    >>> out.write(record.asMARC21())
+    >>> out.close()
 
 '''
 
