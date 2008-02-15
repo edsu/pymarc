@@ -6,6 +6,11 @@ from pymarc import marc8_mapping
 
 from sys import stderr
 
+# ODD_MAP for odd characters
+ODD_MAP = {
+    0x7f2019: 0x027, # change III's crazy smart quote into an apostrophe
+}
+
 def marc8_to_unicode(marc8):
     """
     Pass in a string, and get back a Unicode object.
@@ -44,6 +49,9 @@ class MARC8ToUnicode:
         self.quiet = quiet
 
     def translate(self, marc8_string):
+        # don't choke on empty marc8_string
+        if not marc8_string:
+            return u''
         uni_list = []
         combinings = []
         pos = 0
@@ -89,8 +97,16 @@ class MARC8ToUnicode:
                 else:
                     (uni, cflag) = marc8_mapping.CODESETS[self.g0][code_point]
             except KeyError:
+                try:
+                    uni = ODD_MAP[code_point]
+                    uni_list.append(unichr(uni))
+                    # we can short circuit because we know these mappings
+                    # won't be involved in combinings.  (i hope?)
+                    continue
+                except KeyError:
+                    pass
                 if not self.quiet:
-                    stderr.write("couldn't find 0x%x in g0=%s g1=%s\n", 
+                    stderr.write("couldn't find 0x%x in g0=%s g1=%s\n" % 
                         (code_point, self.g0, self.g1))
                 uni = ord(' ')
                 cflag = False
@@ -100,7 +116,7 @@ class MARC8ToUnicode:
             else:
                 uni_list.append(unichr(uni))
                 if len(combinings) > 0:
-                    uni_list += combinings
+                    uni_list.extend(combinings)
                     combinings = []
 
         # what to do if combining chars left over?
