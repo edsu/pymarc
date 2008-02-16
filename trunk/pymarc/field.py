@@ -26,12 +26,10 @@ class Field( object ):
         if subfields == None:
           subfields = []
 
-        tag = "%03s" % tag
-        if ( tag < '010' ):
-            self.tag = tag
+        self.tag = '%03s' % tag
+        if (self.tag < '010'):
             self.data = data
         else: 
-            self.tag = tag 
             self.indicators = indicators
             self.indicator1 = indicators[0] 
             self.indicator2 = indicators[1] 

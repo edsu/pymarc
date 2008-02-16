@@ -6,29 +6,28 @@ import string
 import re
 
 
-class Record( object ):
+class Record(object):
     """
-    Record 
-
     A class for representing a MARC record. Each Record object is made up of
     multiple Field objects. You'll probably want to look at the docs for Field
     to see how to fully use a Record object.
 
     Basic usage:
 
-        field = Field( \
+        field = Field(
             tag = '245', 
             indicators = ['0','1'],
-            subfields = [ \
+            subfields = [
                 'a', 'The pragmatic programmer : ',
                 'b', 'from journeyman to master /', 
-                'c', 'Andrew Hunt, David Thomas.' ]
+                'c', 'Andrew Hunt, David Thomas.',
+            ])
 
-        record.addField( field )
+        record.addField(field)
 
     Or creating a record from a chunk of MARC in transmission format:
 
-        record = Record( data=chunk )
+        record = Record(data=chunk)
 
     Or getting a record as serialized MARC21.
 
@@ -38,65 +37,65 @@ class Record( object ):
     MARC records in a file.  
     """
 
-    def __init__( self, data='' ):
+    def __init__(self, data=''):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
         self.pos = 0
         if len(data) > 0:
-            ok = self.decodeMARC( data )
+            ok = self.decodeMARC(data)
 
-    def __str__( self ):
+    def __str__(self):
         """
         In a string context a Record object will return a prettified version
         of the record in MARCMaker format. See the docstring for Field.__str__
         for more information.
         """
         # join is significantly faster than concatenation
-        text = "=LDR  %s\n" % self.leader
-        text += string.join( map( str, self.fields ), "\n" )
+        text = '=LDR  %s\n' % self.leader
+        text += string.join(map(str, self.fields), '\n')
         text += '\n'
         return text
 
-    def __getitem__( self, tag ):
+    def __getitem__(self, tag):
         """
         Allows a shorthand lookup by tag:
         
-            record["245"]
+            record['245']
 
         """
-        fields = self.getFields( tag )
+        fields = self.getFields(tag)
         if len(fields) > 0: return fields[0]
         return None
 
-    def __iter__( self ):
+    def __iter__(self):
         self.__pos = 0
         return self
 
     def next(self):
-        if self.__pos >= len( self.fields ):
+        if self.__pos >= len(self.fields):
             raise StopIteration
         self.__pos += 1 
-        return self.fields[ self.__pos-1 ]
+        return self.fields[self.__pos-1]
 
-    def addField( self, *fields ):
+    def addField(self, *fields):
         """
         addField() will add pymarc.Field objects to a Record object.
         Optionally you can pass in multiple fields.
         """
         self.fields.extend(fields)
 
-    def getFields( self, *args ):
+    def getFields(self, *args):
         """
-        When passed a tag ( '245' ) getFields() will return a list of all the 
+        When passed a tag ('245'), getFields() will return a list of all the 
         fields in a record with a given tag. 
 
-            title = record.getFields( '245' )
+            title = record.getFields('245')
         
         If no fields with the specified 
         tag are found then an empty list is returned. If you are interested
         in more than one tag you can pass in a list:
 
-            subjects = record.getFields( '600', '610', '650' ) 
+            subjects = record.getFields('600', '610', '650') 
 
         If no tag is passed in to fields() a list of all the fields will be 
         returned.
@@ -106,7 +105,7 @@ class Record( object ):
 
         return [f for f in self.fields if f.tag in args]
 
-    def decodeMARC( self, marc ):
+    def decodeMARC(self, marc):
         """
         decodeMARC() accepts a MARC record in transmission format as a
         a string argument, and will populate the object based on the data
@@ -116,59 +115,65 @@ class Record( object ):
         """
 
         # extract record leader
-        self.leader = marc[ 0 : LEADER_LEN ]
-        if len( self.leader ) != LEADER_LEN: raise RecordLeaderInvalid
+        self.leader = marc[0:LEADER_LEN]
+        if len(self.leader) != LEADER_LEN: 
+            raise RecordLeaderInvalid
 
         # extract the byte offset where the record data starts
-        baseAddress = int( marc[ 12 : 17 ] )
-        if baseAddress <= 0: raise BaseAddressNotFound
-        if baseAddress >= len( marc ): raise BaseAddressInvalid
+        baseAddress = int(marc[12:17])
+        if baseAddress <= 0: 
+            raise BaseAddressNotFound
+        if baseAddress >= len(marc): 
+            raise BaseAddressInvalid
 
         # extract directory, baseAddress-1 is used since the 
         # director ends with an END_OF_FIELD byte
-        directory = marc[ LEADER_LEN : baseAddress-1 ]
+        directory = marc[LEADER_LEN:baseAddress-1]
 
         # determine the number of fields in record
         if len(directory) % DIRECTORY_ENTRY_LEN <> 0:
             raise RecordDirectoryInvalid
-        numFields = len( directory ) / DIRECTORY_ENTRY_LEN 
+        numFields = len(directory) / DIRECTORY_ENTRY_LEN 
         
         # add fields to our record using directory offsets
         fieldNum = 0
-        while ( fieldNum < numFields  ):
+        while (fieldNum < numFields):
             entryStart = fieldNum * DIRECTORY_ENTRY_LEN
             entryEnd = entryStart + DIRECTORY_ENTRY_LEN
-            entry = directory[ entryStart : entryEnd ]
-            entryTag = entry[ 0 : 3 ]
-            entryLength = int( entry[ 3 : 7 ] )
-            entryOffset = int( entry[ 7 : 12 ] )
-            entryData = marc[ baseAddress + entryOffset : 
-                baseAddress + entryOffset + entryLength - 1 ]
+            entry = directory[entryStart:entryEnd]
+            entryTag = entry[0:3]
+            entryLength = int(entry[3:7])
+            entryOffset = int(entry[7:12])
+            entryData = marc[baseAddress + entryOffset : 
+                baseAddress + entryOffset + entryLength - 1]
 
             if entryTag < '010':
-                field = Field( tag=entryTag, data=entryData )
+                field = Field(tag=entryTag, data=entryData)
             else:
                 subfields = list()
-                subs = entryData.split( SUBFIELD_INDICATOR )
+                subs = entryData.split(SUBFIELD_INDICATOR)
                 i1 = subs[0][0]
                 i2 = subs[0][1]
                 for subfield in subs[1:]:
-                    if len(subfield) == 0: continue
+                    if len(subfield) == 0: 
+                        continue
                     code = subfield[0]
                     data = subfield[1:]
-                    subfields.append( code )
-                    subfields.append( data )
+                    subfields.append(code)
+                    subfields.append(data)
                 field = Field( 
                     tag = entryTag, 
-                    indicators = [ i1, i2 ], 
-                    subfields = subfields )
+                    indicators = [i1, i2], 
+                    subfields = subfields,
+                )
 
-            self.addField( field )
+            self.addField(field)
             fieldNum += 1
 
-        if fieldNum == 0: raise NoFieldsFound 
+        if fieldNum == 0: 
+            raise NoFieldsFound 
 
-    def asMARC21( self ):
+    def asMARC21(self):
         """
         returns the record serialized as MARC21
         """
@@ -183,8 +188,8 @@ class Record( object ):
         for field in self.fields:
             fieldData = field.asMARC21()
             fields += fieldData
-            directory += "%03d%04d%05d" % (int(field.tag),len(fieldData),offset)
-            offset += len( fieldData )
+            directory += '%03d%04d%05d' % (int(field.tag),len(fieldData),offset)
+            offset += len(fieldData)
 
         # directory ends with an end of field
         directory += END_OF_FIELD
@@ -200,13 +205,13 @@ class Record( object ):
 
         # update the leader with the current record length and base address
         # the lengths are fixed width and zero padded
-        self.leader = "%05d%s%05d%s" % \
-            ( recordLength, self.leader[5:12], baseAddress, self.leader[17:] )
+        self.leader = '%05d%s%05d%s' % \
+            (recordLength, self.leader[5:12], baseAddress, self.leader[17:])
         
         # return the encoded record
         return self.leader + directory + fields 
 
-    def title( self ):
+    def title(self):
         """
         Returns the title of the record (245 $a an $b).
         """
@@ -218,7 +223,7 @@ class Record( object ):
             pass 
         return title
 
-    def isbn( self ):
+    def isbn(self):
         """
         Returns an ISBN if appropriate. If not present None will
         be returned.
@@ -227,13 +232,13 @@ class Record( object ):
         try: 
             # if anyone ever cares alot about performance 
             # this compilation could be moved out and compiled once
-            isbnPattern = re.compile( '^([0-9A-Za-z]+)' )
-            isbn = isbnPattern.match( self["020"]["a"] ).group(1)
+            isbnPattern = re.compile('^([0-9A-Za-z]+)')
+            isbn = isbnPattern.match(self['020']['a']).group(1)
         except Exception, e:
             pass
         return isbn
 
-    def author( self ):
+    def author(self):
         if self['100']:
             return self['100'].formatField()
         elif self['110']:
@@ -242,48 +247,45 @@ class Record( object ):
             return self['111'].formatField()
         return None
     
-    def uniformtitle( self ):
+    def uniformtitle(self):
         if self['130']:
             return self['130'].formatField()
         elif self['240']:
             return self['240'].formatField()
         return None
 
-    def subjects( self ):
+    def subjects(self):
         """
         Note: Fields 690-699 are considered "local" added entry fields but
         occur with some frequency in OCLC and RLIN records.
         """
-        subjlist = self.getFields (
-            '600', '610', '611', '630', '648', '650', '651', '653', '654',
-            '655', '656', '657', '658', '662', '690', '691', '696', '697',
-            '698', '699'
-          )
+        subjlist = self.getFields('600', '610', '611', '630', '648', '650', 
+            '651', '653', '654', '655', '656', '657', '658', '662', '690', 
+            '691', '696', '697', '698', '699')
         return subjlist
     
-    def addedentries( self ):
+    def addedentries(self):
         """
         Note: Fields 790-799 are considered "local" added entry fields but
         occur with some frequency in OCLC and RLIN records.
         """
-        aelist = self.getFields (
-            '700', '710', '711', '720', '730', '740', '752', '753', '754',
-            '790', '791', '792', '793', '796', '797', '798', '799'
-          )
+        aelist = self.getFields('700', '710', '711', '720', '730', '740', 
+            '752', '753', '754', '790', '791', '792', '793', '796', '797', 
+            '798', '799')
         return aelist
     
-    def location( self ):
+    def location(self):
         loc = self.getFields('852')
         return loc
 
-    def notes( self ):
+    def notes(self):
         # todo
         pass
 
-    def publisher( self ):
+    def publisher(self):
         # todo
         pass
 
-    def pubyear( self ):
+    def pubyear(self):
         # todo
         pass
