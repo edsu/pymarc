@@ -1,19 +1,19 @@
 import unittest
-import test.record
-import test.field
-import test.reader 
-import test.encode
-import test.writer
+from test import record
+from test import field
+from test import reader 
+from test import encode
+from test import writer
 
 def suite():
-    suite = unittest.TestSuite()
-    suite.addTest( test.record.suite() )
-    suite.addTest( test.field.suite() )
-    suite.addTest( test.reader.suite() )
-    suite.addTest( test.encode.suite() )
-    suite.addTest( test.writer.suite() )
-    return suite
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(record.suite())
+    test_suite.addTest(field.suite())
+    test_suite.addTest(reader.suite())
+    test_suite.addTest(encode.suite())
+    test_suite.addTest(writer.suite())
+    return test_suite
 
 runner = unittest.TextTestRunner()
-runner.run( suite() )
+runner.run(suite())
 

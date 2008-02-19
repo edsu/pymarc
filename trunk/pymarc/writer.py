@@ -1,13 +1,11 @@
-from pymarc import Record, Field, WriteNeedsRecord, NoActiveFile
-from types import *
-from cStringIO import StringIO
+from pymarc import Record, WriteNeedsRecord
 
-class Writer( object ):
+class Writer(object):
     
-    def write( self ):
+    def write(self, record):
         pass
 
-class MARCWriter( Writer ):
+class MARCWriter(Writer):
     """
     A class for writing MARC21 records in transmission format.
 
@@ -26,11 +24,12 @@ class MARCWriter( Writer ):
         print string
     """
 
-    def __init__(self, f):
+    def __init__(self, file_handle):
         """
         You need to pass in a file like object.
         """
-        self.fh = f
+        super(MARCWriter, self).__init__()
+        self.file_handle = file_handle
 
     def write(self, record):
         """
@@ -38,12 +37,12 @@ class MARCWriter( Writer ):
         """
         if type(record) != Record:
             raise WriteNeedsRecord
-        self.fh.write(record.asMARC21())
+        self.file_handle.write(record.as_marc21())
 
-    def close( self ):
+    def close(self):
         """
         Closes the file.
         """
-        self.fh.close()
-        self.fh = None
+        self.file_handle.close()
+        self.file_handle = None
 

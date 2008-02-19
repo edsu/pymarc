@@ -1,31 +1,32 @@
-import util
 import unittest
-import pymarc
 import re
 
-class MARCReaderFileTest( unittest.TestCase ):
+import pymarc
+
+class MARCReaderFileTest(unittest.TestCase):
     """
     Tests for the pymarc.MARCReader class which provides iterator
     based access to a MARC file.
     """ 
 
-    def setUp( self ):
+    def setUp(self):
         self.reader = pymarc.MARCReader(file('test/test.dat'))
 
-    def test_iterator( self ):
+    def test_iterator(self):
         count = 0
         for record in self.reader:
             count += 1
-        self.assertEquals(count, 10, 'found expected amt of MARC21 records')
+        self.assertEquals(count, 10, 
+                'found expected number of MARC21 records')
 
-    def test_string( self ):
+    def test_string(self):
         ## basic test of stringification
-        startsWithLeader = re.compile( "^=LDR" )
-        hasNumericTag = re.compile( "\n=\d\d\d " )
+        starts_with_leader = re.compile('^=LDR')
+        has_numeric_tag = re.compile('\n=\d\d\d ')
         for record in self.reader:
             text = str(record)
-            self.failUnless( startsWithLeader.search(text), 'got leader')
-            self.failUnless(hasNumericTag.search(text), 'got a tag')
+            self.failUnless(starts_with_leader.search(text), 'got leader')
+            self.failUnless(has_numeric_tag.search(text), 'got a tag')
 
 class MARCReaderStringTest(MARCReaderFileTest):
 
@@ -36,10 +37,10 @@ class MARCReaderStringTest(MARCReaderFileTest):
     # inherit same tests from MARCReaderTestFile
 
 def suite():
-    fileSuite = unittest.makeSuite(MARCReaderFileTest, 'test')
-    stringSuite = unittest.makeSuite(MARCReaderStringTest, 'test')
-    suite = unittest.TestSuite((fileSuite, stringSuite))
-    return suite
+    file_suite = unittest.makeSuite(MARCReaderFileTest, 'test')
+    string_suite = unittest.makeSuite(MARCReaderStringTest, 'test')
+    test_suite = unittest.TestSuite((file_suite, string_suite))
+    return test_suite
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

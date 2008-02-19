@@ -1,8 +1,8 @@
-from pymarc import Record, Field
-from constants import END_OF_RECORD
-from exceptions import RecordLengthInvalid
 from types import FileType
 from cStringIO import StringIO
+
+from pymarc import Record
+from pymarc.exceptions import RecordLengthInvalid
 
 class Reader(object):
     """
@@ -29,14 +29,15 @@ class MARCReader(Reader):
         for record in reader:
             ...
     """
-    def __init__(self, f):
+    def __init__(self, raw_or_file_marc):
         """
         The constructor to which you can pass either raw marc or a file object.
         """
-        if (type(f) == FileType): 
-            self.file_handle = f
+        super(MARCReader, self).__init__()
+        if (type(raw_or_file_marc) == FileType): 
+            self.file_handle = raw_or_file_marc
         else: 
-            self.file_handle = StringIO(f)
+            self.file_handle = StringIO(raw_or_file_marc)
 
     def next(self):
         """

@@ -66,7 +66,7 @@ from exceptions import *
 from reader import *
 from writer import *
 from constants import *
-from marc8 import marc8_to_unicode, MARC8_to_Unicode
+from marc8 import marc8_to_unicode, MARC8ToUnicode
 from marcxml import *
 
 if __name__ == "__main__":
