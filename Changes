@@ -1,5 +1,6 @@
 v2.0
 - PEP-8 cleanup (thanks Gabe Farrell)
+- moved over to bzr ()
 
 v1.7 Wed Jan 30 21:52:48 EST 2008
 - documentation fixes (thanks Gabe Farrell)

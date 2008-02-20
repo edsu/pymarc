@@ -23,8 +23,15 @@ pymarc/__init__.py or at the unittests found in the test directory.
 TODO
 ----
 
-- marcxml writing support
-- cleanup with respect to PEP 8 and PEP 257
+- nothing at the moment
 
-LICENSE: BSD 
-AUTHOR: Ed Summers <ehs@pobox.com>
+LICENSE
+-------
+
+BSD 
+
+AUTHORS
+-------
+
+Gabe Farrell <gsf@fruct.us>
+Ed Summers <ehs@pobox.com>
