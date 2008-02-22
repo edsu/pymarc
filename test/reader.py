@@ -19,6 +19,20 @@ class MARCReaderFileTest(unittest.TestCase):
         self.assertEquals(count, 10, 
                 'found expected number of MARC21 records')
 
+    def test_map_records(self):
+        self.count = 0
+        def f(r):
+            self.count += 1
+        pymarc.map_records(f, file('test/test.dat'))
+        self.assertEquals(self.count, 10, 'map_records appears to work')
+
+    def test_multi_map_records(self):
+        self.count = 0
+        def f(r):
+            self.count += 1
+        pymarc.map_records(f, file('test/test.dat'), file('test/test.dat'))
+        self.assertEquals(self.count, 20, 'map_records appears to work')
+
     def test_string(self):
         ## basic test of stringification
         starts_with_leader = re.compile('^=LDR')

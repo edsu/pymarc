@@ -54,3 +54,18 @@ class MARCReader(Reader):
         chunk = first5 + chunk
         record = Record(chunk)
         return record 
+
+def map_records(f, *files):
+    """
+    Applies a given function to each record in a batch. You can
+    pass in multiple batches.
+
+    >>> def print_title(r): 
+    >>>     print r['245']
+    >>> 
+    >>> map_records(print_title, file('marc.dat'))
+    """
+    for file in files:
+        for record in MARCReader(file):
+            f(record)
+
