@@ -16,7 +16,7 @@ Topic :: Text Processing :: General
 
 setup( 
     name = 'pymarc',
-    version = '1.7',
+    version = '2.0',
     url = 'http://cheeseshop.python.org/pypi/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
