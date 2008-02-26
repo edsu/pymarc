@@ -4,6 +4,7 @@ ez_setup.use_setuptools()
 
 from setuptools import setup
 from sys import version_info
+import pymarc
 
 classifiers = """
 Intended Audience :: Education
@@ -16,7 +17,7 @@ Topic :: Text Processing :: General
 
 setup( 
     name = 'pymarc',
-    version = '2.0',
+    version = pymarc.__version__,
     url = 'http://cheeseshop.python.org/pypi/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',

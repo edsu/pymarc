@@ -2,6 +2,7 @@ v2.0
 - PEP-8 cleanup (thanks Gabe Farrell)
 - moved over to bzr (http://fruct.us/bzr/pymarc)
 - added map_records() to pymarc/reader.py
+- anchored version to pymarc.__version__
 
 v1.7 Wed Jan 30 21:52:48 EST 2008
 - documentation fixes (thanks Gabe Farrell)

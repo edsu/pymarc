@@ -1,5 +1,6 @@
 # __init__.py
 
+__version__ = '2.0'
 r'''
 
 The pymarc module provides an API for reading, writing and modifying
@@ -58,7 +59,6 @@ by writing to the author.
 
 '''
 
-__version__ = '1.0'
 
 from record import *
 from field import * 
