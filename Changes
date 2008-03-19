@@ -1,4 +1,4 @@
-v2.1
+v2.1 Wed Mar 19 15:31:11 EST 2008
 - new Record handy lookup methods, and tests (thanks Chris Catalfo)
 - only make elementtreee a requirement if it's not already available
 
