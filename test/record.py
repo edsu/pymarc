@@ -170,6 +170,28 @@ class RecordTest(unittest.TestCase):
         self.assertEquals(record.location()[1].__str__(), loc2)
         rloclist = [rloc.__str__() for rloc in record.location()]
         self.assertEquals(loclist, rloclist)
+        
+    def test_notes(self):
+        record = Record()
+        self.assertEquals(record.notes(), [])
+        record.add_field(Field('500', [' ', ' '],
+            subfields=['a', "Recast in bronze from artist's plaster original of 1903."]))
+        self.assertEquals(record.notes()[0].format_field(), "Recast in bronze from artist's plaster original of 1903.")
+
+    def test_publisher(self):
+        record = Record()
+        self.assertEquals(record.publisher(), None)
+        record.add_field(Field('260', [' ', ' '],
+            subfields=['a', 'Paris :', 'b', 'Gauthier-Villars ;', 'a', 'Chicago :', 'b', 'University of Chicago Press,', 'c', '1955.']))
+        self.assertEquals(record.publisher(), 'Gauthier-Villars ;')
+
+    def test_pubyear(self):
+        record = Record()
+        self.assertEquals(record.pubyear(), None)
+        record.add_field(Field('260', [' ', ' '],
+            subfields=['a', 'Paris :', 'b', 'Gauthier-Villars ;', 'a', 'Chicago :', 'b', 'University of Chicago Press,', 'c', '1955.']))
+        self.assertEquals(record.pubyear(), '1955.')
+
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')

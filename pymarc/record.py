@@ -282,13 +282,25 @@ class Record(object):
         return loc
 
     def notes(self):
-        # todo
-        pass
+        """
+        Return all 5xx fields in an array.
+        """
+        notelist = self.get_fields('500', '501', '502', '504', '505', 
+            '506', '507', '508', '510', '511', '513', '514', '515',    
+            '516', '518', '520', '521', '522', '524', '525', '526', 
+            '530', '533', '534', '535', '536', '538', '540', '541', 
+            '544', '545', '546', '547', '550', '552', '555', '556', 
+            '561', '562', '563', '565', '567', '580', '581', '583',
+            '584', '585', '586', '590', '591', '592', '593', '594', 
+            '595', '596', '597', '598', '599')
+        return notelist
 
     def publisher(self):
-        # todo
-        pass
+        if self['260']:
+            return self['260']['b']
+        return None
 
     def pubyear(self):
-        # todo
-        pass
+        if self['260']:
+            return self['260']['c']
+        return None

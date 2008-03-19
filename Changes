@@ -1,3 +1,7 @@
+v2.1
+- new Record handy lookup methods, and tests (thanks Chris Catalfo)
+- only make elementtreee a requirement if it's not already available
+
 v2.0 Wed Feb 27 15:46:32 EST 2008
 - WARNING: v2.0 will break your code!
 - PEP-8 cleanup (thanks Gabe Farrell)
