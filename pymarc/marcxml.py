@@ -2,7 +2,11 @@
 
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
-import elementtree.ElementTree as ET
+
+try:
+    import xml.etree.ElementTree as ET  # builtin in Python 2.5
+except ImportError:
+    import elementtree.ElementTree as ET
 
 from pymarc import Record, Field, MARC8ToUnicode
 

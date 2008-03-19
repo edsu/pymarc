@@ -31,9 +31,7 @@ class Field(object):
         if self.tag < '010':
             self.data = data
         else: 
-            self.indicators = indicators
-            self.indicator1 = indicators[0] 
-            self.indicator2 = indicators[1] 
+            self.indicator1, self.indicator2 = self.indicators = indicators
             self.subfields = subfields 
 
     def __iter__(self):

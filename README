@@ -8,6 +8,14 @@ More about pymarc can be found at: http://www.textualize.com/pymarc
 INSTALLATION
 ------------
 
+You'll probably just want to use easy_install to install pymarc:
+
+    easy_install pymarc
+
+If you'd like to download and install the latest source you'll need bzr:
+
+    bzr branch http://fruct.us/bzr/pymarc
+
 Run the pymarc test suite to make sure things are in order with the 
 distribution:
 
@@ -25,6 +33,16 @@ TODO
 
 - nothing at the moment
 
+CONTRIBUTIONS
+-------------
+
+Please send us patches with bzr!
+
+  bzr branch http://fruct.us/bzr/pymarc
+  ...
+  bzr commit
+  bzr send --mail-to gsf@fruct.us
+
 LICENSE
 -------
 
@@ -33,5 +51,5 @@ BSD
 AUTHORS
 -------
 
-Gabe Farrell <gsf@fruct.us>
+Gabriel Farrell <gsf@fruct.us>
 Ed Summers <ehs@pobox.com>

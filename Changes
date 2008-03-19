@@ -1,4 +1,5 @@
-v2.0
+v2.0 Wed Feb 27 15:46:32 EST 2008
+- WARNING: v2.0 will break your code!
 - PEP-8 cleanup (thanks Gabe Farrell)
 - moved over to bzr (http://fruct.us/bzr/pymarc)
 - added map_records() to pymarc/reader.py
