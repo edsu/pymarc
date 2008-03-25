@@ -1,4 +1,4 @@
-v2.1 Tue Mar 25 13:00:50 EDT 2008
+v2.2 Tue Mar 25 13:00:50 EDT 2008
 - MARCReader now accepts any "file-like" object that has read() 
   thanks Neil Santos.
 
