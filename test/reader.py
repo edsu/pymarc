@@ -1,5 +1,6 @@
 import unittest
 import re
+import urllib
 
 import pymarc
 
@@ -41,6 +42,12 @@ class MARCReaderFileTest(unittest.TestCase):
             text = str(record)
             self.failUnless(starts_with_leader.search(text), 'got leader')
             self.failUnless(has_numeric_tag.search(text), 'got a tag')
+
+    def test_url(self):
+        reader = pymarc.MARCReader(urllib.urlopen(
+            'http://inkdroid.org/data/marc.dat'))
+        record = reader.next()
+        self.assertEqual(record['245']['a'], 'Python pocket reference /')
 
 class MARCReaderStringTest(MARCReaderFileTest):
 

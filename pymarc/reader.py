@@ -1,4 +1,3 @@
-from types import FileType
 from cStringIO import StringIO
 
 from pymarc import Record
@@ -29,15 +28,17 @@ class MARCReader(Reader):
         for record in reader:
             ...
     """
-    def __init__(self, raw_or_file_marc):
+    def __init__(self, marc_target):
         """
-        The constructor to which you can pass either raw marc or a file object.
+        The constructor to which you can pass either raw marc or a file-like
+        object. Basically the argument you pass in should be raw MARC in 
+        transmission format or an object that responds to read().
         """
         super(MARCReader, self).__init__()
-        if (type(raw_or_file_marc) == FileType): 
-            self.file_handle = raw_or_file_marc
+        if (hasattr(marc_target, "read") and callable(marc_target.read)):
+            self.file_handle = marc_target
         else: 
-            self.file_handle = StringIO(raw_or_file_marc)
+            self.file_handle = StringIO(marc_target)
 
     def next(self):
         """
