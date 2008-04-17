@@ -6,16 +6,6 @@ from pymarc import marc8_mapping
 
 from sys import stderr
 
-# ODD_MAP for odd characters (all from III for now)
-ODD_MAP = {
-    0x21203d: 0x2026, # HORIZONTAL ELLIPSIS
-    0x212040: 0x201c, # LEFT DOUBLE QUOTATION MARK
-    0x7f2014: 0x2014, # EM DASH
-    0x7f2019: 0x2019, # RIGHT SINGLE QUOTATION MARK
-    0x7f2020: 0x201d, # RIGHT DOUBLE QUOTATION MARK
-    0x7f2122: 0x2122, # TRADE MARK SIGN
-}
-
 def marc8_to_unicode(marc8):
     """
     Pass in a string, and get back a Unicode object.
@@ -103,7 +93,7 @@ class MARC8ToUnicode:
                     (uni, cflag) = marc8_mapping.CODESETS[self.g0][code_point]
             except KeyError:
                 try:
-                    uni = ODD_MAP[code_point]
+                    uni = marc8_mapping.ODD_MAP[code_point]
                     uni_list.append(unichr(uni))
                     # we can short circuit because we know these mappings
                     # won't be involved in combinings.  (i hope?)
