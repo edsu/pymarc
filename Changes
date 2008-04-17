@@ -1,3 +1,6 @@
+v2.21 Thu Apr 17 06:36:42 EDT 2008
+- added more iii specific marc8 abominations (thanks Galen Charlton)
+
 v2.2 Tue Mar 25 13:00:50 EDT 2008
 - MARCReader now accepts any "file-like" object that has read() 
   thanks Neil Santos.
