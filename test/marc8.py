@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, makeSuite
 
 from pymarc import marc8_to_unicode
 
@@ -17,5 +17,8 @@ class MARC8Test(TestCase):
             count += 1
             self.assertEquals(marc8_to_unicode(marc8).encode('utf8'), utf8)
 
-        self.assertEquals(count, 1514)
+        self.assertEquals(count, 1515)
 
+def suite():
+    test_suite = makeSuite(MARC8Test, 'test')
+    return test_suite 

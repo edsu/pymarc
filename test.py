@@ -4,6 +4,7 @@ from test import field
 from test import reader 
 from test import encode
 from test import writer
+from test import marc8
 
 def suite():
     test_suite = unittest.TestSuite()
@@ -12,6 +13,7 @@ def suite():
     test_suite.addTest(reader.suite())
     test_suite.addTest(encode.suite())
     test_suite.addTest(writer.suite())
+    test_suite.addTest(marc8.suite())
     return test_suite
 
 runner = unittest.TextTestRunner()

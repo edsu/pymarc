@@ -6,9 +6,14 @@ from pymarc import marc8_mapping
 
 from sys import stderr
 
-# ODD_MAP for odd characters
+# ODD_MAP for odd characters (all from III for now)
 ODD_MAP = {
-    0x7f2019: 0x027, # change III's crazy smart quote into an apostrophe
+    0x21203d: 0x2026, # HORIZONTAL ELLIPSIS
+    0x212040: 0x201c, # LEFT DOUBLE QUOTATION MARK
+    0x7f2014: 0x2014, # EM DASH
+    0x7f2019: 0x2019, # RIGHT SINGLE QUOTATION MARK
+    0x7f2020: 0x201d, # RIGHT DOUBLE QUOTATION MARK
+    0x7f2122: 0x2122, # TRADE MARK SIGN
 }
 
 def marc8_to_unicode(marc8):
