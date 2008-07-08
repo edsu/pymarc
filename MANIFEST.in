@@ -1,1 +1,2 @@
+include *.py
 graft test
