@@ -1,3 +1,0 @@
-global-include *.py *.dat
-include README MANIFEST.in
-
