@@ -2,7 +2,7 @@
 import ez_setup
 ez_setup.use_setuptools()
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 install_requires = []
 try:
@@ -26,7 +26,7 @@ setup(
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
     license = 'http://www.opensource.org/licenses/bsd-license.php',
-    packages = ['pymarc'],
+    packages = find_packages(),
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),
