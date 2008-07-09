@@ -49,6 +49,13 @@ class MARCReaderFileTest(unittest.TestCase):
         record = reader.next()
         self.assertEqual(record['245']['a'], 'Python pocket reference /')
 
+    def test_codecs(self):
+        import codecs
+        reader = pymarc.MARCReader(codecs.open('test/test.dat',
+            encoding='utf-8'))
+        record = reader.next()
+        self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
+
 class MARCReaderStringTest(MARCReaderFileTest):
 
     def setUp(self):
