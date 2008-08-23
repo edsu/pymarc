@@ -1,6 +1,7 @@
 "The pymarc.field file."
 
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
+from pymarc.marc8 import marc8_to_unicode
 
 class Field(object):
     """
@@ -168,3 +169,10 @@ class Field(object):
         if self.tag.startswith('6'): 
             return True
         return False
+    
+def map_marc8_field(f):
+    if f.is_control_field():
+        f.data = marc8_to_unicode(f.data)
+    else:
+        f.subfields = map(marc8_to_unicode, f.subfields)
+    return f

@@ -3,7 +3,8 @@ import re
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound 
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
-from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD
+from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
+        map_marc8_field
 
 class Record(object):
     """
@@ -304,3 +305,10 @@ class Record(object):
         if self['260']:
             return self['260']['c']
         return None
+
+def map_marc8_record(r):
+    r.fields = map(map_marc8_field, r.fields)
+    l = list(r.leader)
+    l[9] = 'a' # see http://www.loc.gov/marc/specifications/speccharucs.html
+    r.leader = "".join(l)
+    return r

@@ -67,6 +67,5 @@ def map_records(f, *files):
     >>> map_records(print_title, file('marc.dat'))
     """
     for file in files:
-        for record in MARCReader(file):
-            f(record)
+        map(f, MARCReader(file))
 
