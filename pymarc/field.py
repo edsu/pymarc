@@ -94,10 +94,10 @@ class Field(object):
         """
         if self.is_control_field():
             return self.data
-        string = ""
+        value_list = []
         for subfield in self:
-            string += subfield[1]
-        return string
+            value_list.append(subfield[1].strip())
+        return ' '.join(value_list)
 
     def get_subfields(self, *codes):
         """
