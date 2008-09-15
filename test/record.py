@@ -151,6 +151,26 @@ class RecordTest(unittest.TestCase):
         raelist = [rae.__str__() for rae in record.addedentries()]
         self.assertEquals(aelist, raelist)
 
+    def test_physicaldescription(self):
+        record = Record()
+        pd1 = '=300  \\$a1 photographic print :$bgelatin silver ;$c10 x 56 in.'
+        pd2 = '=300  \\$aFOO$bBAR$cBAZ'
+        pdlist = [pd1, pd2]
+        self.assertEquals(record.physicaldescription(), [])
+        record.add_field(Field('300', ['\\', ''],
+            subfields=['a', '1 photographic print :',
+                       'b', 'gelatin silver ;',
+                       'c', '10 x 56 in.']))
+        record.add_field(Field('300', ['\\', ''],
+            subfields=['a', 'FOO',
+                       'b', 'BAR',
+                       'c', 'BAZ']))
+        self.assertEquals(len(record.physicaldescription()), 2)
+        self.assertEquals(record.physicaldescription()[0].__str__(), pd1)
+        self.assertEquals(record.physicaldescription()[1].__str__(), pd2)
+        rpdlist = [rpd.__str__() for rpd in record.physicaldescription()]
+        self.assertEquals(pdlist, rpdlist)
+
     def test_location(self):
         record = Record()
         loc1 = '=852  \\\\$aAmerican Institute of Physics.$bNiels Bohr Library and Archives.$eCollege Park, MD'

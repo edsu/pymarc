@@ -1,10 +1,10 @@
 # see http://www.loc.gov/marc/specifications/speccharmarc8.html
 "pymarc marc8.py file."
 
+import sys 
 import unicodedata
 from pymarc import marc8_mapping
 
-from sys import stderr
 
 def marc8_to_unicode(marc8):
     """
@@ -15,6 +15,7 @@ def marc8_to_unicode(marc8):
     """
     converter = MARC8ToUnicode()
     return converter.translate(marc8)
+
 
 class MARC8ToUnicode:
     """
@@ -101,7 +102,7 @@ class MARC8ToUnicode:
                 except KeyError:
                     pass
                 if not self.quiet:
-                    stderr.write("couldn't find 0x%x in g0=%s g1=%s\n" % 
+                    sys.stderr.write("couldn't find 0x%x in g0=%s g1=%s\n" % 
                         (code_point, self.g0, self.g1))
                 uni = ord(' ')
                 cflag = False
