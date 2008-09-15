@@ -103,13 +103,13 @@ def parse_xml_to_array(xml_file):
     parse_xml(xml_file, handler)
     return handler.records
 
-def record_to_xml(record):
+def record_to_xml(record, quiet=False):
     """
     converts a record object to a chunk of xml
     """
     # helper for converting non-unicode data to unicode
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
-    marc8 = MARC8ToUnicode()
+    marc8 = MARC8ToUnicode(quiet=quiet)
     def translate(data):
         if type(data) == unicode: 
             return data

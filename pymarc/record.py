@@ -296,6 +296,12 @@ class Record(object):
             '595', '596', '597', '598', '599')
         return notelist
 
+    def physicaldescription(self):
+        """
+        Return all 300 fields in an array
+        """
+        return self.get_fields('300')
+
     def publisher(self):
         if self['260']:
             return self['260']['b']
