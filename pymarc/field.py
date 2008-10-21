@@ -28,7 +28,12 @@ class Field(object):
         if subfields == None:
             subfields = []
 
-        self.tag = '%03s' % tag
+        # attempt to normalize integer tags if necessary
+        try:
+            self.tag = '%03i' % int(tag)
+        except ValueError:
+            self.tag = '%03s' % tag
+
         if self.tag < '010':
             self.data = data
         else: 

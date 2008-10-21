@@ -103,3 +103,7 @@ class XmlTest(TestCase):
         sys.stderr.close()
         # no errors should have been written
         self.assertEqual(getsize(outfile), 0)
+
+    def test_bad_tag(self):
+        a = pymarc.parse_xml_to_array(file('test/bad_tag.xml'))
+        self.assertEqual(len(a), 1)

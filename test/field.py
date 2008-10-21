@@ -95,6 +95,13 @@ class FieldTest(unittest.TestCase):
         self.assertEqual(self.field.format_field(), 
                 'Huckleberry Finn:  An American Odyssey')
 
+    def test_tag_normalize(self):
+        f = Field(tag='42', indicators=['', ''])
+        self.assertEqual(f.tag, '042')
+        #f.subfields.append('a')
+        #f.subfields.append('foo')
+        #print f
+
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')
     return test_suite
