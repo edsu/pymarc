@@ -1,4 +1,4 @@
-v2.3 Tue Oct 21 08:27:58 EDT 2008
+v2.30 Tue Oct 21 08:27:58 EDT 2008
 - added logic to Field to format integer tags if they aren't of length 3
   thanks to Ross Singer for noticing the problem
 

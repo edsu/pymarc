@@ -21,7 +21,7 @@ Topic :: Text Processing :: General
 
 setup( 
     name = 'pymarc',
-    version = '2.3',  # remember to update pymarc/__init__.py on release!
+    version = '2.30',  # remember to update pymarc/__init__.py on release!
     url = 'http://cheeseshop.python.org/pypi/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
