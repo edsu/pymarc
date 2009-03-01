@@ -1,3 +1,6 @@
+v2.31 Sun Mar  1 09:11:11 EST 2009
+- added strict namespace checking, thanks Godmar Back
+
 v2.30 Tue Oct 21 08:27:58 EDT 2008
 - added logic to Field to format integer tags if they aren't of length 3
   thanks to Ross Singer for noticing the problem

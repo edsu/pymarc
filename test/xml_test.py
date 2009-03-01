@@ -107,3 +107,10 @@ class XmlTest(TestCase):
     def test_bad_tag(self):
         a = pymarc.parse_xml_to_array(file('test/bad_tag.xml'))
         self.assertEqual(len(a), 1)
+
+    def test_strict(self):
+        a = pymarc.parse_xml_to_array(file('test/batch.xml'), strict=True)
+        self.assertEqual(len(a), 2)
+
+
+        

@@ -10,7 +10,10 @@ except ImportError:
 
 from pymarc import Record, Field, MARC8ToUnicode
 
+MARC_XML_NS = "http://www.loc.gov/MARC21/slim"
+
 class XmlHandler(ContentHandler):
+
     """
     You can subclass XmlHandler and add your own process_record 
     method that'll be passed a pymarc.Record as it becomes 
@@ -18,14 +21,18 @@ class XmlHandler(ContentHandler):
     records elsewhere (like to a rdbms) without having to store 
     them all in memory.
     """
-    def __init__(self):
+    def __init__(self, strict=False):
         self.records = []
         self._record = None
         self._field = None
         self._subfield_code = None
         self._text = []
+        self._strict = strict
 
     def startElementNS(self, name, qname, attrs):
+        if self._strict and name[0] != MARC_XML_NS:
+            return
+
         element = name[1]
         self._text = []
 
@@ -43,6 +50,9 @@ class XmlHandler(ContentHandler):
             self._subfield_code = attrs[(None, 'code')]
 
     def endElementNS(self, name, qname):
+        if self._strict and name[0] != MARC_XML_NS:
+            return
+
         element = name[1]
         text = u''.join(self._text)
 
@@ -95,11 +105,13 @@ def map_xml(function, *files):
     for xml_file in files:
         parse_xml(xml_file, handler)
 
-def parse_xml_to_array(xml_file):
+def parse_xml_to_array(xml_file, strict=False):
     """
-    parse an xml file and return the records as an array
+    parse an xml file and return the records as an array. If you would
+    like the parser to explicitly check the namespaces for the MARCSlim
+    namespace use the strict=True option.
     """
-    handler = XmlHandler()
+    handler = XmlHandler(strict)
     parse_xml(xml_file, handler)
     return handler.records
 
