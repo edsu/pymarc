@@ -1,3 +1,6 @@
+v2.32 Sun Apr 19 21:20:31 EDT 2009
+- added Field.delete_subfield thanks Ahuel Angelinetti 
+
 v2.31 Sun Mar  1 09:11:11 EST 2009
 - added strict namespace checking, thanks Godmar Back
 

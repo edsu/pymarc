@@ -85,6 +85,13 @@ class FieldTest(unittest.TestCase):
         field.add_subfield('a','bar')
         self.assertEquals(field.__str__(), '=245  01$afoo$abar')
         
+    def test_delete_subfield(self):
+        field = Field(tag='200', indicators=[0,1], subfields=['a','My Title', 'a', 'Kinda Bogus Anyhow'])
+        self.assertEquals(field.delete_subfield('z'), None)
+        self.assertEquals(field.delete_subfield('a'), 'My Title')
+        self.assertEquals(field.delete_subfield('a'), 'Kinda Bogus Anyhow')
+        self.assertTrue(len(field.subfields) == 0)
+        
     def test_is_subject_field(self):
         self.assertEqual(self.subjectfield.is_subject_field(), True)
         self.assertEqual(self.field.is_subject_field(), False)

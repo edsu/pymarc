@@ -2,6 +2,7 @@
 
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
+from pymarc.exceptions import NoSubfieldFound
 
 class Field(object):
     """
@@ -128,6 +129,23 @@ class Field(object):
         self.subfields.append(code)
         self.subfields.append(value)
 
+    def delete_subfield(self, code):
+        """
+        Deletes the first subfield with the specified 'code' and returns 
+        its value:
+            
+            field.del_subfield('a')
+
+        If no subfield is found with the specified code None is returned.
+        """
+        try:
+            index = self.subfields.index(code)
+            value = self.subfields.pop(index + 1)
+            self.subfields.pop(index)
+            return value
+        except ValueError:
+            return None
+        
     def is_control_field(self):
         """
         returns true or false if the field is considered a control field.
