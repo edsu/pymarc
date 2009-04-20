@@ -2,7 +2,6 @@
 
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
-from pymarc.exceptions import NoSubfieldFound
 
 class Field(object):
     """
