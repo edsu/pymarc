@@ -10,7 +10,9 @@ except ImportError:
 
 from pymarc import Record, Field, MARC8ToUnicode
 
+XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
 MARC_XML_NS = "http://www.loc.gov/MARC21/slim"
+MARC_XML_SCHEMA = "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
 
 class XmlHandler(ContentHandler):
 
@@ -115,9 +117,12 @@ def parse_xml_to_array(xml_file, strict=False):
     parse_xml(xml_file, handler)
     return handler.records
 
-def record_to_xml(record, quiet=False):
+def record_to_xml(record, quiet=False, namespace=False):
     """
     converts a record object to a chunk of xml
+
+    # include the marcxml namespace in the root tag (default: False)
+    record_to_xml(record, namespace=True)
     """
     # helper for converting non-unicode data to unicode
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
@@ -129,6 +134,10 @@ def record_to_xml(record, quiet=False):
             return marc8.translate(data)
 
     root = ET.Element('record')
+    if namespace:
+        root.set('xmlns', MARC_XML_NS)
+        root.set('xmlns:xsi', XSI_NS)
+        root.set('xsi:schemaLocation', MARC_XML_SCHEMA)
     leader = ET.SubElement(root, 'leader')
     leader.text = record.leader
     for field in record:

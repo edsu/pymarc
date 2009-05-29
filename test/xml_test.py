@@ -1,11 +1,11 @@
 from os.path import getsize
 import sys
-from unittest import TestCase
+import unittest
 from cStringIO import StringIO
 
 import pymarc
 
-class XmlTest(TestCase):
+class XmlTest(unittest.TestCase):
 
     def test_map_xml(self):
         self.seen = 0
@@ -104,13 +104,33 @@ class XmlTest(TestCase):
         # no errors should have been written
         self.assertEqual(getsize(outfile), 0)
 
+    def test_strict(self):
+        a = pymarc.parse_xml_to_array(file('test/batch.xml'), strict=True)
+        self.assertEqual(len(a), 2)
+    
+    def test_xml_namespaces(self):
+        """ Tests the 'namespace' parameter of the record_to_xml() method
+        """
+        # get a test record
+        record = pymarc.reader.MARCReader(open('test/test.dat')).next()
+        # record_to_xml() with quiet set to False should generate errors
+        #   and write them to sys.stderr
+        xml = pymarc.record_to_xml(record, namespace=False)
+        # look for the xmlns in the written xml, should be -1
+        self.assertEqual(xml.find('xmlns="http://www.loc.gov/MARC21/slim"'), -1)
+
+        # record_to_xml() with quiet set to True should not generate errors
+        xml = pymarc.record_to_xml(record, namespace=True)
+        # look for the xmlns in the written xml, should be >= 0
+        self.assertNotEqual(xml.find('xmlns="http://www.loc.gov/MARC21/slim"'), -1)
+
     def test_bad_tag(self):
         a = pymarc.parse_xml_to_array(file('test/bad_tag.xml'))
         self.assertEqual(len(a), 1)
 
-    def test_strict(self):
-        a = pymarc.parse_xml_to_array(file('test/batch.xml'), strict=True)
-        self.assertEqual(len(a), 2)
+def suite():
+    test_suite = unittest.makeSuite(XmlTest, 'test')
+    return test_suite
 
-
-        
+if __name__ == '__main__':
+    unittest.main()
