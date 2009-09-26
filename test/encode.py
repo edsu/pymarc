@@ -12,7 +12,7 @@ class Encode(unittest.TestCase):
         record = reader.next()
         # make sure original data is the same as 
         # the record encoded as MARC
-        raw = record.as_marc21()
+        raw = record.as_marc()
         self.assertEqual(original, raw)
 
 def suite():

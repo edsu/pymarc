@@ -1,6 +1,7 @@
 from unittest import TestCase, makeSuite
+import codecs
 
-from pymarc import marc8_to_unicode
+from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
 
 class MARC8Test(TestCase):
 
@@ -18,6 +19,17 @@ class MARC8Test(TestCase):
             self.assertEquals(marc8_to_unicode(marc8).encode('utf8'), utf8)
 
         self.assertEquals(count, 1515)
+
+    def test_unicode(self):
+        record = Record()
+        record.add_field(Field(245, ['1', '0'], ['a', unichr(0x1234)]))
+        writer = MARCWriter(open('test/foo', 'w'))
+        writer.write(record)
+        writer.close()
+
+        reader = MARCReader(open('test/foo'))
+        record = reader.next()
+        self.assertEqual(record['245']['a'], unichr(0x1234))
 
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')

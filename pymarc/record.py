@@ -31,7 +31,7 @@ class Record(object):
 
     Or getting a record as serialized MARC21.
 
-        raw = record.as_marc21()
+        raw = record.as_marc()
 
     You'll normally want to use a MARCReader object to iterate through 
     MARC records in a file.  
@@ -147,6 +147,8 @@ class Record(object):
             entry_offset = int(entry[7:12])
             entry_data = marc[base_address + entry_offset : 
                 base_address + entry_offset + entry_length - 1]
+            # safe to decode now that byte offset manipulation has been done
+            entry_data = entry_data.decode('utf-8') 
 
             if entry_tag < '010':
                 field = Field(tag=entry_tag, data=entry_data)
@@ -174,11 +176,11 @@ class Record(object):
         if field_count == 0: 
             raise NoFieldsFound 
 
-    def as_marc21(self):
+    def as_marc(self):
         """
         returns the record serialized as MARC21
         """
-        fields = '' 
+        fields = ''
         directory = '' 
         offset = 0
 
@@ -187,7 +189,7 @@ class Record(object):
         # the field and the offset from the base address where the field data
         # can be found
         for field in self.fields:
-            field_data = field.as_marc21()
+            field_data = field.as_marc().encode('utf-8')
             fields += field_data
             directory += '%03d%04d%05d' % (int(field.tag), len(field_data),
                     offset)
@@ -212,6 +214,9 @@ class Record(object):
         
         # return the encoded record
         return self.leader + directory + fields 
+
+    # alias for backwards compatability
+    as_marc21 = as_marc
 
     def title(self):
         """

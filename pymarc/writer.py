@@ -37,7 +37,7 @@ class MARCWriter(Writer):
         """
         if type(record) != Record:
             raise WriteNeedsRecord
-        self.file_handle.write(record.as_marc21())
+        self.file_handle.write(record.as_marc())
 
     def close(self):
         """

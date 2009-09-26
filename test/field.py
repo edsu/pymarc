@@ -61,7 +61,7 @@ class FieldTest(unittest.TestCase):
             ['Python (Computer program language)', 'Poetry.' ])
 
     def test_encode(self):
-        self.field.as_marc21()
+        self.field.as_marc()
 
     def test_iterator(self):
         string = ""

@@ -154,7 +154,7 @@ class Field(object):
             return True
         return False
 
-    def as_marc21(self):
+    def as_marc(self):
         """
         used during conversion of a field to raw marc
         """
@@ -164,6 +164,9 @@ class Field(object):
         for subfield in self:
             marc += SUBFIELD_INDICATOR + subfield[0] + subfield[1]
         return marc + END_OF_FIELD
+
+    # alias for backwards compatability
+    as_marc21 = as_marc
 
     def format_field(self):
         """

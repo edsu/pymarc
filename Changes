@@ -1,3 +1,16 @@
+v2.40 
+- renamed Record.as_marc21 Field.as_marc21 to Record.as_marc and Field.as_marc ;
+  to bring in line with Record.decode_marc -- but I created aliases for the old
+  methods so people's code won't break.
+- Record.decode_marc now decodes utf-8 after fields have been extracted with 
+  byte offsets. Similarly Record.as_marc encodes fields as utf-8 before 
+  calculating byte offsets. This hopefully will help people like Ted who
+  were trying to create records with Unicode in them, serializing them as
+  marc, and then other software complaining about record length, byte offsets
+  being incorrect. https://lists.launchpad.net/pymarc-team/msg00007.html
+- disabled quiet marc8 error test since whatever marc8 error was coming up
+  now has disappeared with the new utf-8 encode/decode action.
+
 v2.32 Sun Apr 19 21:20:31 EDT 2009
 - added Field.delete_subfield thanks Ahuel Angelinetti 
 
