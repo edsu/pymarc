@@ -1,3 +1,6 @@
+v2.41
+- added non-numeric tag functionality (thanks Mark Matienzo)
+
 v2.40 
 - renamed Record.as_marc21 Field.as_marc21 to Record.as_marc and Field.as_marc ;
   to bring in line with Record.decode_marc -- but I created aliases for the old
