@@ -34,7 +34,8 @@ class Field(object):
         except ValueError:
             self.tag = '%03s' % tag
 
-        if self.tag < '010':
+        # assume controlfields are numeric only; replicates ruby-marc behavior 
+        if self.tag < '010' and self.tag.isdigit():
             self.data = data
         else: 
             self.indicator1, self.indicator2 = self.indicators = indicators
@@ -150,7 +151,7 @@ class Field(object):
         returns true or false if the field is considered a control field.
         Control fields lack indicators and subfields.
         """
-        if self.tag < '010': 
+        if self.tag < '010' and self.tag.isdigit(): 
             return True
         return False
 

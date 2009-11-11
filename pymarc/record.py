@@ -191,8 +191,12 @@ class Record(object):
         for field in self.fields:
             field_data = field.as_marc().encode('utf-8')
             fields += field_data
-            directory += '%03d%04d%05d' % (int(field.tag), len(field_data),
-                    offset)
+            if field.tag.isdigit():
+                directory += '%03d' % int(field.tag)
+            else:
+                directory += '%03s' % field.tag
+            directory += '%04d%05d' % (len(field_data), offset)
+    
             offset += len(field_data)
 
         # directory ends with an end of field
