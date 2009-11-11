@@ -105,9 +105,12 @@ class FieldTest(unittest.TestCase):
     def test_tag_normalize(self):
         f = Field(tag='42', indicators=['', ''])
         self.assertEqual(f.tag, '042')
-        #f.subfields.append('a')
-        #f.subfields.append('foo')
-        #print f
+
+    def test_alphatag(self):
+        f = Field(tag='CAT', indicators=[0, 1], subfields=['a', 'foo'])
+        self.assertEqual(f.tag, 'CAT')
+        self.assertEqual(f['a'], 'foo')
+        self.assertEqual(f.is_control_field(), False)
 
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')

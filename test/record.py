@@ -212,6 +212,15 @@ class RecordTest(unittest.TestCase):
             subfields=['a', 'Paris :', 'b', 'Gauthier-Villars ;', 'a', 'Chicago :', 'b', 'University of Chicago Press,', 'c', '1955.']))
         self.assertEquals(record.pubyear(), '1955.')
 
+    def test_alphatag(self):
+        record = Record()
+        record.add_field(Field('CAT', [' ', ' '], subfields=['a', 'foo']))
+        record.add_field(Field('CAT', [' ', ' '], subfields=['b', 'bar']))
+        fields = record.get_fields('CAT')
+        self.assertEqual(len(fields), 2)
+        self.assertEqual(fields[0]['a'], 'foo')
+        self.assertEqual(fields[1]['b'], 'bar')
+        self.assertEqual(record['CAT']['a'], 'foo')
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
