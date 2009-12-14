@@ -4,6 +4,11 @@ import codecs
 from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
 
 class MARC8Test(TestCase):
+    
+    def test_marc8_reader(self):
+        marc8_file = file('test/marc8.dat')
+        reader = MARCReader(marc8_file)
+        self.assertEquals(type(reader.next()), Record)
 
     def test_marc8_to_unicode(self):
         marc8_file = file('test/test_marc8.txt')
