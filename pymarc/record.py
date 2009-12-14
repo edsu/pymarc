@@ -38,13 +38,13 @@ class Record(object):
     MARC records in a file.  
     """
 
-    def __init__(self, data='', to_unicode=False, from_charset='marc-8'):
+    def __init__(self, data='', to_unicode=False, force_utf8=False):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
         self.pos = 0
         if len(data) > 0:
             self.decode_marc(data, to_unicode=to_unicode,
-                             from_charset=from_charset)
+                             force_utf8=force_utf8)
 
     def __str__(self):
         """
@@ -108,7 +108,7 @@ class Record(object):
 
         return [f for f in self.fields if f.tag in args]
 
-    def decode_marc(self, marc, to_unicode=False, from_charset='marc-8'):
+    def decode_marc(self, marc, to_unicode=False, force_utf8=False):
         """
         decode_marc() accepts a MARC record in transmission format as a
         a string argument, and will populate the object based on the data
@@ -163,7 +163,7 @@ class Record(object):
                     data = subfield[1:]
 
                     if to_unicode:
-                        if self.leader[9] == 'a' or from_charset == 'utf-8':
+                        if self.leader[9] == 'a' or force_utf8:
                             data = data.decode('utf-8')
                         else:
                             data = marc8_to_unicode(data)

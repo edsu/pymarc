@@ -1,4 +1,6 @@
 from unittest import TestCase, makeSuite
+
+import os
 import codecs
 
 from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
@@ -48,6 +50,8 @@ class MARC8Test(TestCase):
         record = reader.next()
         self.assertEqual(record['245']['a'], unichr(0x1234))
 
+        os.remove('test/foo')
+
     def test_reading_utf8_with_flag(self):
         reader = MARCReader(open('test/utf8_with_leader_flag.dat'))
         record = reader.next()
@@ -82,8 +86,9 @@ class MARC8Test(TestCase):
         # warnings will appear in the terminal
         self.assertEquals(utitle, 'De la solitude a   la communaute .')
 
+        # force reading as utf-8
         reader = MARCReader(open('test/utf8_without_leader_flag.dat'), 
-                            to_unicode=True, from_charset='utf-8')
+                            to_unicode=True, force_utf8=True)
         record = reader.next()
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
