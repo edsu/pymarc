@@ -5,6 +5,7 @@ from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field
+from pymarc.marc8 import marc8_to_unicode
 
 class Record(object):
     """
@@ -37,12 +38,13 @@ class Record(object):
     MARC records in a file.  
     """
 
-    def __init__(self, data=''):
+    def __init__(self, data='', to_unicode=False, from_charset='marc-8'):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
         self.pos = 0
         if len(data) > 0:
-            self.decode_marc(data)
+            self.decode_marc(data, to_unicode=to_unicode,
+                             from_charset=from_charset)
 
     def __str__(self):
         """
@@ -106,7 +108,7 @@ class Record(object):
 
         return [f for f in self.fields if f.tag in args]
 
-    def decode_marc(self, marc):
+    def decode_marc(self, marc, to_unicode=False, from_charset='marc-8'):
         """
         decode_marc() accepts a MARC record in transmission format as a
         a string argument, and will populate the object based on the data
@@ -114,7 +116,6 @@ class Record(object):
         the scenes when you pass in a chunk of MARC data to it.
 
         """
-
         # extract record leader
         self.leader = marc[0:LEADER_LEN]
         if len(self.leader) != LEADER_LEN: 
@@ -147,8 +148,6 @@ class Record(object):
             entry_offset = int(entry[7:12])
             entry_data = marc[base_address + entry_offset : 
                 base_address + entry_offset + entry_length - 1]
-            # safe to decode now that byte offset manipulation has been done
-            entry_data = entry_data.decode('utf-8') 
 
             if entry_tag < '010':
                 field = Field(tag=entry_tag, data=entry_data)
@@ -162,6 +161,12 @@ class Record(object):
                         continue
                     code = subfield[0]
                     data = subfield[1:]
+
+                    if to_unicode:
+                        if self.leader[9] == 'a' or from_charset == 'utf-8':
+                            data = data.decode('utf-8')
+                        else:
+                            data = marc8_to_unicode(data)
                     subfields.append(code)
                     subfields.append(data)
                 field = Field( 

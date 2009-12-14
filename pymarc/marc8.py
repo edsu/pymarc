@@ -13,6 +13,8 @@ def marc8_to_unicode(marc8):
       print marc8_to_unicode(record.title())
 
     """
+    # XXX: might be good to stash away a converter somehow
+    # instead of always re-creating it 
     converter = MARC8ToUnicode()
     return converter.translate(marc8)
 

@@ -28,13 +28,15 @@ class MARCReader(Reader):
         for record in reader:
             ...
     """
-    def __init__(self, marc_target):
+    def __init__(self, marc_target, to_unicode=False, from_charset='marc-8'):
         """
         The constructor to which you can pass either raw marc or a file-like
         object. Basically the argument you pass in should be raw MARC in 
         transmission format or an object that responds to read().
         """
         super(MARCReader, self).__init__()
+        self.to_unicode = to_unicode
+        self.from_charset = from_charset
         if (hasattr(marc_target, "read") and callable(marc_target.read)):
             self.file_handle = marc_target
         else: 
@@ -53,7 +55,9 @@ class MARCReader(Reader):
         length = int(first5)
         chunk = self.file_handle.read(length - 5)
         chunk = first5 + chunk
-        record = Record(chunk)
+        record = Record(chunk, 
+                        to_unicode=self.to_unicode,
+                        from_charset=self.from_charset)
         return record 
 
 def map_records(f, *files):
