@@ -149,6 +149,7 @@ class Record(object):
             entry_data = marc[base_address + entry_offset : 
                 base_address + entry_offset + entry_length - 1]
 
+            # assume controlfields are numeric; replicates ruby-marc behavior 
             if entry_tag < '010' and entry_tag.isdigit():
                 field = Field(tag=entry_tag, data=entry_data)
             else:
