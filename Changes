@@ -4,14 +4,17 @@ vx.xx
   by using MARCReader(to_unicode=True). Also added a parameter force_utf8
   to force decoding as UTF-8 for use in situations when the record is UTF-8, 
   but the leader hasn't been coded correctly.
+- improved non-numeric tag functionality in Record.decode_marc -- comparison
+  to determine if a tag should be treated as a control or variable field
+  wasn't being done in the same way it was in Field.__init__ (Mark Matienzo)
 
 v2.41
 - added non-numeric tag functionality (thanks Mark Matienzo)
 
 v2.40 
-- renamed Record.as_marc21 Field.as_marc21 to Record.as_marc and Field.as_marc ;
-  to bring in line with Record.decode_marc -- but I created aliases for the old
-  methods so people's code won't break.
+- renamed Record.as_marc21 Field.as_marc21 to Record.as_marc and Field.as_marc 
+  to bring in line with Record.decode_marc -- but I created aliases for the
+  old methods so people's code won't break.
 - Record.decode_marc now decodes utf-8 after fields have been extracted with 
   byte offsets. Similarly Record.as_marc encodes fields as utf-8 before 
   calculating byte offsets. This hopefully will help people like Ted who
