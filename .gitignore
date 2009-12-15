@@ -1,2 +1,4 @@
 *.pyc
 pymarc.egg-info
+build
+dist
