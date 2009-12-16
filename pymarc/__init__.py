@@ -1,6 +1,6 @@
 # __init__.py
 
-__version__ = '2.42a1'
+__version__ = '2.50'
 r'''
 
 The pymarc module provides an API for reading, writing and modifying
