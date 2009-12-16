@@ -1,9 +1,9 @@
-vx.xx
+v2.50
 - changed default character set handling behavior back to what it was like 
   pre-v2.40. But retained the ability to convert to Unicode when reading
   by using MARCReader(to_unicode=True). Also added a parameter force_utf8
   to force decoding as UTF-8 for use in situations when the record is UTF-8, 
-  but the leader hasn't been coded correctly.
+  but the leader hasn't been coded correctly. (Ed Summers)
 - improved non-numeric tag functionality in Record.decode_marc -- comparison
   to determine if a tag should be treated as a control or variable field
   wasn't being done in the same way it was in Field.__init__ (Mark Matienzo)
