@@ -1,4 +1,7 @@
-v2.50
+v2.51 Thu Dec 17 13:17:47 EST 2009
+- strip non-numeric characters in Record.isbn() (thanks Accidental Librarian)
+
+v2.50 Wed Dec 16 15:26:23 EST 2009
 - changed default character set handling behavior back to what it was like 
   pre-v2.40. But retained the ability to convert to Unicode when reading
   by using MARCReader(to_unicode=True). Also added a parameter force_utf8
