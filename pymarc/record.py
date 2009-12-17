@@ -7,6 +7,8 @@ from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field
 from pymarc.marc8 import marc8_to_unicode
 
+isbn_regex = re.compile(r'([0-9\-]+)')
+
 class Record(object):
     """
     A class for representing a MARC record. Each Record object is made up of
@@ -253,7 +255,7 @@ class Record(object):
         """
         try:
             isbn_number = self['020']['a']
-            match = re.search(r'([0-9\-]+)', isbn_number)
+            match = isbn_regex.search(isbn_number)
             if match:
                 return match.group(1).replace('-', '')
         except TypeError:
