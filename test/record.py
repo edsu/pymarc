@@ -1,5 +1,6 @@
 import unittest
 
+from pymarc.reader import MARCReader
 from pymarc.record import Record
 from pymarc.field import Field
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid
@@ -97,6 +98,15 @@ class RecordTest(unittest.TestCase):
         record = Record()
         record.add_field(Field('020', [0, 1], subfields=['a', 'ISBN-978-1416566113']))
         self.assertEquals(record.isbn(), '9781416566113')
+        
+        record = Record()
+        record.add_field(Field('020', [' ', ' '], subfields=['a', '0456789012 (reel 1)']))
+        self.assertEquals(record.isbn(), '0456789012')
+        
+    def test_multiple_isbn(self):
+        reader = MARCReader(file('test/multi_isbn.dat'))
+        record = reader.next()
+        self.assertEquals(record.isbn(), '0914378287')
     
     def test_author(self):
         record = Record()
