@@ -1,3 +1,7 @@
+vx.xx
+- slightly better capturing of the isbn from extraneous information in the
+  MARC 020 field.
+
 v2.51 Thu Dec 17 13:17:47 EST 2009
 - strip non-numeric characters in Record.isbn() (André Nesse)
 
