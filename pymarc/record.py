@@ -248,14 +248,15 @@ class Record(object):
         Returns an ISBN if appropriate. If not present None will
         be returned.
         """
-        try: 
-            # if anyone ever cares alot about performance 
-            # this compilation could be moved out and compiled once
-            isbn_pattern = re.compile('^([0-9A-Za-z]+)')
-            isbn = isbn_pattern.match(self['020']['a']).group(1)
+        try:
+            isbn_number = self['020']['a']
+            normalized_isbn = re.sub("\D","",isbn_number)
+            if normalized_isbn:
+                return normalized_isbn
         except TypeError:
-            isbn = None 
-        return isbn
+            # ISBN not set
+            pass
+        return None
 
     def author(self):
         if self['100']:

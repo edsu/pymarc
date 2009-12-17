@@ -87,8 +87,16 @@ class RecordTest(unittest.TestCase):
     def test_isbn(self):
         record = Record()
         self.assertEquals(record.isbn(), None) 
-        record.add_field(Field('020', [0, 1], subfields=['a', '123456789']))
-        self.assertEquals(record.isbn(), '123456789')
+        record.add_field(Field('020', [0, 1], subfields=['a', '9781416566113']))
+        self.assertEquals(record.isbn(), '9781416566113')
+        
+        record = Record()
+        record.add_field(Field('020', [0, 1], subfields=['a', '978-1416566113']))
+        self.assertEquals(record.isbn(), '9781416566113')
+        
+        record = Record()
+        record.add_field(Field('020', [0, 1], subfields=['a', 'ISBN-978-1416566113']))
+        self.assertEquals(record.isbn(), '9781416566113')
     
     def test_author(self):
         record = Record()
