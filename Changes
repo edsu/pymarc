@@ -1,5 +1,5 @@
 v2.51 Thu Dec 17 13:17:47 EST 2009
-- strip non-numeric characters in Record.isbn() (thanks Accidental Librarian)
+- strip non-numeric characters in Record.isbn() (André Nesse)
 
 v2.50 Wed Dec 16 15:26:23 EST 2009
 - changed default character set handling behavior back to what it was like 
