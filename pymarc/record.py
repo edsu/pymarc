@@ -184,7 +184,7 @@ class Record(object):
         if field_count == 0: 
             raise NoFieldsFound 
 
-    def as_marc(self):
+    def as_marc(self, to_unicode=False):
         """
         returns the record serialized as MARC21
         """
@@ -197,7 +197,9 @@ class Record(object):
         # the field and the offset from the base address where the field data
         # can be found
         for field in self.fields:
-            field_data = field.as_marc().encode('utf-8')
+            field_data = field.as_marc()
+            if to_unicode:
+                field_data = field_data.encode('utf-8')
             fields += field_data
             if field.tag.isdigit():
                 directory += '%03d' % int(field.tag)
