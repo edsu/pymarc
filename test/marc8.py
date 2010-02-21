@@ -58,7 +58,8 @@ class MARC8Test(TestCase):
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
         self.assertEquals(type(utitle), str)
-        self.assertEquals(utitle, 'De la solitude a\xcc\x80 la communaute\xcc\x81.')
+        self.assertEquals(utitle,
+            'De la solitude a\xcc\x80 la communaute\xcc\x81.')
 
         reader = MARCReader(open('test/utf8_with_leader_flag.dat'), 
                             to_unicode=True)
@@ -66,7 +67,8 @@ class MARC8Test(TestCase):
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
         self.assertEquals(type(utitle), unicode)
-        self.assertEquals(utitle, u'De la solitude a' + unichr(0x0300) + ' la communaute' + unichr(0x0301) + '.')
+        self.assertEquals(utitle, u'De la solitude a' + unichr(0x0300) +
+            ' la communaute' + unichr(0x0301) + '.')
 
     def test_reading_utf8_without_flag(self):
         reader = MARCReader(open('test/utf8_without_leader_flag.dat'))
@@ -74,10 +76,11 @@ class MARC8Test(TestCase):
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
         self.assertEquals(type(utitle), str)
-        self.assertEquals(utitle, 'De la solitude a\xcc\x80 la communaute\xcc\x81.')
+        self.assertEquals(utitle,
+            'De la solitude a\xcc\x80 la communaute\xcc\x81.')
 
         reader = MARCReader(open('test/utf8_without_leader_flag.dat'), 
-                            to_unicode=True)
+                            to_unicode=True, hide_utf8_warnings=True)
         record = reader.next()
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
@@ -88,12 +91,14 @@ class MARC8Test(TestCase):
 
         # force reading as utf-8
         reader = MARCReader(open('test/utf8_without_leader_flag.dat'), 
-                            to_unicode=True, force_utf8=True)
+                            to_unicode=True, force_utf8=True,
+                            hide_utf8_warnings=True)
         record = reader.next()
         self.assertEquals(type(record), Record)
         utitle = record['240']['a']
         self.assertEquals(type(utitle), unicode)
-        self.assertEquals(utitle, u'De la solitude a' + unichr(0x0300) + ' la communaute' + unichr(0x0301) + '.')
+        self.assertEquals(utitle, u'De la solitude a' + unichr(0x0300) +
+            ' la communaute' + unichr(0x0301) + '.')
 
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')
