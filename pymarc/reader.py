@@ -43,7 +43,8 @@ class MARCReader(Reader):
         reader = MARCReader(file('file.dat'), to_unicode=True, force_utf8=True)
 
     """
-    def __init__(self, marc_target, to_unicode=False, force_utf8=False):
+    def __init__(self, marc_target, to_unicode=False, force_utf8=False,
+        hide_utf8_warnings=False):
         """
         The constructor to which you can pass either raw marc or a file-like
         object. Basically the argument you pass in should be raw MARC in 
@@ -52,6 +53,7 @@ class MARCReader(Reader):
         super(MARCReader, self).__init__()
         self.to_unicode = to_unicode
         self.force_utf8 = force_utf8
+        self.hide_utf8_warnings = hide_utf8_warnings
         if (hasattr(marc_target, "read") and callable(marc_target.read)):
             self.file_handle = marc_target
         else: 
@@ -72,7 +74,8 @@ class MARCReader(Reader):
         chunk = first5 + chunk
         record = Record(chunk, 
                         to_unicode=self.to_unicode,
-                        force_utf8=self.force_utf8)
+                        force_utf8=self.force_utf8,
+                        hide_utf8_warnings=self.hide_utf8_warnings)
         return record 
 
 def map_records(f, *files):

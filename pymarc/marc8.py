@@ -6,7 +6,7 @@ import unicodedata
 from pymarc import marc8_mapping
 
 
-def marc8_to_unicode(marc8):
+def marc8_to_unicode(marc8, hide_utf8_warnings=False):
     """
     Pass in a string, and get back a Unicode object.
 
@@ -15,7 +15,7 @@ def marc8_to_unicode(marc8):
     """
     # XXX: might be good to stash away a converter somehow
     # instead of always re-creating it 
-    converter = MARC8ToUnicode()
+    converter = MARC8ToUnicode(quiet=hide_utf8_warnings)
     return converter.translate(marc8)
 
 
