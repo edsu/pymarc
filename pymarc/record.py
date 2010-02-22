@@ -41,14 +41,15 @@ class Record(object):
     """
 
     def __init__(self, data='', to_unicode=False, force_utf8=False,
-        hide_utf8_warnings=False):
+        hide_utf8_warnings=False, utf8_handling='strict'):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
         self.pos = 0
         if len(data) > 0:
             self.decode_marc(data, to_unicode=to_unicode,
                              force_utf8=force_utf8,
-                             hide_utf8_warnings=hide_utf8_warnings)
+                             hide_utf8_warnings=hide_utf8_warnings,
+                             utf8_handling=utf8_handling)
 
     def __str__(self):
         """
@@ -113,7 +114,7 @@ class Record(object):
         return [f for f in self.fields if f.tag in args]
 
     def decode_marc(self, marc, to_unicode=False, force_utf8=False,
-        hide_utf8_warnings=False):
+        hide_utf8_warnings=False, utf8_handling='strict'):
         """
         decode_marc() accepts a MARC record in transmission format as a
         a string argument, and will populate the object based on the data
@@ -170,7 +171,7 @@ class Record(object):
 
                     if to_unicode:
                         if self.leader[9] == 'a' or force_utf8:
-                            data = data.decode('utf-8')
+                            data = data.decode('utf-8', utf8_handling)
                         else:
                             data = marc8_to_unicode(data, hide_utf8_warnings)
                     subfields.append(code)
@@ -187,7 +188,7 @@ class Record(object):
         if field_count == 0: 
             raise NoFieldsFound 
 
-    def as_marc(self, to_unicode=False):
+    def as_marc(self):
         """
         returns the record serialized as MARC21
         """
@@ -200,9 +201,7 @@ class Record(object):
         # the field and the offset from the base address where the field data
         # can be found
         for field in self.fields:
-            field_data = field.as_marc()
-            if to_unicode:
-                field_data = field_data.encode('utf-8')
+            field_data = field.as_marc().encode('utf-8')
             fields += field_data
             if field.tag.isdigit():
                 directory += '%03d' % int(field.tag)
