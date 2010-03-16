@@ -1,7 +1,8 @@
 import re
 
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
-        BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound 
+        BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
+        FieldNotFound
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field
@@ -91,6 +92,17 @@ class Record(object):
         Optionally you can pass in multiple fields.
         """
         self.fields.extend(fields)
+
+    def remove_field(self, *fields):
+        """
+        remove_field() will remove one or more pymarc.Field objects from
+        a Record object.
+        """
+        for f in fields:
+            try:
+                self.fields.remove(f)
+            except ValueError: 
+                raise FieldNotFound
 
     def get_fields(self, *args):
         """
