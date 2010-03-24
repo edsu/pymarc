@@ -3,7 +3,8 @@ import unittest
 from pymarc.reader import MARCReader
 from pymarc.record import Record
 from pymarc.field import Field
-from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid
+from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
+        FieldNotFound
 
 class RecordTest(unittest.TestCase):
 
@@ -15,6 +16,23 @@ class RecordTest(unittest.TestCase):
             subfields = ['a', 'Python', 'c', 'Guido'])
         record.add_field(field)
         self.failUnless(field in record.fields, msg='found field')
+
+    def test_remove_field(self):
+        record = Record()
+        field = Field(
+            tag = '245', 
+            indicators = ['1', '0'], 
+            subfields = ['a', 'Python', 'c', 'Guido'])
+        record.add_field(field)
+        self.assertEqual(record['245']['a'], 'Python')
+
+        # try removing a field that exists
+        record.remove_field(field)
+        self.assertEqual(record['245'], None)
+
+        # try removing a field that doesn't exist
+        field = Field('001', data='abcd1234')
+        self.assertRaises(FieldNotFound, record.remove_field, field)
 
     def test_quick_access(self):
         record = Record() 
@@ -239,6 +257,15 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(fields[0]['a'], 'foo')
         self.assertEqual(fields[1]['b'], 'bar')
         self.assertEqual(record['CAT']['a'], 'foo')
+
+    def test_copy(self):
+        from copy import deepcopy
+        r1 = MARCReader(file('test/one.dat')).next()
+        r2 = deepcopy(r1)
+        r1.add_field(Field('999', [' ', ' '], subfields=['a', 'foo']))
+        r2.add_field(Field('999', [' ', ' '], subfields=['a', 'bar']))
+        self.assertEqual(r1['999']['a'], 'foo')
+        self.assertEqual(r2['999']['a'], 'bar')
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')

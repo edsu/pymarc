@@ -34,3 +34,7 @@ class WriteNeedsRecord(PymarcException):
 class NoActiveFile(PymarcException):
     def __str__(self):
         return "There is no active file to write to in call to write"
+
+class FieldNotFound(PymarcException):
+    def __str__(self):
+        return "Record does not contain the specified field"

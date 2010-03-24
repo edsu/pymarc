@@ -1,4 +1,4 @@
-v2.52 Mon Feb 22 16:08:39 EST 2010
+v2.6x
 - Added utf8_handling parameter to Record and MARCReader constructors and to
   Record.decode_marc(); accepts 'strict', 'replace', and 'ignore as arguments,
   just like the errors parameter of 8-bit string decoding in Python
@@ -6,8 +6,11 @@ v2.52 Mon Feb 22 16:08:39 EST 2010
   (Mark Matienzo)
 - Added hide_utf8_warnings flag to marc8_to_unicode, MARCReader and Record;
   wrapper for quiet flag for MARC8ToUnicode (Mark Matienzo)
+
+v2.60
 - slightly better capturing of the isbn from extraneous information in the
   MARC 020 field.
+- added Record.remove_field
 
 v2.51 Thu Dec 17 13:17:47 EST 2009
 - strip non-numeric characters in Record.isbn() (André Nesse)
