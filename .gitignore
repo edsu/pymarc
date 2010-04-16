@@ -2,3 +2,4 @@
 pymarc.egg-info
 build
 dist
+*$py.class
