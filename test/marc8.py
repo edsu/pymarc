@@ -22,6 +22,14 @@ class MARC8Test(TestCase):
         utitle = r['240']['a']
         self.assertEquals(type(utitle), unicode)
         self.assertEquals(utitle, u'De la solitude \xe0 la communaut\xe9.')
+        
+    def test_marc8_reader_to_unicode_bad_escape(self):
+        reader = MARCReader(file('test/bad_marc8_escape.dat'), to_unicode=True)
+        r =  reader.next()
+        self.assertEquals(type(r), Record)
+        upublisher = r['260']['b']
+        self.assertEquals(type(upublisher), unicode)
+        self.assertEquals(upublisher, u'La Soci\xe9t\x1b,')
 
     def test_marc8_to_unicode(self):
         marc8_file = file('test/test_marc8.txt')

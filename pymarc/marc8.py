@@ -58,11 +58,20 @@ class MARC8ToUnicode:
             if marc8_string[pos] == '\x1b':
                 next = marc8_string[pos+1]
                 if (next in self.g0_set):
-                    if marc8_string[pos+2] == ',' and next == '$':
+                    if len(marc8_string) >= pos + 3:
+                        if marc8_string[pos+2] == ',' and next == '$':
+                            pos += 1
+                        self.g0 = ord(marc8_string[pos+2])
+                        pos = pos + 3
+                        continue
+                    else:
+                        # if there aren't enough remaining characters, readd
+                        # the escape character so it doesn't get lost; may
+                        # help users diagnose problem records
+                        uni_list.append(marc8_string[pos])
                         pos += 1
-                    self.g0 = ord(marc8_string[pos+2])
-                    pos = pos + 3
-                    continue
+                        continue
+
                 elif next in self.g1_set:
                     if marc8_string[pos+2] == '-' and next == '$':
                         pos += 1
