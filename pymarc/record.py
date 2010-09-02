@@ -217,7 +217,7 @@ class Record(object):
         # can be found
         for field in self.fields:
             field_data = field.as_marc()
-            if self.force_utf8:
+            if self.leader[9] == 'a' or self.force_utf8:
               field_data = field_data.encode('utf-8')
             fields += field_data
             if field.tag.isdigit():
