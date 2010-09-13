@@ -46,11 +46,14 @@ class Record(object):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
         self.pos = 0
+        self.force_utf8 = force_utf8
         if len(data) > 0:
             self.decode_marc(data, to_unicode=to_unicode,
                              force_utf8=force_utf8,
                              hide_utf8_warnings=hide_utf8_warnings,
                              utf8_handling=utf8_handling)
+        elif force_utf8:
+            self.leader[9] = 'a'
 
     def __str__(self):
         """
@@ -213,7 +216,9 @@ class Record(object):
         # the field and the offset from the base address where the field data
         # can be found
         for field in self.fields:
-            field_data = field.as_marc().encode('utf-8')
+            field_data = field.as_marc()
+            if self.leader[9] == 'a' or self.force_utf8:
+              field_data = field_data.encode('utf-8')
             fields += field_data
             if field.tag.isdigit():
                 directory += '%03d' % int(field.tag)
