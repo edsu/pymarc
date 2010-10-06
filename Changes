@@ -1,4 +1,4 @@
-v2.6x
+v2.70
 - Added utf8_handling parameter to Record and MARCReader constructors and to
   Record.decode_marc(); accepts 'strict', 'replace', and 'ignore as arguments,
   just like the errors parameter of 8-bit string decoding in Python
