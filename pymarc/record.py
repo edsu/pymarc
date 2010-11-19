@@ -120,7 +120,7 @@ class Record(object):
 
             subjects = record.get_fields('600', '610', '650') 
 
-        If no tag is passed in to fields() a list of all the fields will be 
+        If no tag is passed in to get_fields() a list of all the fields will be 
         returned.
         """
         if (len(args) == 0):
