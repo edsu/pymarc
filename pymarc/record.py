@@ -53,7 +53,7 @@ class Record(object):
                              hide_utf8_warnings=hide_utf8_warnings,
                              utf8_handling=utf8_handling)
         elif force_utf8:
-            self.leader = self.leader[0:8] + 'a' + self.leader[10:]
+            self.leader = self.leader[0:9] + 'a' + self.leader[10:]
 
     def __str__(self):
         """

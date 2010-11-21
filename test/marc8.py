@@ -108,6 +108,10 @@ class MARC8Test(TestCase):
         self.assertEquals(utitle, u'De la solitude a' + unichr(0x0300) +
             ' la communaute' + unichr(0x0301) + '.')
 
+    def test_record_create_force_utf8(self, force_utf8=True):
+        r = Record(force_utf8=True)
+        self.assertEqual(r.leader[9], 'a')
+
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')
     return test_suite 
