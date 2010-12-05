@@ -179,6 +179,8 @@ class Field(object):
             return self.data
         fielddata = ''
         for subfield in self:
+	    if subfield[0] == '6':
+	    	continue
             if not self.is_subject_field():
                 fielddata += ' %s' % subfield[1]
             else:
