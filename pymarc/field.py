@@ -84,6 +84,26 @@ class Field(object):
             return subfields[0]
         return None
 
+    def __setitem__(self, code, value):
+        """
+        Set the values of the subfield code in a field:
+
+            field['a'] = 'value'
+
+        Raises KeyError if there is more than one subfield code.
+        """
+        subfields = self.get_subfields(code)
+        if len(subfields) > 1:
+            raise KeyError("more than one code '%s'" % code)
+        elif len(subfields) == 0:
+            raise KeyError("no code '%s'" % code)
+        num_code = len(self.subfields)/2
+        while num_code >= 0:
+            if self.subfields[(num_code*2)-2] == code:
+                self.subfields[(num_code*2)-1] = value
+                break
+            num_code -= 1
+
     def next(self):
         "Needed for iteration."
         while self.__pos < len(self.subfields):
