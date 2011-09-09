@@ -97,9 +97,11 @@ class FieldTest(unittest.TestCase):
         self.assertEqual(self.field.is_subject_field(), False)
         
     def test_format_field(self):
-        self.assertEqual(self.subjectfield.format_field(),
+        self.subjectfield.add_subfield('6', '880-4')
+	self.assertEqual(self.subjectfield.format_field(),
             'Python (Computer program language) -- Poetry.')
-        self.assertEqual(self.field.format_field(), 
+        self.field.add_subfield('6', '880-1')
+	self.assertEqual(self.field.format_field(), 
                 'Huckleberry Finn:  An American Odyssey')
 
     def test_tag_normalize(self):
