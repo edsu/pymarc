@@ -30,11 +30,7 @@ pymarc/__init__.py or at the unittests found in the test directory.
 Support
 -------
 
-The pymarc developers encourage you to join the pymarc Google Group if you
-need help. The group can be found at http://groups.google.com/group/pymarc
-Also, please feel free to use [issue
-tracking](https://github.com/edsu/pymarc/issues) on Github to to submit 
-feature requests or bug reports.
+The pymarc developers encourage you to join the [pymarc Google Group](http://groups.google.com/group/pymarc) if you need help.  Also, please feel free to use [issue tracking](https://github.com/edsu/pymarc/issues) on Github to to submit feature requests or bug reports.
 
 Contributions
 -------------
