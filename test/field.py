@@ -112,6 +112,31 @@ class FieldTest(unittest.TestCase):
         self.assertEqual(f['a'], 'foo')
         self.assertEqual(f.is_control_field(), False)
 
+    def test_setitem_no_key(self):
+        try:
+            self.field['h'] = 'error'
+        except KeyError:
+            pass
+        except Exception, e:
+            self.fail('Unexpected exception thrown: %s' % e)
+        else:
+            self.fail('KeyError not thrown')
+
+    def test_setitem_repeated_key(self):
+        try:
+            self.field.add_subfield('a','bar')
+            self.field['a'] = 'error'
+        except KeyError:
+            pass
+        except Exception, e:
+            self.fail('Unexpected exception thrown: %s' % e)
+        else:
+            self.fail('KeyError not thrown')
+
+    def test_setitem(self):
+        self.field['a'] = 'changed'
+        self.assertEqual(self.field['a'], 'changed')
+
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')
     return test_suite
