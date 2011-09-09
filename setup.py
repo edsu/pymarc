@@ -21,7 +21,7 @@ Topic :: Text Processing :: General
 
 setup( 
     name = 'pymarc',
-    version = '2.8.0',  # remember to update pymarc/__init__.py on release!
+    version = '2.8.1',  # remember to update pymarc/__init__.py on release!
     url = 'http://github.com/edsu/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
