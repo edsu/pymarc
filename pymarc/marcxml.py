@@ -2,6 +2,7 @@
 
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
+import unicodedata
 
 try:
     import xml.etree.ElementTree as ET  # builtin in Python 2.5
@@ -23,13 +24,14 @@ class XmlHandler(ContentHandler):
     records elsewhere (like to a rdbms) without having to store 
     them all in memory.
     """
-    def __init__(self, strict=False):
+    def __init__(self, strict=False, normalize_form=None):
         self.records = []
         self._record = None
         self._field = None
         self._subfield_code = None
         self._text = []
         self._strict = strict
+        self.normalize_form = normalize_form
 
     def startElementNS(self, name, qname, attrs):
         if self._strict and name[0] != MARC_XML_NS:
@@ -56,7 +58,10 @@ class XmlHandler(ContentHandler):
             return
 
         element = name[1]
-        text = u''.join(self._text)
+        if self.normalize_form is not None:
+            text = unicodedata.normalize(self.normalize_form, u''.join(self._text))
+        else:
+            text = u''.join(self._text)
 
         if element == 'record':
             self.process_record(self._record)
@@ -107,13 +112,15 @@ def map_xml(function, *files):
     for xml_file in files:
         parse_xml(xml_file, handler)
 
-def parse_xml_to_array(xml_file, strict=False):
+def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
     """
     parse an xml file and return the records as an array. If you would
     like the parser to explicitly check the namespaces for the MARCSlim
     namespace use the strict=True option.
+    Valid values for normalize_form are 'NFC', 'NFKC', 'NFD', and 'NFKD'. See
+    unicodedata.normalize info.
     """
-    handler = XmlHandler(strict)
+    handler = XmlHandler(strict, normalize_form)
     parse_xml(xml_file, handler)
     return handler.records
 
