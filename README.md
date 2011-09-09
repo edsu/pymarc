@@ -1,11 +1,11 @@
-DESCRIPTION
------------
+Description
+===========
 
 pymarc is a python library for working with MARC21 bibliographic data
 loosely based on the MARC/Perl suite of modules (http://marcpm.sf.net).
 
-INSTALLATION
-------------
+Installation
+============
 
 You'll probably just want to use easy_install to install pymarc:
 
@@ -27,35 +27,26 @@ And then install:
 For typical usage of this library look at the documentation in 
 pymarc/__init__.py or at the unittests found in the test directory.
 
-TODO
-----
-
-- nothing at the moment
-
-SUPPORT
--------
+Support
+=======
 
 The pymarc developers encourage you to join the pymarc Google Group if you
 need help. The group can be found at http://groups.google.com/group/pymarc
+Also, please feel free to use [issue
+tracking](https://github.com/edsu/pymarc/issues) on Github to to submit 
+feature requests or bug reports.
 
-CONTRIBUTIONS
--------------
+Contributions
+=============
 
 Please send merge requests on http://github.com/edsu/pymarc
 
-COPYRIGHT
----------
+Copyright
+=========
 
 Copyright (c) 2005-2010 Gabriel Farrell, Mark Matienzo, Ed Summers
 
-LICENSE
--------
+License
+=======
 
 BSD 
-
-AUTHORS
--------
-
-Gabriel Farrell <gsf747@gmail.com>
-Mark Matienzo <mark@matienzo.org>
-Ed Summers <ehs@pobox.com>
