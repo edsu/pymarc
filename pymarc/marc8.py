@@ -78,6 +78,15 @@ class MARC8ToUnicode:
                     self.g1 = ord(marc8_string[pos+2])
                     pos = pos + 3
                     continue
+                else:
+                    charset = ord(next)
+                    if charset in marc8_mapping.CODESETS:
+                        self.g0 = charset
+                        pos += 2
+                    elif charset == 0x73:
+                        self.g0 = self.basic_latin
+                        pos += 2
+
             
             def is_multibyte(charset):
                 return charset == 0x31

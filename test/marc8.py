@@ -112,6 +112,9 @@ class MARC8Test(TestCase):
         r = Record(force_utf8=True)
         self.assertEqual(r.leader[9], 'a')
 
+    def test_subscript_2(self):
+        self.assertEqual(marc8_to_unicode('CO\x1bb2\x1bs is a gas'), u'CO\u2082 is a gas')
+
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')
     return test_suite 
