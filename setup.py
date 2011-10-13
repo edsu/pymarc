@@ -19,9 +19,11 @@ Programming Language :: Python
 Topic :: Text Processing :: General
 """
 
+import pymarc
+
 setup( 
     name = 'pymarc',
-    version = '2.8.2',  # remember to update pymarc/__init__.py on release!
+    version = pymarc.__version__,
     url = 'http://github.com/edsu/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',

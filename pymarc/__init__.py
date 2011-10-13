@@ -1,6 +1,6 @@
 # __init__.py
 
-__version__ = '2.8.1'
+__version__ = '2.8.3'
 
 r'''
 
