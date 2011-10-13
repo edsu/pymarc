@@ -1,3 +1,6 @@
+import pymarc
+version = pymarc.__version__
+
 # bootstrap easy_install
 import ez_setup
 ez_setup.use_setuptools()
@@ -23,7 +26,7 @@ import pymarc
 
 setup( 
     name = 'pymarc',
-    version = pymarc.__version__,
+    version = version,
     url = 'http://github.com/edsu/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
