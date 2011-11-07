@@ -86,6 +86,8 @@ class MARC8ToUnicode:
                     elif charset == 0x73:
                         self.g0 = self.basic_latin
                         pos += 2
+                        if pos == len(marc8_string):
+                            break
 
             
             def is_multibyte(charset):
