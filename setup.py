@@ -13,6 +13,11 @@ try:
 except ImportError:
     install_requires.append('elementtree>=1.2.6')
 
+import sys
+if sys.version_info < (2 , 6):
+    install_requires.append('simplejson>=1.7.3')
+del sys
+
 classifiers = """
 Intended Audience :: Education
 Intended Audience :: Developers
