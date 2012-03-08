@@ -154,7 +154,7 @@ class Field(object):
         Deletes the first subfield with the specified 'code' and returns 
         its value:
             
-            field.del_subfield('a')
+            field.delete_subfield('a')
 
         If no subfield is found with the specified code None is returned.
         """
