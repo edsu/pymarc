@@ -67,7 +67,7 @@ except ImportError:
         finally:
             del chain
 
-isbn_regex = re.compile(r'([0-9\-]+)')
+isbn_regex = re.compile(r'([0-9\-xX]+)')
 
 class Record(object):
     """
@@ -351,7 +351,8 @@ class Record(object):
     def isbn(self):
         """
         Returns the first ISBN in the record or None if one is not
-        present. The returned ISBN will be all numberic; so dashes and 
+        present. The returned ISBN will be all numeric, except for an
+        x/X which may occur in the checksum position.  Dashes and 
         extraneous information will be automatically removed. If you need 
         this information you'll want to look directly at the 020 field, 
         e.g. record['020']['a']
