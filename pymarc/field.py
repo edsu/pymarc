@@ -168,7 +168,7 @@ class Field(object):
         
     def is_control_field(self):
         """
-        returns true or false if the field is considered a control field.
+        Returns true or false if the field is considered a control field.
         Control fields lack indicators and subfields.
         """
         if self.tag < '010' and self.tag.isdigit(): 
@@ -186,7 +186,7 @@ class Field(object):
             marc += SUBFIELD_INDICATOR + subfield[0] + subfield[1]
         return marc + END_OF_FIELD
 
-    # alias for backwards compatability
+    # alias for backwards compatibility
     as_marc21 = as_marc
 
     def format_field(self):

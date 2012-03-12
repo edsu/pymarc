@@ -120,6 +120,10 @@ class RecordTest(unittest.TestCase):
         record = Record()
         record.add_field(Field('020', [' ', ' '], subfields=['a', '0456789012 (reel 1)']))
         self.assertEquals(record.isbn(), '0456789012')
+
+        record = Record()
+        record.add_field(Field('020', [' ', ' '], subfields=['a', '006073132X']))
+        self.assertEquals(record.isbn(), '006073132X')
         
     def test_multiple_isbn(self):
         reader = MARCReader(file('test/multi_isbn.dat'))
