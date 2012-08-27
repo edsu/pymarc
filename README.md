@@ -1,7 +1,7 @@
 Description
 -----------
 
-[![Build Status](https://secure.travis-ci.org/ruebot/pymarc.png)](http://travis-ci.org/ruebot/pymarc)
+[![Build Status](https://secure.travis-ci.org/edsu/pymarc.png)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with MARC21 bibliographic data
 loosely based on the MARC/Perl suite of modules (http://marcpm.sf.net).
