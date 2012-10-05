@@ -155,6 +155,56 @@ class Record(object):
         """
         self.fields.extend(fields)
 
+    def add_grouped_field(self, *fields):
+        """
+        add_grouped_field() will add pymarc.Field objects to a Record object,
+        attempting to maintain a loose numeric order per the MARC standard for
+        "Organization of the record" (http://www.loc.gov/marc/96principl.html)
+        Optionally you can pass in multiple fields.
+        """
+        for f in fields:
+            if len(self.fields) == 0 or not f.tag.isdigit():
+                self.fields.append(f)
+                continue 
+            self._sort_fields(f, 'grouped')
+
+    def add_ordered_field(self, *fields):
+        """
+        add_ordered_field() will add pymarc.Field objects to a Record object,
+        attempting to maintain a strict numeric order.
+        Optionally you can pass in multiple fields.
+        """
+        for f in fields:
+            if len(self.fields) == 0 or not f.tag.isdigit():
+                self.fields.append(f)
+                continue 
+            self._sort_fields(f, 'ordered')
+
+    def _sort_fields(self, field, mode):
+        if mode == 'grouped':
+            tag = int(field.tag[0])
+        else:
+            tag = int(field.tag)
+
+        i, last_tag = 0, 0
+        for selff in self.fields:
+            i += 1
+            if not selff.tag.isdigit():
+                self.fields.insert(i - 1, field)
+                break
+
+            if mode == 'grouped':
+                last_tag = int(selff.tag[0])
+            else:
+                last_tag = int(selff.tag)
+
+            if last_tag > tag:
+                self.fields.insert(i - 1, field)
+                break
+            if len(self.fields) == i:
+                self.fields.append(field)
+                break
+
     def remove_field(self, *fields):
         """
         remove_field() will remove one or more pymarc.Field objects from
