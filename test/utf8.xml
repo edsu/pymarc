@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+            <marc:collection xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"><marc:record xmlns:marc="http://www.loc.gov/MARC21/slim">
+  <marc:leader>00640njm a2200205uu 4500</marc:leader>
+  <marc:controlfield tag="001">ASP925318/clmu</marc:controlfield>
+  <marc:controlfield tag="008">100813s9999    xx ||nn s|||||||||||||| d</marc:controlfield>
+  <marc:datafield tag="245" ind1="0" ind2="0">
+    <marc:subfield code="a">Zen Classics</marc:subfield>
+  </marc:datafield>
+  <marc:datafield tag="246" ind1="1" ind2="0">
+    <marc:subfield code="a">Wilfried Hiller: Book of Stars</marc:subfield>
+  </marc:datafield>
+  <marc:datafield tag="260" ind1=" " ind2=" ">
+    <marc:subfield code="b">Virgin Classics</marc:subfield>
+    <marc:subfield code="c">03 Nov 2008</marc:subfield>
+  </marc:datafield>
+  <marc:datafield tag="306" ind1=" " ind2=" ">
+    <marc:subfield code="a">18 minutes</marc:subfield>
+  </marc:datafield>
+  <marc:datafield tag="505" ind1="0" ind2="0">
+    <marc:subfield code="t">Préludes</marc:subfield>
+  </marc:datafield>
+  <marc:datafield tag="856" ind1="4" ind2="0">
+    <marc:subfield code="u">http://www.aspresolver.com/aspresolver.asp?CLMU;925318</marc:subfield>
+  </marc:datafield>
+</marc:record></marc:collection>

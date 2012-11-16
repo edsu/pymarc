@@ -355,7 +355,10 @@ class Record(object):
             (record_length, self.leader[5:12], base_address, self.leader[17:])
         
         # return the encoded record
-        return self.leader + directory + fields 
+        if self.leader[9] == 'a' or self.force_utf8:
+            return self.leader.encode('utf-8') + directory.encode('utf-8') + fields
+        else:
+            return self.leader + directory + fields
 
     # alias for backwards compatability
     as_marc21 = as_marc
