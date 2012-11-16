@@ -8,6 +8,7 @@ from test import writer
 from test import marc8
 from test import xml_test
 from test import json_test
+from test import utf8_test
 
 
 def suite():
@@ -21,6 +22,7 @@ def suite():
     test_suite.addTest(marc8.suite())
     test_suite.addTest(xml_test.suite())
     test_suite.addTest(json_test.suite())
+    test_suite.addTest(utf8_test.suite())
     return test_suite
 
 runner = unittest.TextTestRunner()
