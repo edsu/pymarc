@@ -365,24 +365,28 @@ class Record(object):
 
     def as_dict(self):
         """
-        Turn a MARC record into a dict, which is used for ``as_json``.
+        Turn a MARC record into a dictionary, which is used for ``as_json``.
         """
-        _dict = {}
-        _dict['leader'] = self.leader
-        _dict['fields'] = {}
+        record = {}
+        record['leader'] = self.leader
+        record['fields'] = []
         for field in self:
-            if hasattr(field, 'subfields'):
-                _dict['fields'][field.tag] = {}
-                _dict['fields'][field.tag]['indicators'] = field.indicators
-                _dict['fields'][field.tag]['subfields'] = dict(
-                    izip_longest(*[iter(field.subfields)] * 2))
+            if field.is_control_field():
+                record['fields'].append({field.tag: field.data})
             else:
-                _dict['fields'][field.tag] = field.data
-        return _dict
+                fd = {}
+                fd['subfields'] = []
+                fd['ind1'] = field.indicator1
+                fd['ind2'] = field.indicator2
+                for tag, value in izip_longest(*[iter(field.subfields)] * 2):
+                    fd['subfields'].append({tag: value})
+                record['fields'].append({field.tag: fd})
+        return record  # as dict
 
     def as_json(self, **kwargs):
         """
-        Serialize a record as JSON.
+        Serialize a record as JSON according to
+        http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/
         """
         return json.dumps(self.as_dict(), **kwargs)
 
