@@ -135,6 +135,12 @@ class FieldTest(unittest.TestCase):
         else:
             self.fail('KeyError not thrown')
 
+    def test_iter_over_controlfield(self):
+        try:
+            l = [subfield for subfield in self.controlfield]
+        except AttributeError, e:
+            self.fail('Error during iteration: %s' % e)
+
     def test_setitem(self):
         self.field['a'] = 'changed'
         self.assertEqual(self.field['a'], 'changed')
