@@ -106,6 +106,8 @@ class Field(object):
 
     def next(self):
         "Needed for iteration."
+        if not hasattr(self, 'subfields'):
+            raise StopIteration
         while self.__pos < len(self.subfields):
             subfield = (self.subfields[ self.__pos ],
                 self.subfields[ self.__pos+1 ])
