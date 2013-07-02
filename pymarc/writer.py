@@ -35,7 +35,7 @@ class MARCWriter(Writer):
         """
         Writes a record.
         """
-        if type(record) != Record:
+        if not isinstance(record, Record):
             raise WriteNeedsRecord
         self.file_handle.write(record.as_marc())
 
