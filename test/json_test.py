@@ -8,6 +8,21 @@ try:
 except ImportError:
     import simplejson as json
 
+class JsonReaderTest(unittest.TestCase):
+	def setUp(self):
+		self.reader = pymarc.JSONReader(file('test/test.json'))
+		self.in_json = json.load(file('test/test.json'),strict=False)
+	
+	def testRoundtrip(self):
+		"""Tests that result of loading records from the test file
+		produces objects deeply equal to the result of loading 
+		marc-in-json files directly"""
+		recs = list(self.reader)
+		self.assertEquals(len(self.in_json), len(recs),"Incorrect number of records found")
+		for i,rec in enumerate(recs):
+			deserialized = json.loads(rec.as_json(),strict=False)
+			comp = self.in_json[i]
+			self.assertEqual(comp,deserialized)
 
 class JsonTest(unittest.TestCase):
 
