@@ -1,4 +1,3 @@
-from __future__ import print_function
 from cStringIO import StringIO
 import sys
 import os
@@ -115,7 +114,7 @@ class JSONReader(Reader):
             else:
                 self.file_handle = StringIO(marc_target)
         if stream:
-            print("Streaming not yet implemented, your data will be loaded into memory", file=sys.stderr)
+            sys.stderr.write("Streaming not yet implemented, your data will be loaded into memory\n")
         self.records =json.load(self.file_handle,strict=False)
 
     def __iter__(self):
