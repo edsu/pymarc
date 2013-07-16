@@ -1,6 +1,10 @@
+from __future__ import print_function
 from cStringIO import StringIO
+import sys
+import os
+import json
 
-from pymarc import Record
+from pymarc import Record, Field
 from pymarc.exceptions import RecordLengthInvalid
 
 class Reader(object):
@@ -99,4 +103,43 @@ def map_records(f, *files):
     """
     for file in files:
         map(f, MARCReader(file))
+
+class JSONReader(Reader):
+    def __init__(self,marc_target,encoding='utf-8',stream=False):
+        self.encoding = encoding
+        if hasattr(marc_target,'read') and callable(marc_target.read):
+            self.file_handle = marc_target
+        else:
+            if os.path.exists(marc_target):
+                self.file_handle = open(marc_target,'r')
+            else:
+                self.file_handle = StringIO(marc_target)
+        if stream:
+            print("Streaming not yet implemented, your data will be loaded into memory", file=sys.stderr)
+        self.records =json.load(self.file_handle,strict=False)
+
+    def __iter__(self):
+        if hasattr(self.records,'__iter__'):
+        	self.iter = iter(self.records)
+        else:
+        	self.iter = iter([self.records])
+        return self
+
+    def next(self):
+        jobj = next(self.iter)
+        rec = Record()
+        rec.leader = jobj['leader']
+        for field in jobj['fields']:
+            k,v = list(field.iteritems())[0]
+            if 'subfields' in v and hasattr(v,'update'):
+                # flatten m-i-j dict to list in pymarc
+                subfields = []
+                for sub in v['subfields']:
+                    for code,value in sub.items():
+                        subfields.extend((code,value))
+                fld = Field(tag=k,subfields=subfields,indicators=[v['ind1'], v['ind2']])
+            else:
+                fld = Field(tag=k,data=v)
+            rec.add_field(fld)
+        return rec
 
