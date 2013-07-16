@@ -9,8 +9,6 @@ pymarc is a python library for working with bibliographic data encoded in
 Installation
 ------------
 
-### easy
-
 You'll probably just want to use pip to install pymarc:
 
     pip install pymarc
