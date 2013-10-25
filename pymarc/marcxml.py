@@ -47,8 +47,8 @@ class XmlHandler(ContentHandler):
             self._field = Field(tag)
         elif element == 'datafield':
             tag = attrs.getValue((None, u'tag'))
-            ind1 = attrs.getValue((None, u'ind1'))
-            ind2 = attrs.getValue((None, u'ind2'))
+            ind1 = attrs.get((None, u'ind1'), u' ')
+            ind2 = attrs.get((None, u'ind2'), u' ')
             self._field = Field(tag, [ind1, ind2])
         elif element == 'subfield':
             self._subfield_code = attrs[(None, 'code')]

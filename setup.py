@@ -1,10 +1,6 @@
 import pymarc
 version = pymarc.__version__
 
-# bootstrap easy_install
-import ez_setup
-ez_setup.use_setuptools()
-
 from setuptools import setup, find_packages
 
 install_requires = []
@@ -40,5 +36,4 @@ setup(
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),
-    test_suite = 'test',
 )
