@@ -285,21 +285,29 @@ class Record(object):
             else:
                 subfields = list()
                 subs = entry_data.split(SUBFIELD_INDICATOR)
-                first_indicator = subs[0][0]
-                second_indicator = subs[0][1]
-                for subfield in subs[1:]:
-                    if len(subfield) == 0: 
-                        continue
-                    code = subfield[0]
-                    data = subfield[1:]
 
-                    if to_unicode:
-                        if self.leader[9] == 'a' or force_utf8:
-                            data = data.decode('utf-8', utf8_handling)
-                        else:
-                            data = marc8_to_unicode(data, hide_utf8_warnings)
-                    subfields.append(code)
-                    subfields.append(data)
+                # make sure we've got the indicators and subfields we expected
+                if len(subs) < 2 or len(subs[0]) != 2:
+                    # TODO: should we log a warning, or throw an exception here?
+                    # we are currently just moving forward
+                    first_indicator = ' '
+                    second_indicator = ' '
+                else:
+                    first_indicator = subs[0][0]
+                    second_indicator = subs[0][1]
+                    for subfield in subs[1:]:
+                        if len(subfield) == 0: 
+                            continue
+                        code = subfield[0]
+                        data = subfield[1:]
+
+                        if to_unicode:
+                            if self.leader[9] == 'a' or force_utf8:
+                                data = data.decode('utf-8', utf8_handling)
+                            else:
+                                data = marc8_to_unicode(data, hide_utf8_warnings)
+                        subfields.append(code)
+                        subfields.append(data)
                 field = Field( 
                     tag = entry_tag, 
                     indicators = [first_indicator, second_indicator], 
