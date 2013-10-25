@@ -36,4 +36,5 @@ setup(
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),
+    test_suite = 'test',
 )
