@@ -138,6 +138,16 @@ class Record(object):
             return fields[0]
         return None
 
+    def __contains__(self, tag):
+        """
+        Allows a shorthand test of tag membership:
+
+            '245' in record
+
+        """
+        fields = self.get_fields(tag)
+        return len(fields) > 0
+
     def __iter__(self):
         self.__pos = 0
         return self

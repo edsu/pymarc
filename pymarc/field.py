@@ -84,6 +84,16 @@ class Field(object):
             return subfields[0]
         return None
 
+    def __contains__(self, subfield):
+        """
+        Allows a shorthand test of field membership:
+
+            'a' in field
+
+        """
+        subfields = self.get_subfields(subfield)
+        return len(subfields) > 0
+
     def __setitem__(self, code, value):
         """
         Set the values of the subfield code in a field:
