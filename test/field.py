@@ -63,6 +63,10 @@ class FieldTest(unittest.TestCase):
     def test_encode(self):
         self.field.as_marc()
 
+    def test_membership(self):
+        self.assertTrue('a' in self.field)
+        self.assertFalse('zzz' in self.field)
+
     def test_iterator(self):
         string = ""
         for subfield in self.field:

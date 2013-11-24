@@ -44,6 +44,16 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(record['245'], title, 'short access')
         self.assertEqual(record['999'], None, 'short access with no field')
 
+    def test_membership(self):
+        record = Record()
+        title = Field(
+            tag = '245',
+            indicators = ['1', '0'],
+            subfields = ['a', 'Python', 'c', 'Guido'])
+        record.add_field(title)
+        self.assertTrue('245' in record)
+        self.assertFalse('999' in record)
+
     def test_field_not_found(self):
         record = Record()
         self.assertEquals(len(record.fields), 0)
