@@ -12,7 +12,7 @@ class Field(object):
             indicators = ['0','1'],
             subfields = [
                 'a', 'The pragmatic programmer : ',
-                'b', 'from journeyman to master /', 
+                'b', 'from journeyman to master /',
                 'c', 'Andrew Hunt, David Thomas.',
             ]
 
@@ -23,7 +23,7 @@ class Field(object):
 
     """
     def __init__(self, tag, indicators=None, subfields=None, data=''):
-        if indicators == None: 
+        if indicators == None:
             indicators = []
         if subfields == None:
             subfields = []
@@ -34,12 +34,12 @@ class Field(object):
         except ValueError:
             self.tag = '%03s' % tag
 
-        # assume controlfields are numeric only; replicates ruby-marc behavior 
+        # assume controlfields are numeric only; replicates ruby-marc behavior
         if self.tag < '010' and self.tag.isdigit():
             self.data = data
-        else: 
+        else:
             self.indicator1, self.indicator2 = self.indicators = indicators
-            self.subfields = subfields 
+            self.subfields = subfields
 
     def __iter__(self):
         self.__pos = 0
@@ -53,12 +53,12 @@ class Field(object):
         have yet to be implemented (see [3]), so be forewarned. Note also
         for complete MARCMaker compatibility, you will need to change your
         newlines to DOS format ('\r\n').
-        
+
         [1] http://www.loc.gov/marc/makrbrkr.html#mechanics
         [2] http://search.cpan.org/~eijabb/MARC-File-MARCMaker/
         [3] http://www.loc.gov/marc/mnemonics.html
         """
-        if self.is_control_field(): 
+        if self.is_control_field():
             text = '=%s  %s' % (self.tag, self.data.replace(' ','\\'))
         else:
             text = '=%s  ' % (self.tag)
@@ -68,7 +68,7 @@ class Field(object):
                 else:
                     text += '%s' % indicator
             for subfield in self:
-                text += ('$%s%s' % subfield) 
+                text += ('$%s%s' % subfield)
         return text
 
     def __getitem__(self, subfield):
@@ -80,7 +80,7 @@ class Field(object):
         Handy for quick lookups.
         """
         subfields = self.get_subfields(subfield)
-        if len(subfields) > 0: 
+        if len(subfields) > 0:
             return subfields[0]
         return None
 
@@ -125,7 +125,7 @@ class Field(object):
 
     def value(self):
         """
-        Returns the field as a string without tag, indicators, and 
+        Returns the field as a string without tag, indicators, and
         subfield indicators.
         """
         if self.is_control_field():
@@ -148,7 +148,7 @@ class Field(object):
         for subfield in self:
             if subfield[0] in codes:
                 values.append(subfield[1])
-        return values 
+        return values
 
     def add_subfield(self, code, value):
         """
@@ -161,9 +161,9 @@ class Field(object):
 
     def delete_subfield(self, code):
         """
-        Deletes the first subfield with the specified 'code' and returns 
+        Deletes the first subfield with the specified 'code' and returns
         its value:
-            
+
             field.delete_subfield('a')
 
         If no subfield is found with the specified code None is returned.
@@ -175,13 +175,13 @@ class Field(object):
             return value
         except ValueError:
             return None
-        
+
     def is_control_field(self):
         """
         Returns true or false if the field is considered a control field.
         Control fields lack indicators and subfields.
         """
-        if self.tag < '010' and self.tag.isdigit(): 
+        if self.tag < '010' and self.tag.isdigit():
             return True
         return False
 
@@ -205,12 +205,12 @@ class Field(object):
         subfield indicators. Like pymarc.Field.value(), but prettier
         (adds spaces, formats subject headings).
         """
-        if self.is_control_field(): 
+        if self.is_control_field():
             return self.data
         fielddata = ''
         for subfield in self:
-	    if subfield[0] == '6':
-	    	continue
+            if subfield[0] == '6':
+                continue
             if not self.is_subject_field():
                 fielddata += ' %s' % subfield[1]
             else:
@@ -218,16 +218,16 @@ class Field(object):
                     fielddata += ' %s' % subfield[1]
                 else: fielddata += ' -- %s' % subfield[1]
         return fielddata.strip()
-    
+
     def is_subject_field(self):
         """
         Returns True or False if the field is considered a subject
         field.  Used by format_field.
         """
-        if self.tag.startswith('6'): 
+        if self.tag.startswith('6'):
             return True
         return False
-    
+
 def map_marc8_field(f):
     if f.is_control_field():
         f.data = marc8_to_unicode(f.data)
