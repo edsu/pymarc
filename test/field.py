@@ -6,19 +6,19 @@ class FieldTest(unittest.TestCase):
 
     def setUp(self):
         self.field = Field(
-            tag = '245', 
-            indicators = [ 0, 1 ], 
-            subfields = [ 
-                'a', 'Huckleberry Finn: ', 
+            tag = '245',
+            indicators = [ 0, 1 ],
+            subfields = [
+                'a', 'Huckleberry Finn: ',
                 'b', 'An American Odyssey'
             ]
         )
 
         self.controlfield = Field(
-            tag = '008', 
+            tag = '008',
             data = '831227m19799999nyu           ||| | ger  '
         )
-        
+
         self.subjectfield = Field(
             tag = '650',
             indicators = [' ', '0'],
@@ -27,9 +27,9 @@ class FieldTest(unittest.TestCase):
                 'v', 'Poetry.'
             ]
         )
-    
+
     def test_string(self):
-        self.assertEquals(str(self.field), 
+        self.assertEquals(str(self.field),
             '=245  01$aHuckleberry Finn: $bAn American Odyssey')
 
     def test_controlfield_string(self):
@@ -38,8 +38,8 @@ class FieldTest(unittest.TestCase):
 
     def test_indicators(self):
         assert self.field.indicator1 is 0
-        self.assertEqual(self.field.indicator2, 1) 
-        
+        self.assertEqual(self.field.indicator2, 1)
+
     def test_subfields_created(self):
         subfields = self.field.subfields
         self.assertEqual(len(subfields), 4)
@@ -49,15 +49,15 @@ class FieldTest(unittest.TestCase):
         self.assertEqual(self.field['z'], None)
 
     def test_subfields(self):
-        self.assertEqual(self.field.get_subfields('a'), 
+        self.assertEqual(self.field.get_subfields('a'),
             ['Huckleberry Finn: '])
         self.assertEqual(self.subjectfield.get_subfields('a'),
             ['Python (Computer program language)'])
 
     def test_subfields_multi(self):
-        self.assertEqual(self.field.get_subfields('a','b'), 
+        self.assertEqual(self.field.get_subfields('a','b'),
             ['Huckleberry Finn: ', 'An American Odyssey' ])
-        self.assertEqual(self.subjectfield.get_subfields('a','v'), 
+        self.assertEqual(self.subjectfield.get_subfields('a','v'),
             ['Python (Computer program language)', 'Poetry.' ])
 
     def test_encode(self):
@@ -75,9 +75,9 @@ class FieldTest(unittest.TestCase):
         self.assertEquals(string, 'aHuckleberry Finn: bAn American Odyssey')
 
     def test_value(self):
-        self.assertEquals(self.field.value(), 
+        self.assertEquals(self.field.value(),
             'Huckleberry Finn: An American Odyssey')
-        self.assertEquals(self.controlfield.value(), 
+        self.assertEquals(self.controlfield.value(),
                 '831227m19799999nyu           ||| | ger  ')
 
     def test_non_integer_tag(self):
@@ -88,25 +88,25 @@ class FieldTest(unittest.TestCase):
         field = Field(tag='245', indicators=[0, 1], subfields=['a', 'foo'])
         field.add_subfield('a','bar')
         self.assertEquals(field.__str__(), '=245  01$afoo$abar')
-        
+
     def test_delete_subfield(self):
         field = Field(tag='200', indicators=[0,1], subfields=['a','My Title', 'a', 'Kinda Bogus Anyhow'])
         self.assertEquals(field.delete_subfield('z'), None)
         self.assertEquals(field.delete_subfield('a'), 'My Title')
         self.assertEquals(field.delete_subfield('a'), 'Kinda Bogus Anyhow')
         self.assertTrue(len(field.subfields) == 0)
-        
+
     def test_is_subject_field(self):
         self.assertEqual(self.subjectfield.is_subject_field(), True)
         self.assertEqual(self.field.is_subject_field(), False)
-        
+
     def test_format_field(self):
         self.subjectfield.add_subfield('6', '880-4')
-	self.assertEqual(self.subjectfield.format_field(),
+        self.assertEqual(self.subjectfield.format_field(),
             'Python (Computer program language) -- Poetry.')
         self.field.add_subfield('6', '880-1')
-	self.assertEqual(self.field.format_field(), 
-                'Huckleberry Finn:  An American Odyssey')
+        self.assertEqual(self.field.format_field(),
+            'Huckleberry Finn:  An American Odyssey')
 
     def test_tag_normalize(self):
         f = Field(tag='42', indicators=['', ''])
