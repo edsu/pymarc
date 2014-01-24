@@ -8,7 +8,8 @@ pymarc is a python library for working with bibliographic data encoded in
 for reading, writing and modifying MARC records. It was mostly designed to 
 be an emergency eject seat, for getting your data assets out of MARC and into
 some kind of saner representation. However over the years it has been used 
-to create and modify MARC records, since repeated calls for it to die as a
+to create and modify MARC records, since [repeated
+calls](http://marc-must-die.info/index.php/Main_Page) for it to die as a
 format have resulted in it living happily as a zombie. If you are brand new
 to MARC and need to understand it enough to be able to extract titles, subjects,
 etc from records [Understanding MARC](http://www.loc.gov/marc/umb/) is a 
