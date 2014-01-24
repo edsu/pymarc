@@ -10,10 +10,7 @@ be an emergency eject seat, for getting your data assets out of MARC and into
 some kind of saner representation. However over the years it has been used 
 to create and modify MARC records, since despite [repeated
 calls](http://marc-must-die.info/index.php/Main_Page) for it to die as a
-format, it seems to be living quite happily as a zombie. If you are brand new
-to MARC and need to understand it enough to be able to extract titles, subjects,
-etc from records [Understanding MARC](http://www.loc.gov/marc/umb/) is a 
-useful read.
+format, it seems to be living quite happily as a zombie. 
 
 Below are some common examples of how you might want to use pymarc. If 
 you run across an example that you think should be here please send a 
@@ -23,14 +20,14 @@ pull request.
 
 Most often you will have some MARC data and will want to extract data
 from it. Here's an example of reading a batch of records and printing out 
-the 245 subfield a. If you are curious this example uses the batch file 
+the title. If you are curious this example uses the batch file 
 available here in pymarc repository:
 
 ```python  
 >>> from pymarc import MARCReader
 >>> reader = MARCReader(open('test/marc.dat'))
 >>> for record in reader: 
-...    print record['245']['a']
+...    print record.title()
 The pragmatic programmer :
 Programming Python /
 Learning Python /
@@ -52,6 +49,17 @@ Design patterns :
 Introduction to algorithms /
 ANSI Common Lisp /
 ```
+
+A `pymarc.Record` has a few handy methods like `title` for getting at bits
+of a bibliographic record, others include: `author`, `isbn`, `subjects`, 
+`location`, `notes`, `physicaldescription`, `publisher`, `pubyear`. But 
+really, to work with MARC data you need to understand the numeric field tags 
+and subfield codes that are used to designate various bits of information. There
+is a lot more hiding in a MARC record than these methods provide access to.
+For example the `title` method extracts the information from the `245` field, 
+subfield `a`. If you are new to MARC fields [Understanding
+MARC](http://www.loc.gov/marc/umb/) is a pretty good primer, and the [MARC 21
+Formats](http://www.loc.gov/marc/marcdocz.html) page at the Library of Congress is a good reference once you understand the basics.
 
 ### Writing
 
