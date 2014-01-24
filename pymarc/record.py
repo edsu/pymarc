@@ -1,4 +1,5 @@
 import re
+import logging
 
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
@@ -296,34 +297,49 @@ class Record(object):
                 subfields = list()
                 subs = entry_data.split(SUBFIELD_INDICATOR)
 
-                # make sure we've got the indicators and subfields we expected
-                if len(subs) < 2 or len(subs[0]) != 2:
-                    # TODO: should we log a warning, or throw an exception here?
-                    # we are currently just moving forward
-                    first_indicator = ' '
+                # The MARC spec requires there to be two indicators in a
+                # field. However experience in the wild has shown that
+                # indicators are sometimes missing, and sometimes there
+                # are too many. Rather than throwing an exception because
+                # we can't find what we want and rejecting the field, or
+                # barfing on the whole record we'll try to use what we can
+                # find. This means missing indicators will be recorded as
+                # blank spaces, and any more than 2 are dropped on the floor.
+
+                first_indicator = second_indicator = ' '
+                if len(subs[0]) == 0:
+                    logging.warn("missing indicators: %s", entry_data)
+                    first_indicator = second_indicator = ' '
+                elif len(subs[0]) == 1:
+                    logging.warn("only 1 indicator found: %s", entry_data)
+                    first_indicator = subs[0][0]
                     second_indicator = ' '
+                elif len(subs[0]) > 2:
+                    logging.warn("more than 2 indicators found: %s", entry_data)
+                    first_indicator = subs[0][0]
+                    second_indicator = subs[0][1]
                 else:
                     first_indicator = subs[0][0]
                     second_indicator = subs[0][1]
-                    for subfield in subs[1:]:
-                        if len(subfield) == 0: 
-                            continue
-                        code = subfield[0]
-                        data = subfield[1:]
 
-                        if to_unicode:
-                            if self.leader[9] == 'a' or force_utf8:
-                                data = data.decode('utf-8', utf8_handling)
-                            else:
-                                data = marc8_to_unicode(data, hide_utf8_warnings)
-                        subfields.append(code)
-                        subfields.append(data)
+                for subfield in subs[1:]:
+                    if len(subfield) == 0:
+                        continue
+                    code = subfield[0]
+                    data = subfield[1:]
+
+                    if to_unicode:
+                        if self.leader[9] == 'a' or force_utf8:
+                            data = data.decode('utf-8', utf8_handling)
+                        else:
+                            data = marc8_to_unicode(data, hide_utf8_warnings)
+                    subfields.append(code)
+                    subfields.append(data)
                 field = Field( 
                     tag = entry_tag, 
                     indicators = [first_indicator, second_indicator], 
                     subfields = subfields,
                 )
-
             self.add_field(field)
             field_count += 1
 
