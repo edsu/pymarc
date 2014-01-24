@@ -27,7 +27,7 @@ available here in pymarc repository:
 from pymarc import MARCReader
 reader = MARCReader(open('test/marc.dat'))
 for record in reader: 
-  print record.title()
+    print record.title()
 ```
 ```
 The pragmatic programmer :
