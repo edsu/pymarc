@@ -26,63 +26,68 @@ from it. Here's an example of reading a batch of records and printing out
 the 245 subfield a. If you are curious this example uses the batch file 
 available here in pymarc repository:
 
-    >>> from pymarc import MARCReader
-    >>> reader = MARCReader(open('test/marc.dat'))
-    >>> for record in reader: 
-    ...    print record['245']['a']
-    The pragmatic programmer :
-    Programming Python /
-    Learning Python /
-    Python cookbook /
-    Python programming for the absolute beginner /
-    Web programming :
-    Python programming on Win32 /
-    Python programming :
-    Python Web programming /
-    Core python programming /
-    Python and Tkinter programming /
-    Game programming with Python, Lua, and Ruby /
-    Python programming patterns /
-    Python programming with the Java class libraries :
-    Learn to program using Python :
-    Programming with Python /
-    BSD Sockets programming from a multi-language perspective /
-    Design patterns :
-    Introduction to algorithms /
-    ANSI Common Lisp /
-
+```python  
+>>> from pymarc import MARCReader
+>>> reader = MARCReader(open('test/marc.dat'))
+>>> for record in reader: 
+...    print record['245']['a']
+The pragmatic programmer :
+Programming Python /
+Learning Python /
+Python cookbook /
+Python programming for the absolute beginner /
+Web programming :
+Python programming on Win32 /
+Python programming :
+Python Web programming /
+Core python programming /
+Python and Tkinter programming /
+Game programming with Python, Lua, and Ruby /
+Python programming patterns /
+Python programming with the Java class libraries :
+Learn to program using Python :
+Programming with Python /
+BSD Sockets programming from a multi-language perspective /
+Design patterns :
+Introduction to algorithms /
+ANSI Common Lisp /
+```
 
 ### Writing
 
 Here's an example of creating a record and writing it out to a file.
 
-    >>> from pymarc import Record, Field
-    >>> record = Record()
-    >>> record.addField(
-    ...     Field(
-    ...         tag = '245', 
-    ...         indicators = ['0','1'],
-    ...         subfields = [
-    ...             'a', 'The pragmatic programmer : ',
-    ...             'b', 'from journeyman to master /', 
-    ...             'c', 'Andrew Hunt, David Thomas.'
-    ...         ]))
-    >>> out = open('file.dat', 'w')
-    >>> out.write(record.asMARC21())
-    >>> out.close()
+```python
+>>> from pymarc import Record, Field
+>>> record = Record()
+>>> record.addField(
+...     Field(
+...         tag = '245', 
+...         indicators = ['0','1'],
+...         subfields = [
+...             'a', 'The pragmatic programmer : ',
+...             'b', 'from journeyman to master /', 
+...             'c', 'Andrew Hunt, David Thomas.'
+...         ]))
+>>> out = open('file.dat', 'w')
+>>> out.write(record.asMARC21())
+>>> out.close()
+```
 
 ### Updating
 
 Modifying works the same way, you read it in, modify it, and then write it out
 again:
 
-    >>> from pymarc import MARCReader
-    >>> reader = MARCReader(open('test/marc.dat'))
-    >>> record = reader.next()
-    >>> record['245']['a'] = 'The Zombie Programmer'
-    >>> out = open('file.dat', 'w')
-    >>> out.write(record.asMARC21())
-    >>> out.close()
+```python
+>>> from pymarc import MARCReader
+>>> reader = MARCReader(open('test/marc.dat'))
+>>> record = reader.next()
+>>> record['245']['a'] = 'The Zombie Programmer'
+>>> out = open('file.dat', 'w')
+>>> out.write(record.asMARC21())
+>>> out.close()
+```
 
 
 ### JSON and XML
