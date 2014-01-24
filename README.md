@@ -24,10 +24,12 @@ the title. If you are curious this example uses the batch file
 available here in pymarc repository:
 
 ```python  
->>> from pymarc import MARCReader
->>> reader = MARCReader(open('test/marc.dat'))
->>> for record in reader: 
-...    print record.title()
+from pymarc import MARCReader
+reader = MARCReader(open('test/marc.dat'))
+for record in reader: 
+  print record.title()
+```
+```
 The pragmatic programmer :
 Programming Python /
 Learning Python /
@@ -81,35 +83,35 @@ Formats](http://www.loc.gov/marc/marcdocz.html) page at the Library of Congress 
 Here's an example of creating a record and writing it out to a file.
 
 ```python
->>> from pymarc import Record, Field
->>> record = Record()
->>> record.addField(
-...     Field(
-...         tag = '245', 
-...         indicators = ['0','1'],
-...         subfields = [
-...             'a', 'The pragmatic programmer : ',
-...             'b', 'from journeyman to master /', 
-...             'c', 'Andrew Hunt, David Thomas.'
-...         ]))
->>> out = open('file.dat', 'w')
->>> out.write(record.asMARC21())
->>> out.close()
+from pymarc import Record, Field
+record = Record()
+record.addField(
+    Field(
+        tag = '245', 
+        indicators = ['0','1'],
+        subfields = [
+            'a', 'The pragmatic programmer : ',
+            'b', 'from journeyman to master /', 
+            'c', 'Andrew Hunt, David Thomas.'
+        ]))
+out = open('file.dat', 'w')
+out.write(record.asMARC21())
+out.close()
 ```
 
 ### Updating
 
-Modifying works the same way, you read it in, modify it, and then write it out
+Updating works the same way, you read it in, modify it, and then write it out
 again:
 
 ```python
->>> from pymarc import MARCReader
->>> reader = MARCReader(open('test/marc.dat'))
->>> record = reader.next()
->>> record['245']['a'] = 'The Zombie Programmer'
->>> out = open('file.dat', 'w')
->>> out.write(record.asMARC21())
->>> out.close()
+from pymarc import MARCReader
+reader = MARCReader(open('test/marc.dat'))
+record = reader.next()
+record['245']['a'] = 'The Zombie Programmer'
+out = open('file.dat', 'w')
+out.write(record.asMARC21())
+out.close()
 ```
 
 
