@@ -150,7 +150,7 @@ The pymarc developers encourage you to join the [pymarc Google Group](http://gro
 Copyright
 ---------
 
-Copyright (c) 2005-2012 Gabriel Farrell, Mark Matienzo, Ed Summers
+Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Ed Summers
 
 License
 -------
