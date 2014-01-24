@@ -54,8 +54,8 @@ Introduction to algorithms /
 ANSI Common Lisp /
 ```
 
-A `pymarc.Record` has a few handy methods like `title` for getting at bits
-of a bibliographic record, others include: `author`, `isbn`, `subjects`, 
+A `pymarc.Record` object has a few handy methods like `title` for getting at 
+bits of a bibliographic record, others include: `author`, `isbn`, `subjects`, 
 `location`, `notes`, `physicaldescription`, `publisher`, `pubyear`. But 
 really, to work with MARC data you need to understand the numeric field tags 
 and subfield codes that are used to designate various bits of information. There
