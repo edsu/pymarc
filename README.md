@@ -57,7 +57,18 @@ really, to work with MARC data you need to understand the numeric field tags
 and subfield codes that are used to designate various bits of information. There
 is a lot more hiding in a MARC record than these methods provide access to.
 For example the `title` method extracts the information from the `245` field, 
-subfield `a`. If you are new to MARC fields [Understanding
+subfield `a`. You can access this like so:
+
+    print record['245']['a']
+
+Some fields like subjects can repeat. In cases like that you will want to use
+`get_fields` to get all of them as `pmarc.Field` objects, which you can then 
+interact with further:
+
+    for f in record.get_fields('650'):
+        print f
+
+If you are new to MARC fields [Understanding
 MARC](http://www.loc.gov/marc/umb/) is a pretty good primer, and the [MARC 21
 Formats](http://www.loc.gov/marc/marcdocz.html) page at the Library of Congress is a good reference once you understand the basics.
 
