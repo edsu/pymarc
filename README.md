@@ -124,7 +124,7 @@ make other developers a bit happier by using the JSON or XML serializations.
 pymarc has support for both. The main benefit here is that the UTF8 character
 encoding is used, rather than the frustratingly archaic MARC8 encoding. Also
 they will be able to use JSON and XML tools to get at the data they want instead
-of some crazy MARC processing library, ahem, like pymarc.
+of some crazy MARC processing library like, ahem, pymarc.
 
 Installation
 ------------
