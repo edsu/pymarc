@@ -1,6 +1,3 @@
-Overview
---------
-
 [![Build Status](https://secure.travis-ci.org/edsu/pymarc.png)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with bibliographic data encoded in 
