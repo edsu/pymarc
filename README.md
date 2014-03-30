@@ -92,7 +92,7 @@ Here's an example of creating a record and writing it out to a file.
 ```python
 from pymarc import Record, Field
 record = Record()
-record.addField(
+record.add_field(
     Field(
         tag = '245', 
         indicators = ['0','1'],
@@ -102,7 +102,7 @@ record.addField(
             'c', 'Andrew Hunt, David Thomas.'
         ]))
 out = open('file.dat', 'w')
-out.write(record.asMARC21())
+out.write(record.as_marc())
 out.close()
 ```
 
@@ -117,7 +117,7 @@ reader = MARCReader(open('test/marc.dat'))
 record = reader.next()
 record['245']['a'] = 'The Zombie Programmer'
 out = open('file.dat', 'w')
-out.write(record.asMARC21())
+out.write(record.as_marc())
 out.close()
 ```
 
