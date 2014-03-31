@@ -17,7 +17,7 @@ class MARCUnicodeTest(unittest.TestCase):
         self.assertEqual(self.field_count, 8)
 
     def test_copy_utf8(self):
-        writer = pymarc.MARCWriter(open('test/write-utf8-test.dat', 'w'))
+        writer = pymarc.MARCWriter(open('test/write-utf8-test.dat', 'wb'))
         new_record = pymarc.Record(to_unicode=True, force_utf8=True)
         def process_xml(record):
             new_record.leader = record.leader

@@ -8,10 +8,12 @@ try:
 except ImportError:
     import simplejson as json
 
+from pymarc.six import string_types as basestring
+
 class JsonReaderTest(unittest.TestCase):
 	def setUp(self):
-		self.reader = pymarc.JSONReader(file('test/test.json'))
-		self.in_json = json.load(file('test/test.json'),strict=False)
+		self.reader = pymarc.JSONReader(open('test/test.json'))
+		self.in_json = json.load(open('test/test.json'),strict=False)
 	
 	def testRoundtrip(self):
 		"""Tests that result of loading records from the test file
@@ -27,7 +29,7 @@ class JsonReaderTest(unittest.TestCase):
 class JsonTest(unittest.TestCase):
 
     def setUp(self):
-        self.reader = pymarc.MARCReader(file('test/test.dat'))
+        self.reader = pymarc.MARCReader(open('test/test.dat', 'rb'))
         self._record = pymarc.Record()
         field = pymarc.Field(
             tag='245',
@@ -88,7 +90,6 @@ class JsonTest(unittest.TestCase):
 
     def test_as_json_multiple(self):
         for record in self.reader:
-            self.assertTrue(basestring in record.as_json().__class__.__bases__)
             self.assertEquals(dict, json.loads(record.as_json()).__class__)
 
 
