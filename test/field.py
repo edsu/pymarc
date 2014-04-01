@@ -1,4 +1,5 @@
 import unittest
+import sys
 
 from pymarc.field import Field
 
@@ -37,8 +38,8 @@ class FieldTest(unittest.TestCase):
             r'=008  831227m19799999nyu\\\\\\\\\\\|||\|\ger\\')
 
     def test_indicators(self):
-        assert self.field.indicator1 is 0
-        self.assertEqual(self.field.indicator2, 1)
+        self.assertEqual(self.field.indicator1, '0')
+        self.assertEqual(self.field.indicator2, '1')
 
     def test_subfields_created(self):
         subfields = self.field.subfields
@@ -61,7 +62,7 @@ class FieldTest(unittest.TestCase):
             ['Python (Computer program language)', 'Poetry.' ])
 
     def test_encode(self):
-        self.field.as_marc()
+        self.field.as_marc(encoding='utf-8')
 
     def test_membership(self):
         self.assertTrue('a' in self.field)
@@ -123,7 +124,8 @@ class FieldTest(unittest.TestCase):
             self.field['h'] = 'error'
         except KeyError:
             pass
-        except Exception, e:
+        except Exception:
+            e = sys.exc_info()[1]
             self.fail('Unexpected exception thrown: %s' % e)
         else:
             self.fail('KeyError not thrown')
@@ -134,7 +136,8 @@ class FieldTest(unittest.TestCase):
             self.field['a'] = 'error'
         except KeyError:
             pass
-        except Exception, e:
+        except Exception:
+            e = sys.exc_info()[1]
             self.fail('Unexpected exception thrown: %s' % e)
         else:
             self.fail('KeyError not thrown')

@@ -1,5 +1,6 @@
 "pymarc marcxml file."
 
+import logging
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
 import unicodedata
@@ -10,6 +11,7 @@ except ImportError:
     import elementtree.ElementTree as ET
 
 from pymarc import Record, Field, MARC8ToUnicode
+from pymarc import six
 
 XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
 MARC_XML_NS = "http://www.loc.gov/MARC21/slim"
@@ -135,7 +137,7 @@ def record_to_xml(record, quiet=False, namespace=False):
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
     marc8 = MARC8ToUnicode(quiet=quiet)
     def translate(data):
-        if type(data) == unicode: 
+        if type(data) == six.text_type: 
             return data
         else: 
             return marc8.translate(data)
