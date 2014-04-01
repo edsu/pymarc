@@ -6,7 +6,7 @@
 |_|    |___/
 ```
 
-[![Build Status](https://travis-ci.org/LibraryOfCongress/bagit-python.svg)](http://travis-ci.org/edsu/pymarc)
+[![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with bibliographic data encoded in 
 [MARC21](http://en.wikipedia.org/wiki/MARC_standards). It provides an API 
