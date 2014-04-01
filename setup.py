@@ -3,7 +3,7 @@ version = pymarc.__version__
 
 from setuptools import setup, find_packages
 
-install_requires = []
+install_requires = ['six']
 try:
     import xml.etree
 except ImportError:

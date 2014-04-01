@@ -1,9 +1,9 @@
-from pymarc.six import BytesIO as StringIO
-from pymarc.six import Iterator
-from pymarc import six
-import sys
 import os
+import sys
 import json
+
+from six import Iterator
+from six import BytesIO as StringIO
 
 from pymarc import Record, Field
 from pymarc.exceptions import RecordLengthInvalid
@@ -71,6 +71,11 @@ class MARCReader(Reader):
             self.file_handle = marc_target
         else: 
             self.file_handle = StringIO(marc_target)
+
+    def close(self):
+        if self.file_handle:
+            self.file_handle.close()
+            self.file_hand = None
 
     def __next__(self):
         """

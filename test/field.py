@@ -30,11 +30,11 @@ class FieldTest(unittest.TestCase):
         )
 
     def test_string(self):
-        self.assertEquals(str(self.field),
+        self.assertEqual(str(self.field),
             '=245  01$aHuckleberry Finn: $bAn American Odyssey')
 
     def test_controlfield_string(self):
-        self.assertEquals(str(self.controlfield),
+        self.assertEqual(str(self.controlfield),
             r'=008  831227m19799999nyu\\\\\\\\\\\|||\|\ger\\')
 
     def test_indicators(self):
@@ -73,12 +73,12 @@ class FieldTest(unittest.TestCase):
         for subfield in self.field:
             string += subfield[0]
             string += subfield[1]
-        self.assertEquals(string, 'aHuckleberry Finn: bAn American Odyssey')
+        self.assertEqual(string, 'aHuckleberry Finn: bAn American Odyssey')
 
     def test_value(self):
-        self.assertEquals(self.field.value(),
+        self.assertEqual(self.field.value(),
             'Huckleberry Finn: An American Odyssey')
-        self.assertEquals(self.controlfield.value(),
+        self.assertEqual(self.controlfield.value(),
                 '831227m19799999nyu           ||| | ger  ')
 
     def test_non_integer_tag(self):
@@ -88,13 +88,13 @@ class FieldTest(unittest.TestCase):
     def test_add_subfield(self):
         field = Field(tag='245', indicators=[0, 1], subfields=['a', 'foo'])
         field.add_subfield('a','bar')
-        self.assertEquals(field.__str__(), '=245  01$afoo$abar')
+        self.assertEqual(field.__str__(), '=245  01$afoo$abar')
 
     def test_delete_subfield(self):
         field = Field(tag='200', indicators=[0,1], subfields=['a','My Title', 'a', 'Kinda Bogus Anyhow'])
-        self.assertEquals(field.delete_subfield('z'), None)
-        self.assertEquals(field.delete_subfield('a'), 'My Title')
-        self.assertEquals(field.delete_subfield('a'), 'Kinda Bogus Anyhow')
+        self.assertEqual(field.delete_subfield('z'), None)
+        self.assertEqual(field.delete_subfield('a'), 'My Title')
+        self.assertEqual(field.delete_subfield('a'), 'Kinda Bogus Anyhow')
         self.assertTrue(len(field.subfields) == 0)
 
     def test_is_subject_field(self):

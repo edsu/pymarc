@@ -3,8 +3,9 @@
 
 import sys 
 import unicodedata
+
+from six import unichr
 from pymarc import marc8_mapping
-from pymarc.six import unichr
 
 def marc8_to_unicode(marc8, hide_utf8_warnings=False):
     """

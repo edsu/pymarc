@@ -1,6 +1,9 @@
 import re
 import logging
 
+from six import Iterator
+from six.moves import zip_longest as izip_longest
+
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
         FieldNotFound
@@ -8,7 +11,6 @@ from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field, RawField
 from pymarc.marc8 import marc8_to_unicode
-from pymarc.six import Iterator
 
 try:
     # the json module was included in the stdlib in python 2.6
@@ -21,7 +23,6 @@ except ImportError:
     # http://pypi.python.org/pypi/simplejson/1.7.3
     import simplejson as json
 
-from pymarc.six.moves import zip_longest as izip_longest
 
 isbn_regex = re.compile(r'([0-9\-xX]+)')
 
@@ -272,14 +273,14 @@ class Record(Iterator):
                 first_indicator = second_indicator = ' '
                 subs[0] = subs[0].decode('ascii')
                 if len(subs[0]) == 0:
-                    logging.warn("missing indicators: %s", entry_data)
+                    logging.warning("missing indicators: %s", entry_data)
                     first_indicator = second_indicator = ' '
                 elif len(subs[0]) == 1:
-                    logging.warn("only 1 indicator found: %s", entry_data)
+                    logging.warning("only 1 indicator found: %s", entry_data)
                     first_indicator = subs[0][0]
                     second_indicator = ' '
                 elif len(subs[0]) > 2:
-                    logging.warn("more than 2 indicators found: %s", entry_data)
+                    logging.warning("more than 2 indicators found: %s", entry_data)
                     first_indicator = subs[0][0]
                     second_indicator = subs[0][1]
                 else:

@@ -1,8 +1,10 @@
-import unittest
 import re
+import unittest
 
+import six
 import pymarc
-from pymarc.six.moves.urllib.request import urlopen
+
+from six.moves.urllib.request import urlopen
 
 class MARCReaderFileTest(unittest.TestCase):
     """
@@ -13,26 +15,35 @@ class MARCReaderFileTest(unittest.TestCase):
     def setUp(self):
         self.reader = pymarc.MARCReader(open('test/test.dat', 'rb'))
 
+    def tearDown(self):
+        if self.reader:
+            self.reader.close()
+
     def test_iterator(self):
         count = 0
         for record in self.reader:
             count += 1
-        self.assertEquals(count, 10, 
+        self.assertEqual(count, 10, 
                 'found expected number of MARC21 records')
 
     def test_map_records(self):
         self.count = 0
         def f(r):
             self.count += 1
-        pymarc.map_records(f, open('test/test.dat', 'rb'))
-        self.assertEquals(self.count, 10, 'map_records appears to work')
+        with open('test/test.dat', 'rb') as fh:
+            pymarc.map_records(f, fh)
+            self.assertEqual(self.count, 10, 'map_records appears to work')
 
     def test_multi_map_records(self):
         self.count = 0
         def f(r):
             self.count += 1
-        pymarc.map_records(f, open('test/test.dat', 'rb'), open('test/test.dat', 'rb'))
-        self.assertEquals(self.count, 20, 'map_records appears to work')
+        fh1 = open('test/test.dat', 'rb')
+        fh2 = open('test/test.dat', 'rb')
+        pymarc.map_records(f, fh1, fh2)
+        self.assertEqual(self.count, 20, 'map_records appears to work')
+        fh1.close()
+        fh2.close()
 
     def test_string(self):
         ## basic test of stringification
@@ -40,8 +51,8 @@ class MARCReaderFileTest(unittest.TestCase):
         has_numeric_tag = re.compile('\n=\d\d\d ')
         for record in self.reader:
             text = str(record)
-            self.failUnless(starts_with_leader.search(text), 'got leader')
-            self.failUnless(has_numeric_tag.search(text), 'got a tag')
+            self.assertTrue(starts_with_leader.search(text), 'got leader')
+            self.assertTrue(has_numeric_tag.search(text), 'got a tag')
 
     def test_url(self):
         reader = pymarc.MARCReader(urlopen(
@@ -51,30 +62,35 @@ class MARCReaderFileTest(unittest.TestCase):
 
     def disabled_test_codecs(self):
         import codecs
-        reader = pymarc.MARCReader(codecs.open('test/test.dat',
-            encoding='utf-8'))
-        record = next(reader)
-        self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
+        with codecs.open('test/test.dat', encoding='utf-8') as fh:
+            reader = pymarc.MARCReader(fh)
+            record = next(reader)
+            self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
 
     def test_bad_indicator(self):
-        reader = pymarc.MARCReader(open('test/bad_indicator.dat', 'rb'))
-        record = next(reader)
-        self.assertEqual(record['245']['a'], 'Aristocrats of color :')
+        with open('test/bad_indicator.dat', 'rb') as fh:
+            reader = pymarc.MARCReader(fh)
+            record = next(reader)
+            self.assertEqual(record['245']['a'], 'Aristocrats of color :')
 
     def test_regression_45(self):
         # https://github.com/edsu/pymarc/issues/45
-        reader = pymarc.MARCReader(open('test/regression45.dat', 'rb'))
-        record = next(reader)
-        self.assertEqual(record['752']['a'], 'Russian Federation')
-        self.assertEqual(record['752']['b'], 'Kostroma Oblast')
-        self.assertEqual(record['752']['d'], 'Kostroma')
+        with open('test/regression45.dat', 'rb') as fh:
+            reader = pymarc.MARCReader(fh)
+            record = next(reader)
+            self.assertEqual(record['752']['a'], 'Russian Federation')
+            self.assertEqual(record['752']['b'], 'Kostroma Oblast')
+            self.assertEqual(record['752']['d'], 'Kostroma')
             
 
 class MARCReaderStringTest(MARCReaderFileTest):
 
     def setUp(self):
-        raw = open('test/test.dat', 'rb').read()
-        self.reader = pymarc.reader.MARCReader(raw)
+        fh = open('test/test.dat')
+        raw = fh.read()
+        fh.close()
+
+        self.reader = pymarc.reader.MARCReader(six.b(raw))
 
     # inherit same tests from MARCReaderTestFile
 

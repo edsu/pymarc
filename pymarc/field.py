@@ -1,10 +1,13 @@
 "The pymarc.field file."
 
+import logging
+
+from six import Iterator
+from six import text_type
+
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
-from pymarc.six import Iterator
-from pymarc.six import text_type
-import logging
+
 
 class Field(Iterator):
     """

@@ -1,5 +1,5 @@
 "Constants for pymarc."
-from pymarc.six import unichr
+from six import unichr
 
 LEADER_LEN              = 24
 DIRECTORY_ENTRY_LEN     = 12

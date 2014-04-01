@@ -8,23 +8,26 @@ try:
 except ImportError:
     import simplejson as json
 
-from pymarc.six import string_types as basestring
+from six import string_types as basestring
 
 class JsonReaderTest(unittest.TestCase):
-	def setUp(self):
-		self.reader = pymarc.JSONReader(open('test/test.json'))
-		self.in_json = json.load(open('test/test.json'),strict=False)
-	
-	def testRoundtrip(self):
-		"""Tests that result of loading records from the test file
-		produces objects deeply equal to the result of loading 
-		marc-in-json files directly"""
-		recs = list(self.reader)
-		self.assertEquals(len(self.in_json), len(recs),"Incorrect number of records found")
-		for i,rec in enumerate(recs):
-			deserialized = json.loads(rec.as_json(),strict=False)
-			comp = self.in_json[i]
-			self.assertEqual(comp,deserialized)
+    def setUp(self):
+        with open('test/test.json') as fh:
+            self.in_json = json.load(fh, strict=False)
+
+        with open('test/test.json') as fh:
+           self.reader = pymarc.JSONReader(fh)
+
+    def testRoundtrip(self):
+        """Tests that result of loading records from the test file
+        produces objects deeply equal to the result of loading 
+        marc-in-json files directly"""
+        recs = list(self.reader)
+        self.assertEqual(len(self.in_json), len(recs),"Incorrect number of records found")
+        for i,rec in enumerate(recs):
+            deserialized = json.loads(rec.as_json(),strict=False)
+            comp = self.in_json[i]
+            self.assertEqual(comp,deserialized)
 
 class JsonTest(unittest.TestCase):
 
@@ -76,11 +79,11 @@ class JsonTest(unittest.TestCase):
         record = json.loads(self._record.as_json())
 
         self.assertTrue('leader' in record)
-        self.assertEquals(record['leader'], '          22        4500')
+        self.assertEqual(record['leader'], '          22        4500')
 
         self.assertTrue('fields' in record)
         self.assertTrue('245' in record['fields'][0])
-        self.assertEquals(record['fields'][0]['245'], {
+        self.assertEqual(record['fields'][0]['245'], {
             u'subfields': [
                 {u'a': u'Python'},
                 {u'c': u'Guido'}
@@ -90,7 +93,7 @@ class JsonTest(unittest.TestCase):
 
     def test_as_json_multiple(self):
         for record in self.reader:
-            self.assertEquals(dict, json.loads(record.as_json()).__class__)
+            self.assertEqual(dict, json.loads(record.as_json()).__class__)
 
 
 def suite():

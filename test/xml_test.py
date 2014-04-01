@@ -1,10 +1,12 @@
-from os.path import getsize
 import sys
 import unittest
-from pymarc.six.moves import cStringIO as StringIO
 
+import six
 import pymarc
-from pymarc import six
+
+from os.path import getsize
+from six.moves import cStringIO as StringIO
+
 
 class XmlTest(unittest.TestCase):
 
@@ -116,7 +118,8 @@ class XmlTest(unittest.TestCase):
         """ Tests the 'namespace' parameter of the record_to_xml() method
         """
         # get a test record
-        record = next(pymarc.reader.MARCReader(open('test/test.dat', 'rb')))
+        fh = open('test/test.dat', 'rb')
+        record = next(pymarc.reader.MARCReader(fh))
         # record_to_xml() with quiet set to False should generate errors
         #   and write them to sys.stderr
         xml = pymarc.record_to_xml(record, namespace=False)
@@ -127,6 +130,8 @@ class XmlTest(unittest.TestCase):
         xml = pymarc.record_to_xml(record, namespace=True)
         # look for the xmlns in the written xml, should be >= 0
         self.assertIn(b'xmlns="http://www.loc.gov/MARC21/slim"', xml)
+
+        fh.close()
 
     def test_bad_tag(self):
         a = pymarc.parse_xml_to_array(open('test/bad_tag.xml'))
