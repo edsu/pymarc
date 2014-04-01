@@ -1,5 +1,5 @@
 import pymarc
-version = pymarc.__version__
+version = '3.0.0'
 
 from setuptools import setup, find_packages
 
