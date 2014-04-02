@@ -115,9 +115,9 @@ again:
 
 ```python
 from pymarc import MARCReader
-with open('test/marc.dat') as fh:
+with open('test/marc.dat', 'rb') as fh:
     reader = MARCReader(fh)
-    record = reader.next()
+    record = next(reader)
     record['245']['a'] = 'The Zombie Programmer'
 
 out = open('file.dat', 'wb')
