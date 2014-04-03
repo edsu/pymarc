@@ -521,11 +521,17 @@ class Record(object):
     def publisher(self):
         if self['260']:
             return self['260']['b']
+        if self['264']:
+            return self['264']['b']
+
         return None
 
     def pubyear(self):
         if self['260']:
             return self['260']['c']
+        elif self['264']:
+            return self['264']['c']
+
         return None
 
 def map_marc8_record(r):
