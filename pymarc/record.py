@@ -476,20 +476,12 @@ class Record(object):
     
     def series(self):
         """
-        Note: 490 supersedes the 440 series
-        statement which was both series statement and added entry. 
+        Note: 490 supersedes the 440 series statement which was both 
+        series statement and added entry. 8XX fields are added entries.
         """
-        ser = self.get_fields('440', '490')
-        return ser
+        serieslist = self.get_fields('440', '490', '800', '810', '811', '830')
+        return serieslist
         
-    def seriesaddedentries(self):
-        """
-        Note: 8XX fields are usually justified by a 490 with first indicator
-        value as 1.
-        """
-        saelist = self.get_fields('800', '810', '811', '830')
-        return saelist
-
     def subjects(self):
         """
         Note: Fields 690-699 are considered "local" added entry fields but
