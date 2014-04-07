@@ -473,7 +473,15 @@ class Record(object):
         elif self['240']:
             return self['240'].format_field()
         return None
-
+    
+    def series(self):
+        """
+        Note: 490 supersedes the 440 series statement which was both 
+        series statement and added entry. 8XX fields are added entries.
+        """
+        serieslist = self.get_fields('440', '490', '800', '810', '811', '830')
+        return serieslist
+        
     def subjects(self):
         """
         Note: Fields 690-699 are considered "local" added entry fields but
