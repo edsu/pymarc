@@ -527,17 +527,24 @@ class Record(object):
         return self.get_fields('300')
 
     def publisher(self):
+        """
+        Returns publisher name. 264 fields used for original RDA records, with 
+        second indicator '1' indicating publication statement.
+        """ 
         if self['260']:
             return self['260']['b']
-        if self['264']:
+        if self['264'].indicator2 == '1':
             return self['264']['b']
 
         return None
 
     def pubyear(self):
+        """
+        Returns year of publication.
+        """
         if self['260']:
             return self['260']['c']
-        elif self['264']:
+        elif self['264'].indicator2 == '1':
             return self['264']['c']
 
         return None
