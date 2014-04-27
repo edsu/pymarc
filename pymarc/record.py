@@ -528,9 +528,8 @@ class Record(object):
 
     def publisher(self):
         """
-        Returns publisher name. 264 fields used for original RDA records, with 
-        second indicator '1' indicating publication statement.
-        """ 
+        Note: 264 field with second indicator '1' indicates publisher.
+        """
         if self['260']:
             return self['260']['b']
         if self['264'].indicator2 == '1':
@@ -539,9 +538,6 @@ class Record(object):
         return None
 
     def pubyear(self):
-        """
-        Returns year of publication.
-        """
         if self['260']:
             return self['260']['c']
         elif self['264'].indicator2 == '1':
