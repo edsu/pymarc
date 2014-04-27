@@ -530,18 +530,20 @@ class Record(object):
         """
         Note: 264 field with second indicator '1' indicates publisher.
         """
-        if self['260']:
-            return self['260']['b']
-        if self['264'].indicator2 == '1':
-            return self['264']['b']
+        for f in self.get_fields('260', '264'):
+            if self['260']:
+                return self['260']['b']
+            if self['264'] and f.indicator2 == '1':
+                return self['264']['b']
 
         return None
 
     def pubyear(self):
-        if self['260']:
-            return self['260']['c']
-        elif self['264'].indicator2 == '1':
-            return self['264']['c']
+        for f in self.get_fields('260', '264'):
+            if self['260']:
+                return self['260']['c']
+            if self['264'] and f.indicator2 == '1':
+                return self['264']['c']
 
         return None
 
