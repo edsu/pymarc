@@ -106,7 +106,7 @@ def map_xml(function, *files):
     parsed the function will get called with the extracted record
 
     def do_it(r):
-      print r
+      print(r)
 
     map_xml(do_it, 'marc.xml')
     """

@@ -103,7 +103,7 @@ def map_records(f, *files):
     pass in multiple batches.
 
     >>> def print_title(r): 
-    >>>     print r['245']
+    >>>     print(r['245'])
     >>> 
     >>> map_records(print_title, file('marc.dat'))
     """

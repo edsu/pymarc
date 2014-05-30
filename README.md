@@ -31,9 +31,10 @@ available here in pymarc repository:
 
 ```python  
 from pymarc import MARCReader
-reader = MARCReader(open('test/marc.dat'))
-for record in reader: 
-    print record.title()
+with open('test/marc.dat', 'rb') as fh:
+    reader = MARCReader(fh)
+    for record in reader: 
+        print(record.title())
 ```
 ```
 The pragmatic programmer :from journeyman to master /
@@ -70,7 +71,7 @@ For example the `title` method extracts the information from the `245` field,
 subfields `a` and `b`. You can access `245a` like so:
 
 ```python
-print record['245']['a']
+print(record['245']['a'])
 ```
 
 Some fields like subjects can repeat. In cases like that you will want to use
@@ -79,7 +80,7 @@ interact with further:
 
 ```python
 for f in record.get_fields('650'):
-    print f
+    print(f)
 ```
 
 If you are new to MARC fields [Understanding
@@ -102,7 +103,7 @@ record.add_field(
             'b', 'from journeyman to master /', 
             'c', 'Andrew Hunt, David Thomas.'
         ]))
-out = open('file.dat', 'w')
+out = open('file.dat', 'wb')
 out.write(record.as_marc())
 out.close()
 ```
@@ -114,10 +115,12 @@ again:
 
 ```python
 from pymarc import MARCReader
-reader = MARCReader(open('test/marc.dat'))
-record = reader.next()
-record['245']['a'] = 'The Zombie Programmer'
-out = open('file.dat', 'w')
+with open('test/marc.dat', 'rb') as fh:
+    reader = MARCReader(fh)
+    record = next(reader)
+    record['245']['a'] = 'The Zombie Programmer'
+
+out = open('file.dat', 'wb')
 out.write(record.as_marc())
 out.close()
 ```
@@ -164,7 +167,7 @@ channel on [Freenode](http://freenode.net) is a good place for both.
 Copyright
 ---------
 
-Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Ed Summers
+Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
 
 License
 -------
