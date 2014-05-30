@@ -1,2 +1,2 @@
 include *.py
-graft test
+prune test

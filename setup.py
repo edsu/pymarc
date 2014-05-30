@@ -1,7 +1,7 @@
 import pymarc
 version = pymarc.__version__
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 install_requires = []
 try:
@@ -32,7 +32,7 @@ setup(
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
     license = 'http://www.opensource.org/licenses/bsd-license.php',
-    packages = find_packages(),
+    py_modules = ['pymarc'],
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),
