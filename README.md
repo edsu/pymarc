@@ -9,13 +9,14 @@
 [![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with bibliographic data encoded in 
-[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It provides an API 
-for reading, writing and modifying MARC records. It was mostly designed to 
-be an emergency eject seat, for getting your data assets out of MARC and into
-some kind of saner representation. However over the years it has been used 
-to create and modify MARC records, since despite [repeated
-calls](http://marc-must-die.info/index.php/Main_Page) for it to die as a
-format, it seems to be living quite happily as a zombie. 
+[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It should work under
+python 2.x and 3.x. It provides an API for reading, writing and modifying 
+MARC records. It was mostly designed to be an emergency eject seat, for 
+getting your data assets out of MARC and into some kind of saner 
+representation. However over the years it has been used to create and 
+modify MARC records, since despite 
+[repeated calls](http://marc-must-die.info/index.php/Main_Page) for it to die 
+as a format, MARC seems to be living quite happily as a zombie. 
 
 Below are some common examples of how you might want to use pymarc. If 
 you run across an example that you think should be here please send a 

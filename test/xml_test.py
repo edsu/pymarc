@@ -1,9 +1,12 @@
-from os.path import getsize
 import sys
 import unittest
-from cStringIO import StringIO
 
+import six
 import pymarc
+
+from os.path import getsize
+from six.moves import cStringIO as StringIO
+
 
 class XmlTest(unittest.TestCase):
 
@@ -50,7 +53,7 @@ class XmlTest(unittest.TestCase):
         # generate xml
         xml = pymarc.record_to_xml(record1)
         # parse generated xml 
-        record2 = pymarc.parse_xml_to_array(StringIO(xml))[0]
+        record2 = pymarc.parse_xml_to_array(six.BytesIO(xml))[0]
 
         # compare original and resulting record
         self.assertEqual(record1.leader, record2.leader)
@@ -78,13 +81,13 @@ class XmlTest(unittest.TestCase):
         """
         outfile = 'test/dummy_stderr.txt'
         # truncate outfile in case someone's fiddled with it
-        open(outfile, 'w').close()
+        open(outfile, 'wb').close()
         # redirect stderr
-        sys.stderr = open(outfile, 'w')
+        sys.stderr = open(outfile, 'wb')
         # reload pymarc so it picks up the new sys.stderr
         reload(pymarc)
         # get problematic record
-        record = pymarc.reader.MARCReader(open('test/utf8_errors.dat')).next()
+        record = next(pymarc.reader.MARCReader(open('test/utf8_errors.dat', 'rb')))
         # record_to_xml() with quiet set to False should generate errors
         #   and write them to sys.stderr
         xml = pymarc.record_to_xml(record, quiet=False)
@@ -94,11 +97,11 @@ class XmlTest(unittest.TestCase):
         self.assertNotEqual(getsize(outfile), 0)
 
         # truncate file again
-        open(outfile, 'w').close()
+        open(outfile, 'wb').close()
         # be sure its truncated
         self.assertEqual(getsize(outfile), 0)
         # redirect stderr again
-        sys.stderr = open(outfile, 'w')
+        sys.stderr = open(outfile, 'wb')
         reload(pymarc)
         # record_to_xml() with quiet set to True should not generate errors
         xml = pymarc.record_to_xml(record, quiet=True)
@@ -108,27 +111,30 @@ class XmlTest(unittest.TestCase):
         self.assertEqual(getsize(outfile), 0)
 
     def test_strict(self):
-        a = pymarc.parse_xml_to_array(file('test/batch.xml'), strict=True)
+        a = pymarc.parse_xml_to_array(open('test/batch.xml'), strict=True)
         self.assertEqual(len(a), 2)
     
     def test_xml_namespaces(self):
         """ Tests the 'namespace' parameter of the record_to_xml() method
         """
         # get a test record
-        record = pymarc.reader.MARCReader(open('test/test.dat')).next()
+        fh = open('test/test.dat', 'rb')
+        record = next(pymarc.reader.MARCReader(fh))
         # record_to_xml() with quiet set to False should generate errors
         #   and write them to sys.stderr
         xml = pymarc.record_to_xml(record, namespace=False)
         # look for the xmlns in the written xml, should be -1
-        self.assertEqual(xml.find('xmlns="http://www.loc.gov/MARC21/slim"'), -1)
+        self.assertNotIn(b'xmlns="http://www.loc.gov/MARC21/slim"', xml)
 
         # record_to_xml() with quiet set to True should not generate errors
         xml = pymarc.record_to_xml(record, namespace=True)
         # look for the xmlns in the written xml, should be >= 0
-        self.assertNotEqual(xml.find('xmlns="http://www.loc.gov/MARC21/slim"'), -1)
+        self.assertIn(b'xmlns="http://www.loc.gov/MARC21/slim"', xml)
+
+        fh.close()
 
     def test_bad_tag(self):
-        a = pymarc.parse_xml_to_array(file('test/bad_tag.xml'))
+        a = pymarc.parse_xml_to_array(open('test/bad_tag.xml'))
         self.assertEqual(len(a), 1)
 
 def suite():

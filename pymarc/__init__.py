@@ -1,7 +1,5 @@
 # __init__.py
 
-__version__ = '2.9.3'
-
 r'''
 
 The pymarc module provides an API for reading, writing and modifying
@@ -17,7 +15,7 @@ by writing to the author.
    are curious this example uses the batch file available in the distribution.
 
     >>> from pymarc import MARCReader
-    >>> reader = MARCReader(open('test/marc.dat'))
+    >>> reader = MARCReader(open('test/marc.dat', 'rb'))
     >>> for record in reader: 
     ...    print record['245']['a']
     The pragmatic programmer :
@@ -54,21 +52,21 @@ by writing to the author.
     ...             'b', 'from journeyman to master /', 
     ...             'c', 'Andrew Hunt, David Thomas.'
     ...         ]))
-    >>> out = open('file.dat', 'w')
+    >>> out = open('file.dat', 'wb')
     >>> out.write(record.asMARC21())
     >>> out.close()
 
 '''
 
 
-from record import *
-from field import * 
-from exceptions import *
-from reader import *
-from writer import *
-from constants import *
-from marc8 import marc8_to_unicode, MARC8ToUnicode
-from marcxml import *
+from .record import *
+from .field import * 
+from .exceptions import *
+from .reader import *
+from .writer import *
+from .constants import *
+from .marc8 import marc8_to_unicode, MARC8ToUnicode
+from .marcxml import *
 
 if __name__ == "__main__":
     import doctest
