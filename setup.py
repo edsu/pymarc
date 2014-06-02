@@ -1,4 +1,3 @@
-import pymarc
 version = '3.0.0'
 
 from setuptools import setup
@@ -23,16 +22,14 @@ Programming Language :: Python
 Topic :: Text Processing :: General
 """
 
-import pymarc
-
-setup( 
+setup(
     name = 'pymarc',
     version = version,
     url = 'http://github.com/edsu/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
     license = 'http://www.opensource.org/licenses/bsd-license.php',
-    py_modules = ['pymarc'],
+    packages = ['pymarc'],
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),
