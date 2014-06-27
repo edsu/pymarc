@@ -1,9 +1,8 @@
-import pymarc
-version = pymarc.__version__
+version = '3.0.0'
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
-install_requires = []
+install_requires = ['six']
 try:
     import xml.etree
 except ImportError:
@@ -23,16 +22,14 @@ Programming Language :: Python
 Topic :: Text Processing :: General
 """
 
-import pymarc
-
-setup( 
+setup(
     name = 'pymarc',
     version = version,
     url = 'http://github.com/edsu/pymarc',
     author = 'Ed Summers',
     author_email = 'ehs@pobox.com',
     license = 'http://www.opensource.org/licenses/bsd-license.php',
-    packages = find_packages(),
+    packages = ['pymarc'],
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
     classifiers = filter(None, classifiers.split('\n')),

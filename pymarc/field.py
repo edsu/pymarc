@@ -1,9 +1,15 @@
 "The pymarc.field file."
 
+import logging
+
+from six import Iterator
+from six import text_type
+
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
 
-class Field(object):
+
+class Field(Iterator):
     """
     Field() pass in the field tag, indicators and subfields for the tag.
 
@@ -22,12 +28,13 @@ class Field(object):
         field = Field(tag='001', data='fol05731351')
 
     """
-    def __init__(self, tag, indicators=None, subfields=None, data=''):
+    def __init__(self, tag, indicators=None, subfields=None, data=u''):
         if indicators == None:
             indicators = []
         if subfields == None:
             subfields = []
-
+        indicators = [text_type(x) for x in indicators]
+        
         # attempt to normalize integer tags if necessary
         try:
             self.tag = '%03i' % int(tag)
@@ -107,14 +114,14 @@ class Field(object):
             raise KeyError("more than one code '%s'" % code)
         elif len(subfields) == 0:
             raise KeyError("no code '%s'" % code)
-        num_code = len(self.subfields)/2
+        num_code = len(self.subfields)//2
         while num_code >= 0:
             if self.subfields[(num_code*2)-2] == code:
                 self.subfields[(num_code*2)-1] = value
                 break
             num_code -= 1
 
-    def next(self):
+    def __next__(self):
         "Needed for iteration."
         while self.__pos < len(self.subfields):
             subfield = (self.subfields[ self.__pos ],
@@ -185,16 +192,17 @@ class Field(object):
             return True
         return False
 
-    def as_marc(self):
+    def as_marc(self, encoding):
         """
         used during conversion of a field to raw marc
         """
         if self.is_control_field():
-            return self.data + END_OF_FIELD
-        marc = str(self.indicator1) + str(self.indicator2)
+            return (self.data + END_OF_FIELD).encode(encoding)
+        marc = self.indicator1 + self.indicator2
         for subfield in self:
             marc += SUBFIELD_INDICATOR + subfield[0] + subfield[1]
-        return marc + END_OF_FIELD
+
+        return (marc + END_OF_FIELD).encode(encoding)
 
     # alias for backwards compatibility
     as_marc21 = as_marc
@@ -227,6 +235,27 @@ class Field(object):
         if self.tag.startswith('6'):
             return True
         return False
+
+
+class RawField(Field):
+    """
+    MARC field that keeps data in raw, undecoded byte strings.
+
+    Should only be used when input records are wrongly encoded.
+    """
+    def as_marc(self, encoding=None):
+        """
+        used during conversion of a field to raw marc
+        """
+        if encoding is not None:
+            logging.warn("Attempt to force a RawField into encoding %s", encoding)
+        if self.is_control_field():
+            return self.data + END_OF_FIELD
+        marc = self.indicator1.encode('ascii') + self.indicator2.encode('ascii')
+        for subfield in self:
+            marc += SUBFIELD_INDICATOR.encode('ascii') + subfield[0] + subfield[1]
+        return marc + END_OF_FIELD
+
 
 def map_marc8_field(f):
     if f.is_control_field():

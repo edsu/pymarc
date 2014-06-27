@@ -1,12 +1,14 @@
-from cStringIO import StringIO
-import sys
 import os
+import sys
 import json
+
+from six import Iterator
+from six import BytesIO as StringIO
 
 from pymarc import Record, Field
 from pymarc.exceptions import RecordLengthInvalid
 
-class Reader(object):
+class Reader(Iterator):
     """
     A base class for all iterating readers in the pymarc package. 
     """
@@ -53,7 +55,7 @@ class MARCReader(Reader):
     http://docs.python.org/library/codecs.html for more info).
 
     """
-    def __init__(self, marc_target, to_unicode=False, force_utf8=False,
+    def __init__(self, marc_target, to_unicode=True, force_utf8=False,
         hide_utf8_warnings=False, utf8_handling='strict'):
         """
         The constructor to which you can pass either raw marc or a file-like
@@ -70,7 +72,12 @@ class MARCReader(Reader):
         else: 
             self.file_handle = StringIO(marc_target)
 
-    def next(self):
+    def close(self):
+        if self.file_handle:
+            self.file_handle.close()
+            self.file_hand = None
+
+    def __next__(self):
         """
         To support iteration. 
         """
@@ -96,12 +103,12 @@ def map_records(f, *files):
     pass in multiple batches.
 
     >>> def print_title(r): 
-    >>>     print r['245']
+    >>>     print(r['245'])
     >>> 
     >>> map_records(print_title, file('marc.dat'))
     """
     for file in files:
-        map(f, MARCReader(file))
+        list(map(f, MARCReader(file)))
 
 class JSONReader(Reader):
     def __init__(self,marc_target,encoding='utf-8',stream=False):
@@ -124,12 +131,12 @@ class JSONReader(Reader):
         	self.iter = iter([self.records])
         return self
 
-    def next(self):
+    def __next__(self):
         jobj = next(self.iter)
         rec = Record()
         rec.leader = jobj['leader']
         for field in jobj['fields']:
-            k,v = list(field.iteritems())[0]
+            k,v = list(field.items())[0]
             if 'subfields' in v and hasattr(v,'update'):
                 # flatten m-i-j dict to list in pymarc
                 subfields = []

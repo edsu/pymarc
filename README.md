@@ -9,13 +9,14 @@
 [![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with bibliographic data encoded in 
-[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It provides an API 
-for reading, writing and modifying MARC records. It was mostly designed to 
-be an emergency eject seat, for getting your data assets out of MARC and into
-some kind of saner representation. However over the years it has been used 
-to create and modify MARC records, since despite [repeated
-calls](http://marc-must-die.info/index.php/Main_Page) for it to die as a
-format, it seems to be living quite happily as a zombie. 
+[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It should work under
+python 2.x and 3.x. It provides an API for reading, writing and modifying 
+MARC records. It was mostly designed to be an emergency eject seat, for 
+getting your data assets out of MARC and into some kind of saner 
+representation. However over the years it has been used to create and 
+modify MARC records, since despite 
+[repeated calls](http://marc-must-die.info/index.php/Main_Page) for it to die 
+as a format, MARC seems to be living quite happily as a zombie. 
 
 Below are some common examples of how you might want to use pymarc. If 
 you run across an example that you think should be here please send a 
@@ -30,9 +31,10 @@ available here in pymarc repository:
 
 ```python  
 from pymarc import MARCReader
-reader = MARCReader(open('test/marc.dat'))
-for record in reader: 
-    print record.title()
+with open('test/marc.dat', 'rb') as fh:
+    reader = MARCReader(fh)
+    for record in reader: 
+        print(record.title())
 ```
 ```
 The pragmatic programmer :from journeyman to master /
@@ -69,7 +71,7 @@ For example the `title` method extracts the information from the `245` field,
 subfields `a` and `b`. You can access `245a` like so:
 
 ```python
-print record['245']['a']
+print(record['245']['a'])
 ```
 
 Some fields like subjects can repeat. In cases like that you will want to use
@@ -78,7 +80,7 @@ interact with further:
 
 ```python
 for f in record.get_fields('650'):
-    print f
+    print(f)
 ```
 
 If you are new to MARC fields [Understanding
@@ -101,7 +103,7 @@ record.add_field(
             'b', 'from journeyman to master /', 
             'c', 'Andrew Hunt, David Thomas.'
         ]))
-out = open('file.dat', 'w')
+out = open('file.dat', 'wb')
 out.write(record.as_marc())
 out.close()
 ```
@@ -113,10 +115,12 @@ again:
 
 ```python
 from pymarc import MARCReader
-reader = MARCReader(open('test/marc.dat'))
-record = reader.next()
-record['245']['a'] = 'The Zombie Programmer'
-out = open('file.dat', 'w')
+with open('test/marc.dat', 'rb') as fh:
+    reader = MARCReader(fh)
+    record = next(reader)
+    record['245']['a'] = 'The Zombie Programmer'
+
+out = open('file.dat', 'wb')
 out.write(record.as_marc())
 out.close()
 ```
@@ -163,7 +167,7 @@ channel on [Freenode](http://freenode.net) is a good place for both.
 Copyright
 ---------
 
-Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Ed Summers
+Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
 
 License
 -------

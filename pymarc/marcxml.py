@@ -1,8 +1,11 @@
 "pymarc marcxml file."
 
+import logging
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
 import unicodedata
+
+import six
 
 try:
     import xml.etree.ElementTree as ET  # builtin in Python 2.5
@@ -103,7 +106,7 @@ def map_xml(function, *files):
     parsed the function will get called with the extracted record
 
     def do_it(r):
-      print r
+      print(r)
 
     map_xml(do_it, 'marc.xml')
     """
@@ -135,7 +138,7 @@ def record_to_xml(record, quiet=False, namespace=False):
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
     marc8 = MARC8ToUnicode(quiet=quiet)
     def translate(data):
-        if type(data) == unicode: 
+        if type(data) == six.text_type: 
             return data
         else: 
             return marc8.translate(data)

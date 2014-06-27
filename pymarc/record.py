@@ -1,12 +1,15 @@
 import re
 import logging
 
+from six import Iterator
+from six.moves import zip_longest as izip_longest
+
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
         FieldNotFound
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
-        map_marc8_field
+        map_marc8_field, RawField
 from pymarc.marc8 import marc8_to_unicode
 
 try:
@@ -20,57 +23,10 @@ except ImportError:
     # http://pypi.python.org/pypi/simplejson/1.7.3
     import simplejson as json
 
-try:
-    # izip_longest first appeared in python 2.6
-    # http://docs.python.org/library/itertools.html#itertools.izip_longest
-    from itertools import izip_longest
-except ImportError:
-    # itertools was introducted in python 2.3
-    # we just define the required classes and functions
-    # for 2.3 <= python < 2.6 here
-    class ZipExhausted(Exception):
-        pass
-
-    def _next(obj):
-        """
-        ``next`` (http://docs.python.org/library/functions.html#next)
-        was introduced in python 2.6 - and if we are here
-        (no ``izip_longest``), than we need to define this."""
-        return obj.next()
-
-    def izip_longest(*args, **kwds):
-        """
-        Make an iterator that aggregates elements from each of the iterables.
-        If the iterables are of uneven length, missing values are filled-in
-        with fillvalue.
-        Iteration continues until the longest iterable is exhausted.
-
-        This function is available in the standard lib since 2.6.
-        """
-        # chain and repeat are available since python 2.3
-        from itertools import chain, repeat
-
-        # izip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D-
-        fillvalue = kwds.get('fillvalue', '')
-        counter = [len(args) - 1]
-        def sentinel():
-            if not counter[0]:
-                raise ZipExhausted
-            counter[0] -= 1
-            yield fillvalue
-        fillers = repeat(fillvalue)
-        iterators = [chain(it, sentinel(), fillers) for it in args]
-        try:
-            while iterators:
-                yield tuple(map(_next, iterators))
-        except ZipExhausted:
-            pass
-        finally:
-            del chain
 
 isbn_regex = re.compile(r'([0-9\-xX]+)')
 
-class Record(object):
+class Record(Iterator):
     """
     A class for representing a MARC record. Each Record object is made up of
     multiple Field objects. You'll probably want to look at the docs for Field
@@ -101,7 +57,7 @@ class Record(object):
     MARC records in a file.  
     """
 
-    def __init__(self, data='', to_unicode=False, force_utf8=False,
+    def __init__(self, data='', to_unicode=True, force_utf8=False,
         hide_utf8_warnings=False, utf8_handling='strict'):
         self.leader = (' '*10) + '22' + (' '*8) + '4500'
         self.fields = list()
@@ -153,7 +109,7 @@ class Record(object):
         self.__pos = 0
         return self
 
-    def next(self):
+    def __next__(self):
         if self.__pos >= len(self.fields):
             raise StopIteration
         self.__pos += 1 
@@ -248,7 +204,7 @@ class Record(object):
 
         return [f for f in self.fields if f.tag in args]
 
-    def decode_marc(self, marc, to_unicode=False, force_utf8=False,
+    def decode_marc(self, marc, to_unicode=True, force_utf8=False,
         hide_utf8_warnings=False, utf8_handling='strict'):
         """
         decode_marc() accepts a MARC record in transmission format as a
@@ -258,9 +214,14 @@ class Record(object):
 
         """
         # extract record leader
-        self.leader = marc[0:LEADER_LEN]
+        self.leader = marc[0:LEADER_LEN].decode('ascii')
         if len(self.leader) != LEADER_LEN: 
             raise RecordLeaderInvalid
+
+        if self.leader[9] == 'a' or self.force_utf8:
+            encoding = 'utf-8'
+        else:
+            encoding = 'iso8859-1'
 
         # extract the byte offset where the record data starts
         base_address = int(marc[12:17])
@@ -271,7 +232,7 @@ class Record(object):
 
         # extract directory, base_address-1 is used since the 
         # director ends with an END_OF_FIELD byte
-        directory = marc[LEADER_LEN:base_address-1]
+        directory = marc[LEADER_LEN:base_address-1].decode('ascii')
 
         # determine the number of fields in record
         if len(directory) % DIRECTORY_ENTRY_LEN != 0:
@@ -292,10 +253,13 @@ class Record(object):
 
             # assume controlfields are numeric; replicates ruby-marc behavior 
             if entry_tag < '010' and entry_tag.isdigit():
-                field = Field(tag=entry_tag, data=entry_data)
+                if to_unicode:
+                    field = Field(tag=entry_tag, data=entry_data.decode(encoding))
+                else:
+                    field = RawField(tag=entry_tag, data=entry_data)
             else:
                 subfields = list()
-                subs = entry_data.split(SUBFIELD_INDICATOR)
+                subs = entry_data.split(SUBFIELD_INDICATOR.encode('ascii'))
 
                 # The MARC spec requires there to be two indicators in a
                 # field. However experience in the wild has shown that
@@ -307,15 +271,16 @@ class Record(object):
                 # blank spaces, and any more than 2 are dropped on the floor.
 
                 first_indicator = second_indicator = ' '
+                subs[0] = subs[0].decode('ascii')
                 if len(subs[0]) == 0:
-                    logging.warn("missing indicators: %s", entry_data)
+                    logging.warning("missing indicators: %s", entry_data)
                     first_indicator = second_indicator = ' '
                 elif len(subs[0]) == 1:
-                    logging.warn("only 1 indicator found: %s", entry_data)
+                    logging.warning("only 1 indicator found: %s", entry_data)
                     first_indicator = subs[0][0]
                     second_indicator = ' '
                 elif len(subs[0]) > 2:
-                    logging.warn("more than 2 indicators found: %s", entry_data)
+                    logging.warning("more than 2 indicators found: %s", entry_data)
                     first_indicator = subs[0][0]
                     second_indicator = subs[0][1]
                 else:
@@ -325,7 +290,7 @@ class Record(object):
                 for subfield in subs[1:]:
                     if len(subfield) == 0:
                         continue
-                    code = subfield[0]
+                    code = subfield[0:1].decode('ascii')
                     data = subfield[1:]
 
                     if to_unicode:
@@ -335,11 +300,18 @@ class Record(object):
                             data = marc8_to_unicode(data, hide_utf8_warnings)
                     subfields.append(code)
                     subfields.append(data)
-                field = Field( 
-                    tag = entry_tag, 
-                    indicators = [first_indicator, second_indicator], 
-                    subfields = subfields,
-                )
+                if to_unicode:
+                    field = Field( 
+                        tag = entry_tag, 
+                        indicators = [first_indicator, second_indicator], 
+                        subfields = subfields,
+                    )
+                else:
+                    field = RawField(
+                        tag = entry_tag, 
+                        indicators = [first_indicator, second_indicator], 
+                        subfields = subfields,
+                    )
             self.add_field(field)
             field_count += 1
 
@@ -350,32 +322,35 @@ class Record(object):
         """
         returns the record serialized as MARC21
         """
-        fields = ''
-        directory = '' 
+        fields = b''
+        directory = b'' 
         offset = 0
 
         # build the directory
         # each element of the directory includes the tag, the byte length of 
         # the field and the offset from the base address where the field data
         # can be found
+        if self.leader[9] == 'a' or self.force_utf8:
+            encoding = 'utf-8'
+        else:
+            encoding = 'iso8859-1'
+
         for field in self.fields:
-            field_data = field.as_marc()
-            if self.leader[9] == 'a' or self.force_utf8:
-              field_data = field_data.encode('utf-8')
+            field_data = field.as_marc(encoding=encoding)
             fields += field_data
             if field.tag.isdigit():
-                directory += '%03d' % int(field.tag)
+                directory += ('%03d' % int(field.tag)).encode(encoding)
             else:
-                directory += '%03s' % field.tag
-            directory += '%04d%05d' % (len(field_data), offset)
+                directory += ('%03s' % field.tag).encode(encoding)
+            directory += ('%04d%05d' % (len(field_data), offset)).encode(encoding)
     
             offset += len(field_data)
 
         # directory ends with an end of field
-        directory += END_OF_FIELD
+        directory += END_OF_FIELD.encode(encoding)
 
         # field data ends with an end of record
-        fields += END_OF_RECORD
+        fields += END_OF_RECORD.encode(encoding)
 
         # the base address where the directory ends and the field data begins
         base_address = LEADER_LEN + len(directory)
@@ -385,14 +360,11 @@ class Record(object):
 
         # update the leader with the current record length and base address
         # the lengths are fixed width and zero padded
-        self.leader = '%05d%s%05d%s' % \
+        strleader = '%05d%s%05d%s' % \
             (record_length, self.leader[5:12], base_address, self.leader[17:])
+        self.leader = strleader.encode(encoding)
         
-        # return the encoded record
-        if self.leader[9] == 'a' or self.force_utf8:
-            return self.leader.encode('utf-8') + directory.encode('utf-8') + fields
-        else:
-            return self.leader + directory + fields
+        return self.leader + directory + fields
 
     # alias for backwards compatability
     as_marc21 = as_marc
