@@ -499,18 +499,23 @@ class Record(Iterator):
         return self.get_fields('300')
 
     def publisher(self):
-        if self['260']:
-            return self['260']['b']
-        if self['264']:
-            return self['264']['b']
+        """
+        Note: 264 field with second indicator '1' indicates publisher.
+        """
+        for f in self.get_fields('260', '264'):
+            if self['260']:
+                return self['260']['b']
+            if self['264'] and f.indicator2 == '1':
+                return self['264']['b']
 
         return None
 
     def pubyear(self):
-        if self['260']:
-            return self['260']['c']
-        elif self['264']:
-            return self['264']['c']
+        for f in self.get_fields('260', '264'):
+            if self['260']:
+                return self['260']['c']
+            if self['264'] and f.indicator2 == '1':
+                return self['264']['c']
 
         return None
 
