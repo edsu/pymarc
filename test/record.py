@@ -254,12 +254,24 @@ class RecordTest(unittest.TestCase):
             subfields=['a', 'Paris :', 'b', 'Gauthier-Villars ;', 'a', 'Chicago :', 'b', 'University of Chicago Press,', 'c', '1955.']))
         self.assertEqual(record.publisher(), 'Gauthier-Villars ;')
 
+        record = Record()
+        self.assertEqual(record.publisher(), None)
+        record.add_field(Field('264', [' ', '1'],
+            subfields=['a', 'London :', 'b', 'Penguin,', 'c', '1961.']))
+        self.assertEqual(record.publisher(), 'Penguin,')
+
     def test_pubyear(self):
         record = Record()
         self.assertEqual(record.pubyear(), None)
         record.add_field(Field('260', [' ', ' '],
             subfields=['a', 'Paris :', 'b', 'Gauthier-Villars ;', 'a', 'Chicago :', 'b', 'University of Chicago Press,', 'c', '1955.']))
         self.assertEqual(record.pubyear(), '1955.')
+
+        record = Record()
+        self.assertEqual(record.pubyear(), None)
+        record.add_field(Field('264', [' ', '1'],
+            subfields=['a', 'London :', 'b', 'Penguin,', 'c', '1961.']))
+        self.assertEqual(record.pubyear(), '1961.')
 
     def test_alphatag(self):
         record = Record()
