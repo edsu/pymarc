@@ -125,7 +125,7 @@ class JSONReader(Reader):
         self.records =json.load(self.file_handle,strict=False)
 
     def __iter__(self):
-        if hasattr(self.records,'__iter__'):
+        if hasattr(self.records,'__iter__') and not isinstance(self.records, dict):
         	self.iter = iter(self.records)
         else:
         	self.iter = iter([self.records])
