@@ -406,7 +406,7 @@ class Record(Iterator):
             title = None 
         if title:
             try:
-                title += self['245']['b'] 
+                title += " " + self['245']['b'] 
             except TypeError: 
                 pass
         return title
