@@ -292,6 +292,30 @@ class RecordTest(unittest.TestCase):
             r2.add_field(Field('999', [' ', ' '], subfields=['a', 'bar']))
             self.assertEqual(r1['999']['a'], 'foo')
             self.assertEqual(r2['999']['a'], 'bar')
+        
+    def test_as_marc_leader(self):
+        record = Record()
+        record.add_field(
+            Field(
+                tag = '245', 
+                indicators = ['0','1'],
+                subfields = ['a', 'The pragmatic programmer']))
+        record.leader = '00067     2200037   4500'
+        leader_not_touched = record.leader
+        transmission_format = record.as_marc()
+        leader_touched = record.leader
+        self.assertTrue(leader_not_touched==leader_touched)
+        
+        
+    def test_remove_fields(self):
+        with open('test/testunimarc.dat', 'rb') as fh:
+            record = Record(fh.read(), force_utf8=True)
+        self.assertTrue(len(record.get_fields('899'))!=0)
+        self.assertTrue(len(record.get_fields('702'))!=0)
+        record.remove_fields('899', '702')
+        self.assertTrue(len(record.get_fields('899'))==0)
+        self.assertTrue(len(record.get_fields('702'))==0)
+            
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
