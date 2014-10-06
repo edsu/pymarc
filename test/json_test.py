@@ -29,6 +29,14 @@ class JsonReaderTest(unittest.TestCase):
             comp = self.in_json[i]
             self.assertEqual(comp,deserialized)
 
+    def testOneRecord(self):
+        """Tests case when in source json there is only one record not wrapped in list"""
+        data = json.dumps(self.in_json[0])
+        reader = pymarc.JSONReader(data)
+        self.assertEqual([rec.as_dict() for rec in reader][0], self.in_json[0])
+
+
+
 class JsonTest(unittest.TestCase):
 
     def setUp(self):
