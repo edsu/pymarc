@@ -1,6 +1,6 @@
 import re
-import logging
 import six
+import logging
 
 from six import Iterator
 
