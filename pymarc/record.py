@@ -1,8 +1,8 @@
 import re
 import logging
+import six
 
 from six import Iterator
-from six.moves import zip_longest as izip_longest
 
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
@@ -11,6 +11,8 @@ from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field, RawField
 from pymarc.marc8 import marc8_to_unicode
+
+izip_longest = six.moves.zip_longest
 
 try:
     # the json module was included in the stdlib in python 2.6
