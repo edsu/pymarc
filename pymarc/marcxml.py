@@ -128,10 +128,10 @@ def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
     return handler.records
 
 def record_to_xml(record, quiet=False, namespace=False):
-    node = record_to_xmlNode(record, quiet, namespace)
+    node = record_to_xml_node(record, quiet, namespace)
     return ET.tostring(node)
 
-def record_to_xmlNode(record, quiet=False, namespace=False):
+def record_to_xml_node(record, quiet=False, namespace=False):
     """
     converts a record object to a chunk of xml
 
