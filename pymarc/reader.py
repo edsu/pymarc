@@ -3,7 +3,7 @@ import sys
 import json
 
 from six import Iterator
-from six import BytesIO as StringIO
+from six import BytesIO, StringIO
 
 from pymarc import Record, Field
 from pymarc.exceptions import RecordLengthInvalid
@@ -70,7 +70,7 @@ class MARCReader(Reader):
         if (hasattr(marc_target, "read") and callable(marc_target.read)):
             self.file_handle = marc_target
         else: 
-            self.file_handle = StringIO(marc_target)
+            self.file_handle = BytesIO(marc_target)
 
     def close(self):
         if self.file_handle:
@@ -125,7 +125,7 @@ class JSONReader(Reader):
         self.records =json.load(self.file_handle,strict=False)
 
     def __iter__(self):
-        if hasattr(self.records,'__iter__'):
+        if hasattr(self.records,'__iter__') and not isinstance(self.records, dict):
         	self.iter = iter(self.records)
         else:
         	self.iter = iter([self.records])
