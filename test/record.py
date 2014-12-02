@@ -293,6 +293,12 @@ class RecordTest(unittest.TestCase):
             self.assertEqual(r1['999']['a'], 'foo')
             self.assertEqual(r2['999']['a'], 'bar')
 
+    def test_as_marc_consistency(self):
+        record = Record()
+        leadertype = type(record.leader)
+        record.as_marc()
+        self.assertEqual(leadertype, type(record.leader))
+
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
     return test_suite 

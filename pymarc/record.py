@@ -364,9 +364,9 @@ class Record(Iterator):
         # the lengths are fixed width and zero padded
         strleader = '%05d%s%05d%s' % \
             (record_length, self.leader[5:12], base_address, self.leader[17:])
-        self.leader = strleader.encode(encoding)
+        leader = strleader.encode(encoding)
         
-        return self.leader + directory + fields
+        return leader + directory + fields
 
     # alias for backwards compatability
     as_marc21 = as_marc
