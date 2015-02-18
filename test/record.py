@@ -104,7 +104,7 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(record.title(), None)
         record.add_field(Field('245', [0, 1], 
             subfields=['a', 'Foo :', 'b', 'bar']))
-        self.assertEqual(record.title(), 'Foo :bar')
+        self.assertEqual(record.title(), 'Foo : bar')
 
         record = Record()
         record.add_field(Field('245', [0, 1], 
@@ -292,6 +292,12 @@ class RecordTest(unittest.TestCase):
             r2.add_field(Field('999', [' ', ' '], subfields=['a', 'bar']))
             self.assertEqual(r1['999']['a'], 'foo')
             self.assertEqual(r2['999']['a'], 'bar')
+
+    def test_as_marc_consistency(self):
+        record = Record()
+        leadertype = type(record.leader)
+        record.as_marc()
+        self.assertEqual(leadertype, type(record.leader))
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
