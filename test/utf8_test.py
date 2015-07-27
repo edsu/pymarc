@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import unittest
 import pymarc
@@ -12,7 +12,7 @@ class MARCUnicodeTest(unittest.TestCase):
         def process_xml(record):
             for field in record.get_fields():
                 self.field_count += 1
-            
+
         pymarc.map_xml(process_xml, 'test/utf8.xml')
         self.assertEqual(self.field_count, 8)
 
@@ -24,17 +24,17 @@ class MARCUnicodeTest(unittest.TestCase):
 
             for field in record.get_fields():
                 new_record.add_field(field)
-            
+
         pymarc.map_xml(process_xml, 'test/utf8.xml')
 
         try:
             writer.write(new_record)
             writer.close()
-        
+
         finally:
             # remove it
             os.remove('test/write-utf8-test.dat')
-        
+
 def suite():
     test_suite = unittest.makeSuite(MARCUnicodeTest, 'test')
     return test_suite

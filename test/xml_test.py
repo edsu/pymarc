@@ -12,14 +12,14 @@ class XmlTest(unittest.TestCase):
 
     def test_map_xml(self):
         self.seen = 0
-        def count(record): 
+        def count(record):
             self.seen += 1
         pymarc.map_xml(count, 'test/batch.xml')
         self.assertEqual(2, self.seen)
 
     def test_multi_map_xml(self):
         self.seen = 0
-        def count(record): 
+        def count(record):
             self.seen += 1
         pymarc.map_xml(count, 'test/batch.xml', 'test/batch.xml')
         self.assertEqual(4, self.seen)
@@ -31,13 +31,13 @@ class XmlTest(unittest.TestCase):
         # should've got two records
         self.assertEqual(type(records[0]), pymarc.Record)
         self.assertEqual(type(records[1]), pymarc.Record)
-       
+
         # first record should have 18 fields
         record = records[0]
         self.assertEqual(len(record.get_fields()), 18)
-      
+
         # check the content of a control field
-        self.assertEqual(record['008'].data, 
+        self.assertEqual(record['008'].data,
                          u'910926s1957    nyuuun              eng  ')
 
         # check a data field with subfields
@@ -52,7 +52,7 @@ class XmlTest(unittest.TestCase):
         record1 = pymarc.parse_xml_to_array('test/batch.xml')[0]
         # generate xml
         xml = pymarc.record_to_xml(record1)
-        # parse generated xml 
+        # parse generated xml
         record2 = pymarc.parse_xml_to_array(six.BytesIO(xml))[0]
 
         # compare original and resulting record
@@ -113,7 +113,7 @@ class XmlTest(unittest.TestCase):
     def test_strict(self):
         a = pymarc.parse_xml_to_array(open('test/batch.xml'), strict=True)
         self.assertEqual(len(a), 2)
-    
+
     def test_xml_namespaces(self):
         """ Tests the 'namespace' parameter of the record_to_xml() method
         """

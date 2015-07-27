@@ -10,7 +10,7 @@ from six import text_type, binary_type
 from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
 
 class MARC8Test(TestCase):
-    
+
     def test_marc8_reader(self):
         with open('test/marc8.dat', 'rb') as fh:
             reader = MARCReader(fh, to_unicode=False)
@@ -28,15 +28,15 @@ class MARC8Test(TestCase):
             utitle = r['240']['a']
             self.assertEqual(type(utitle), text_type)
             self.assertEqual(utitle, u'De la solitude \xe0 la communaut\xe9.')
-        
+
     def test_marc8_reader_to_unicode_bad_eacc_sequence(self):
         with open('test/bad_eacc_encoding.dat', 'rb') as fh:
             reader = MARCReader(fh, to_unicode=True, hide_utf8_warnings=True)
             try:
                 r = next(reader)
-                self.assertFalse("Was able to decode invalid MARC8") 
+                self.assertFalse("Was able to decode invalid MARC8")
             except UnicodeDecodeError:
-                self.assertTrue("Caught UnicodeDecodeError as expected") 
+                self.assertTrue("Caught UnicodeDecodeError as expected")
 
     def test_marc8_reader_to_unicode_bad_escape(self):
         with open('test/bad_marc8_escape.dat', 'rb') as fh:
@@ -120,7 +120,7 @@ class MARC8Test(TestCase):
 
         # force reading as utf-8
         with open('test/utf8_without_leader_flag.dat', 'rb') as fh:
-            reader = MARCReader(fh, to_unicode=True, force_utf8=True, 
+            reader = MARCReader(fh, to_unicode=True, force_utf8=True,
                                 hide_utf8_warnings=True)
             record = next(reader)
             self.assertEqual(type(record), Record)
@@ -139,4 +139,4 @@ class MARC8Test(TestCase):
 
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')
-    return test_suite 
+    return test_suite
