@@ -145,7 +145,7 @@ class FieldTest(unittest.TestCase):
     def test_iter_over_controlfield(self):
         try:
             l = [subfield for subfield in self.controlfield]
-        except AttributeError, e:
+        except AttributeError as e:
             self.fail('Error during iteration: %s' % e)
 
     def test_setitem(self):
