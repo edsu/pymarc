@@ -21,10 +21,10 @@ MARC_XML_SCHEMA = "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/m
 class XmlHandler(ContentHandler):
 
     """
-    You can subclass XmlHandler and add your own process_record 
-    method that'll be passed a pymarc.Record as it becomes 
-    available. This could be useful if you want to stream the 
-    records elsewhere (like to a rdbms) without having to store 
+    You can subclass XmlHandler and add your own process_record
+    method that'll be passed a pymarc.Record as it becomes
+    available. This could be useful if you want to stream the
+    records elsewhere (like to a rdbms) without having to store
     them all in memory.
     """
     def __init__(self, strict=False, normalize_form=None):
@@ -44,7 +44,7 @@ class XmlHandler(ContentHandler):
         self._text = []
 
         if element == 'record':
-            self._record = Record() 
+            self._record = Record()
         elif element == 'controlfield':
             tag = attrs.getValue((None, u'tag'))
             self._field = Field(tag)
@@ -142,9 +142,9 @@ def record_to_xml_node(record, quiet=False, namespace=False):
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
     marc8 = MARC8ToUnicode(quiet=quiet)
     def translate(data):
-        if type(data) == six.text_type: 
+        if type(data) == six.text_type:
             return data
-        else: 
+        else:
             return marc8.translate(data)
 
     root = ET.Element('record')

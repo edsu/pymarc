@@ -40,7 +40,7 @@ class OrderedFieldsTest(unittest.TestCase):
         exp = ['111', '666', '888', '999', '988', '998']
 
         self.assertEqual(grouped, exp, "Fields are not grouped numerically")
-           
+
 def suite():
     test_suite = unittest.makeSuite(OrderedFieldsTest, 'test')
     return test_suite

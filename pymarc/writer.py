@@ -1,7 +1,7 @@
 from pymarc import Record, WriteNeedsRecord
 
 class Writer(object):
-    
+
     def write(self, record):
         pass
 
@@ -16,7 +16,7 @@ class MARCWriter(Writer):
         ## pass in a file
         writer = MARCWriter(file('file.dat','w'))
         writer.write(record)
-   
+
         ## use StringIO if you want to write to a string
         string = StringIO()
         writer = MARCWriter(string)

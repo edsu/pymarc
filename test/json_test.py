@@ -20,7 +20,7 @@ class JsonReaderTest(unittest.TestCase):
 
     def testRoundtrip(self):
         """Tests that result of loading records from the test file
-        produces objects deeply equal to the result of loading 
+        produces objects deeply equal to the result of loading
         marc-in-json files directly"""
         recs = list(self.reader)
         self.assertEqual(len(self.in_json), len(recs),"Incorrect number of records found")

@@ -34,7 +34,7 @@ class Field(Iterator):
         if subfields == None:
             subfields = []
         indicators = [text_type(x) for x in indicators]
-        
+
         # attempt to normalize integer tags if necessary
         try:
             self.tag = '%03i' % int(tag)
