@@ -185,6 +185,16 @@ class Record(Iterator):
             except ValueError: 
                 raise FieldNotFound
 
+    def remove_fields(self, *tags):
+        """
+        Remove all the fields with the tags passed to the function:
+            
+            self.remove_fields('200', '899')
+            
+        will remove all the fields marked with tags '200' or '899'.
+        """
+        self.fields[:] = (field for field in self.fields if field.tag not in tags)
+        
     def get_fields(self, *args):
         """
         When passed a tag ('245'), get_fields() will return a list of all the 
