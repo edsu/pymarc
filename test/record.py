@@ -324,6 +324,20 @@ class RecordTest(unittest.TestCase):
         record.as_marc()
         self.assertEqual(leadertype, type(record.leader))
 
+    def test_init_with_no_leader(self):
+        """ Test creating a record object with no leader argument. """
+        record = Record()
+        record.add_field(
+            Field(
+                tag = '245',
+                indicators = ['0','1'],
+                subfields = ['a', 'The pragmatic programmer']))
+        transmission_format = record.as_marc()
+        transmission_format_leader = transmission_format[0:24]
+        self.assertEqual(
+            transmission_format_leader,
+            b'00067     2200037   4500')
+
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
     return test_suite
