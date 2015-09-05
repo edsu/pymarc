@@ -292,12 +292,15 @@ class RecordTest(unittest.TestCase):
             r2.add_field(Field('999', [' ', ' '], subfields=['a', 'bar']))
             self.assertEqual(r1['999']['a'], 'foo')
             self.assertEqual(r2['999']['a'], 'bar')
-        
-    def test_as_marc_leader(self):
+
+    def test_as_marc_with_explicit_leader(self):
+        """ Test setting an explicit leader.
+        as_marc() should use the whole leader as set.
+        """
         record = Record()
         record.add_field(
             Field(
-                tag = '245', 
+                tag = '245',
                 indicators = ['0','1'],
                 subfields = ['a', 'The pragmatic programmer']))
         record.leader = '00067     2200037   4500'
@@ -305,8 +308,7 @@ class RecordTest(unittest.TestCase):
         transmission_format = record.as_marc()
         leader_touched = record.leader
         self.assertTrue(leader_not_touched==leader_touched)
-        
-        
+
     def test_remove_fields(self):
         with open('test/testunimarc.dat', 'rb') as fh:
             record = Record(fh.read(), force_utf8=True)
@@ -315,7 +317,6 @@ class RecordTest(unittest.TestCase):
         record.remove_fields('899', '702')
         self.assertTrue(len(record.get_fields('899'))==0)
         self.assertTrue(len(record.get_fields('702'))==0)
-            
 
     def test_as_marc_consistency(self):
         record = Record()
