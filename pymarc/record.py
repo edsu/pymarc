@@ -60,8 +60,9 @@ class Record(Iterator):
     """
 
     def __init__(self, data='', to_unicode=True, force_utf8=False,
-        hide_utf8_warnings=False, utf8_handling='strict'):
-        self.leader = (' '*10) + '22' + (' '*8) + '4500'
+        hide_utf8_warnings=False, utf8_handling='strict',
+        leader=' ' * LEADER_LEN):
+        self.leader = leader[0:10] + '22' + leader[12:20] + '4500'
         self.fields = list()
         self.pos = 0
         self.force_utf8 = force_utf8
@@ -188,13 +189,13 @@ class Record(Iterator):
     def remove_fields(self, *tags):
         """
         Remove all the fields with the tags passed to the function:
-            
+
             self.remove_fields('200', '899')
-            
+
         will remove all the fields marked with tags '200' or '899'.
         """
         self.fields[:] = (field for field in self.fields if field.tag not in tags)
-        
+
     def get_fields(self, *args):
         """
         When passed a tag ('245'), get_fields() will return a list of all the

@@ -294,7 +294,8 @@ class RecordTest(unittest.TestCase):
             self.assertEqual(r2['999']['a'], 'bar')
 
     def test_as_marc_with_explicit_leader(self):
-        """ Test setting an explicit leader.
+        """
+        Test setting an explicit leader.
         as_marc() should use the whole leader as set.
         """
         record = Record()
@@ -325,7 +326,9 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(leadertype, type(record.leader))
 
     def test_init_with_no_leader(self):
-        """ Test creating a record object with no leader argument. """
+        """
+        Test creating a Record object with no leader argument.
+        """
         record = Record()
         record.add_field(
             Field(
@@ -337,6 +340,58 @@ class RecordTest(unittest.TestCase):
         self.assertEqual(
             transmission_format_leader,
             b'00067     2200037   4500')
+
+    def test_init_with_no_leader_but_with_force_utf8(self):
+        """
+        Test creating a Record object with no leader argument
+        but with the force_utf8 argument being True.
+        """
+        record = Record(force_utf8 = True)
+        record.add_field(
+            Field(
+                tag = '245',
+                indicators = ['0','1'],
+                subfields = ['a', 'The pragmatic programmer']))
+        transmission_format = record.as_marc()
+        transmission_format_leader = transmission_format[0:24]
+        self.assertEqual(
+            transmission_format_leader,
+            b'00067    a2200037   4500')
+
+    def test_init_with_leader(self):
+        """
+        Test creating a Record with a leader argument.
+        """
+        record = Record(leader='abcdefghijklmnopqrstuvwx')
+        record.add_field(
+            Field(
+                tag = '245',
+                indicators = ['0','1'],
+                subfields = ['a', 'The pragmatic programmer']))
+        transmission_format = record.as_marc()
+        transmission_format_leader = transmission_format[0:24]
+        self.assertEqual(
+            transmission_format_leader,
+            b'00067fghij2200037rst4500')
+
+    def test_init_with_leader_and_force_utf8(self):
+        """
+        Test creating a Record  with a leader argument
+        and with the force_ut8 argument being True.
+        """
+        record = Record(
+            leader = 'abcdefghijklmnopqrstuvwx',
+            force_utf8 = True)
+        record.add_field(
+            Field(
+                tag = '245',
+                indicators = ['0','1'],
+                subfields = ['a', 'The pragmatic programmer']))
+        transmission_format = record.as_marc()
+        transmission_format_leader = transmission_format[0:24]
+        self.assertEqual(
+            transmission_format_leader,
+            b'00067fghia2200037rst4500')
 
 def suite():
     test_suite = unittest.makeSuite(RecordTest, 'test')
