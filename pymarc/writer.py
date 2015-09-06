@@ -46,21 +46,21 @@ class JSONWriter(Writer):
     IMPORTANT: You must the close a JSONWriter,
     otherwise you will not get valid JSON.
 
-    Simple usage:
+    Simple usage::
 
-        from pymarc import JSONWriter
+        >>> from pymarc import JSONWriter
 
-        ## pass in a file
-        writer = JSONWriter(open('file.xml','wt'))
-        writer.write(record)
-        writer.close()
+        ### writing to a file
+        >>> writer = JSONWriter(open('file.json','wt'))
+        >>> writer.write(record)
+        >>> writer.close() # Important!
 
-        ## use StringIO if you want to write to a string
-        string = StringIO()
-        writer = JSONWriter(string, own_file_handle = False)
-        writer.write(record)
-        writer.close()
-        print string
+        ### writing to a string
+        >>> string = StringIO()
+        >>> writer = JSONWriter(string, own_file_handle = False)
+        >>> writer.write(record)
+        >>> writer.close() # Important!
+        >>> print string
     """
 
     def __init__(self, file_handle, own_file_handle = True):
@@ -99,24 +99,32 @@ class MARCWriter(Writer):
     """
     A class for writing MARC21 records in transmission format.
 
-    Simple usage:
+    Simple usage::
 
-        from pymarc import MARCWriter
+        >>> from pymarc import MARCWriter
 
-        ## pass in a file
-        writer = MARCWriter(file('file.dat','w'))
-        writer.write(record)
+        ### writing to a file
+        >>> writer = MARCWriter(open('file.dat','wb'))
+        >>> writer.write(record)
+        >>> writer.close()
 
-        ## use StringIO if you want to write to a string
-        string = StringIO()
-        writer = MARCWriter(string)
-        writer.write(record)
-        print string
+        ### writing to a string (Python 2 only)
+        >>> string = StringIO()
+        >>> writer = MARCWriter(string)
+        >>> writer.write(record)
+        >>> writer.close()
+        >>> print string
+
+        ### writing to memory (Python 3 only)
+        >>> memory = BytesIO()
+        >>> writer = MARCWriter(memory)
+        >>> writer.write(record)
+        >>> writer.close()
     """
 
     def __init__(self, file_handle, own_file_handle = True):
         """
-        You need to pass in a file like object.
+        You need to pass in a byte file like object.
 
         If own_file_handle is True (the default) then the file handle will be
         closed when the writer is closed. Otherwise the file handle will be
@@ -138,26 +146,26 @@ class TextWriter(Writer):
 
     A blank line separates each record.
 
-    Simple usage:
+    Simple usage::
 
-        from pymarc import TextWriter
+        >>> from pymarc import TextWriter
 
-        ## pass in a file
-        writer = TextWriter(open('file.dat','wt'))
-        writer.write(record)
-        writer.close()
+        ### writing to a file
+        >>> writer = TextWriter(open('file.txt','wt'))
+        >>> writer.write(record)
+        >>> writer.close()
 
-        ## use StringIO if you want to write to a string
-        string = StringIO()
-        writer = MARCWriter(string, own_file_handle = False)
-        writer.write(record)
-        writer.close()
-        print string
+        ### writing to a string
+        >>> string = StringIO()
+        >>> writer = TextWriter(string, own_file_handle = False)
+        >>> writer.write(record)
+        >>> writer.close()
+        >>> print string
     """
 
     def __init__(self, file_handle, own_file_handle = True):
         """
-        You need to pass in a file like object.
+        You need to pass in a text file like object.
 
         If own_file_handle is True (the default) then the file handle will be
         closed when the writer is closed. Otherwise the file handle will be
@@ -184,22 +192,27 @@ class XMLWriter(Writer):
     IMPORTANT: You must the close an XMLWriter, otherwise you will not get
     a valid XML document.
 
-    Simple usage:
+    Simple usage::
 
-        from pymarc import XMLWriter
+        >>> from pymarc import XMLWriter
 
-        ## pass in a file
-        writer = XMLWriter(open('file.xml','wb'))
-        writer.write(record)
-        writer.close()
+        ### writing to a file
+        >>> writer = XMLWriter(open('file.xml','wb'))
+        >>> writer.write(record)
+        >>> writer.close() # Important!
 
-        ## use StringIO for Python 2 and BytesIO for Python 3
-        ## if you want to write to a string/bytes.
-        string = StringIO()   ## BytesIO() for Python 3
-        writer = MARCWriter(string, own_file_handle = False)
-        writer.write(record)
-        writer.close()
-        print string
+        ### writing to a string (Python 2 only)
+        >>> string = StringIO()
+        >>> writer = XMLWriter(string)
+        >>> writer.write(record)
+        >>> writer.close() # Important!
+        >>> print string
+
+        ### writing to memory (Python 3 only)
+        >>> memory = BytesIO()
+        >>> writer = XMLWriter(memory)
+        >>> writer.write(record)
+        >>> writer.close() # Important!
     """
 
     def __init__(self, file_handle, own_file_handle = True):
