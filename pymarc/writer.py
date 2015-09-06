@@ -6,6 +6,17 @@ try:
 except ImportError:
     import elementtree.ElementTree as ET
 
+try:
+    # the json module was included in the stdlib in python 2.6
+    # http://docs.python.org/library/json.html
+    import json
+except ImportError:
+    # simplejson 2.0.9 is available for python 2.4+
+    # http://pypi.python.org/pypi/simplejson/2.0.9
+    # simplejson 1.7.3 is available for python 2.3+
+    # http://pypi.python.org/pypi/simplejson/1.7.3
+    import simplejson as json
+
 
 class Writer(object):
 
@@ -14,6 +25,67 @@ class Writer(object):
 
     def close(self):
         pass
+
+
+class JSONWriter(Writer):
+    """
+    A class for writing records as an array of MARC-in-JSON objects.
+
+    IMPORTANT: You must the close a JSONWriter,
+    otherwise you will not get valid JSON.
+
+    Simple usage:
+
+        from pymarc import JSONWriter
+
+        ## pass in a file
+        writer = JSONWriter(open('file.xml','wt'))
+        writer.write(record)
+        writer.close()
+
+        ## use StringIO if you want to write to a string
+        string = StringIO()
+        writer = JSONWriter(string, own_file_handle = False)
+        writer.write(record)
+        writer.close()
+        print string
+    """
+
+    def __init__(self, file_handle, own_file_handle = True):
+        """
+        You need to pass in a text file like object.
+
+        If own_file_handle is True (the default) then the file handle will be
+        closed when the writer is closed. Otherwise the file handle will be
+        left open.
+        """
+        super(JSONWriter, self).__init__()
+        self.file_handle = file_handle
+        self.own_file_handle = own_file_handle
+        self.write_count = 0
+        self.file_handle.write('[')
+
+    def write(self, record):
+        """
+        Writes a record.
+        """
+        if not isinstance(record, Record):
+            raise WriteNeedsRecord
+        if self.write_count > 0:
+            self.file_handle.write(',')
+        json.dump(record.as_dict(), self.file_handle, separators=(',', ':'))
+        self.write_count += 1
+
+    def close(self):
+        """
+        Closes the file.
+
+        If own_file_handle is True, also closes the file handle.
+        """
+        self.file_handle.write(']')
+        if self.own_file_handle:
+            self.file_handle.close()
+        self.file_handle = None
 
 
 class MARCWriter(Writer):

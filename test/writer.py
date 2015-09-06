@@ -4,6 +4,245 @@ import os
 import textwrap
 from six import BytesIO, StringIO, u, binary_type
 
+try:
+    # the json module was included in the stdlib in python 2.6
+    # http://docs.python.org/library/json.html
+    import json
+except ImportError:
+    # simplejson 2.0.9 is available for python 2.4+
+    # http://pypi.python.org/pypi/simplejson/2.0.9
+    # simplejson 1.7.3 is available for python 2.3+
+    # http://pypi.python.org/pypi/simplejson/1.7.3
+    import simplejson as json
+
+
+class JSONWriterTest(unittest.TestCase):
+
+    def test_own_file_handle_true(self):
+        """
+        If a JSONWriter is created with own_file_handle = True, then when the
+        JSONWriter is closed the file handle is also closed.
+        """
+        file_handle = StringIO()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should be open')
+        writer = pymarc.JSONWriter(file_handle, own_file_handle = True)
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should still be open')
+        writer.close()
+        self.assertTrue(
+            file_handle.closed,
+            'The file handle should close when the writer closes')
+
+    def test_own_file_handle_false(self):
+        """
+        If a JSONWriter is created with own_file_handle = False, then when the
+        JSONWriter is closed the file handle is NOT also closed.
+        """
+        file_handle = StringIO()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should be open')
+        writer = pymarc.JSONWriter(file_handle, own_file_handle = False)
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should still be open')
+        writer.close()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should NOT close when the writer closes')
+
+    def test_writing_0_records(self):
+        expected = json.loads(r"""
+            []
+        """)
+        file_handle = StringIO()
+        try:
+            writer = pymarc.JSONWriter(file_handle, own_file_handle = False)
+            writer.close()
+            actual = json.loads(file_handle.getvalue())
+            self.assertEquals(actual, expected)
+        finally:
+            file_handle.close()
+
+    def test_writing_empty_record(self):
+        expected = json.loads(r"""
+            [
+                {
+                    "leader" : "          22        4500",
+                    "fields" : []
+                }
+            ]
+        """)
+        file_handle = StringIO()
+        try:
+            writer = pymarc.JSONWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            writer.write(record)
+            writer.close()
+            actual = json.loads(file_handle.getvalue())
+            self.assertEquals(actual, expected)
+        finally:
+            file_handle.close()
+
+    def test_writing_1_record(self):
+        expected = json.loads(r"""
+            [
+                {
+                    "leader" : "          22        4500",
+                    "fields" : [
+                        {
+                            "100": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "me" }
+                                ]
+                            }
+                        },
+                        {
+                            "245": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "Foo /" },
+                                    { "c": "by me." }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        """)
+        file_handle = StringIO()
+        try:
+            writer = pymarc.JSONWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            writer.close()
+            actual = json.loads(file_handle.getvalue())
+            self.assertEquals(actual, expected)
+        finally:
+            file_handle.close()
+
+    def test_writing_3_records(self):
+        expected = json.loads(r"""
+            [
+                {
+                    "leader" : "          22        4500",
+                    "fields" : [
+                        {
+                            "008": "090227s2009    mau                 chi d"
+                        },
+                        {
+                            "100": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "me" }
+                                ]
+                            }
+                        },
+                        {
+                            "245": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "Foo /" },
+                                    { "c": "by me." }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "leader" : "          22        4500",
+                    "fields" : [
+                        {
+                            "100": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "me" }
+                                ]
+                            }
+                        },
+                        {
+                            "245": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "Foo /" },
+                                    { "c": "by me." }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "leader" : "          22        4500",
+                    "fields" : [
+                        {
+                            "245": {
+                                "ind1": "0",
+                                "ind2": "0",
+                                "subfields": [
+                                    { "a": "Foo /" },
+                                    { "c": "by me." }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        """)
+        file_handle = StringIO()
+        try:
+            writer = pymarc.JSONWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field(
+                    '008',
+                    data=u('090227s2009    mau                 chi d')))
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            writer.close()
+            actual = json.loads(file_handle.getvalue())
+            self.assertEquals(actual, expected)
+        finally:
+            file_handle.close()
+
 
 class MARCWriterTest(unittest.TestCase):
 
@@ -396,10 +635,11 @@ class XMLWriterTest(unittest.TestCase):
 
 
 def suite():
+    json_suite = unittest.makeSuite(JSONWriterTest, 'test')
     marc_suite = unittest.makeSuite(MARCWriterTest, 'test')
     text_suite = unittest.makeSuite(TextWriterTest, 'test')
     xml_suite = unittest.makeSuite(XMLWriterTest, 'test')
-    test_suite = unittest.TestSuite((marc_suite, text_suite, xml_suite))
+    test_suite = unittest.TestSuite((json_suite, marc_suite, text_suite, xml_suite))
     return test_suite
 
 if __name__ == '__main__':
