@@ -1,7 +1,8 @@
 import unittest
 import pymarc
 import os
-from six import BytesIO
+import textwrap
+from six import BytesIO, StringIO, u
 
 
 class MARCWriterTest(unittest.TestCase):
@@ -64,8 +65,152 @@ class MARCWriterTest(unittest.TestCase):
             file_handle.closed,
             'The file handle should NOT close when the writer closes')
 
+
+class TextWriterTest(unittest.TestCase):
+
+    def test_writing_0_records(self):
+        file_handle = StringIO()
+        try:
+            writer = pymarc.TextWriter(file_handle, own_file_handle = False)
+            writer.close()
+            self.assertEqual(
+                file_handle.getvalue(),
+                '',
+                'Nothing should be have been written to the file handle')
+        finally:
+            file_handle.close()
+
+    def test_writing_1_record(self):
+        expected = r"""
+            =LDR            22        4500
+            =100  00$ame
+            =245  00$aFoo /$cby me.
+        """
+        expected = textwrap.dedent(expected[1:])
+        file_handle = StringIO()
+        try:
+            writer = pymarc.TextWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            writer.close()
+            self.assertEquals(file_handle.getvalue(), expected)
+        finally:
+            file_handle.close()
+
+    def test_writing_3_records(self):
+        expected = r"""
+            =LDR            22        4500
+            =008  090227s2009\\\\mau\\\\\\\\\\\\\\\\\chi\d
+            =100  00$ame
+            =245  00$aFoo /$cby me.
+
+            =LDR            22        4500
+            =100  00$ame
+            =245  00$aFoo /$cby me.
+
+            =LDR            22        4500
+            =245  00$aFoo /$cby me.
+        """
+        expected = textwrap.dedent(expected[1:])
+        file_handle = StringIO()
+        try:
+            writer = pymarc.TextWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field(
+                    '008',
+                    data=u('090227s2009    mau                 chi d')))
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(
+                pymarc.Field(
+                    '245',
+                    ['0', '0'],
+                    ['a', u('Foo /'), 'c', u('by me.')]))
+            writer.write(record)
+            writer.close()
+            self.assertEquals(file_handle.getvalue(), expected)
+        finally:
+            file_handle.close()
+
+    def test_writing_empty_record(self):
+        expected = r"""
+            =LDR            22        4500
+        """
+        expected = textwrap.dedent(expected[1:])
+        file_handle = StringIO()
+        try:
+            writer = pymarc.TextWriter(file_handle, own_file_handle = False)
+            record = pymarc.Record()
+            writer.write(record)
+            self.assertEquals(file_handle.getvalue(), expected)
+        finally:
+            file_handle.close()
+
+    def test_own_file_handle_true(self):
+        """
+        If a TextWriter is created with own_file_handle = True, then when the
+        TextWriter is closed the file handle is also closed.
+        """
+        file_handle = StringIO()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should be open')
+        writer = pymarc.TextWriter(file_handle, own_file_handle = True)
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should still be open')
+        writer.close()
+        self.assertTrue(
+            file_handle.closed,
+            'The file handle should close when the writer closes')
+
+    def test_own_file_handle_false(self):
+        """
+        If a TextWriter is created with own_file_handle = False, then when the
+        TextWriter is closed the file handle is NOT also closed.
+        """
+        file_handle = StringIO()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should be open')
+        writer = pymarc.TextWriter(file_handle, own_file_handle = False)
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should still be open')
+        writer.close()
+        self.assertFalse(
+            file_handle.closed,
+            'The file handle should NOT close when the writer closes')
+
+
 def suite():
-    test_suite = unittest.makeSuite(MARCWriterTest, 'test')
+    marc_suite = unittest.makeSuite(MARCWriterTest, 'test')
+    text_suite = unittest.makeSuite(TextWriterTest, 'test')
+    test_suite = unittest.TestSuite((marc_suite, text_suite))
     return test_suite
 
 if __name__ == '__main__':
