@@ -20,11 +20,23 @@ except ImportError:
 
 class Writer(object):
 
+    def __init__(self, file_handle, own_file_handle = True):
+        self.file_handle = file_handle
+        self.own_file_handle = own_file_handle
+
     def write(self, record):
-        pass
+        if not isinstance(record, Record):
+            raise WriteNeedsRecord
 
     def close(self):
-        pass
+        """
+        Closes the writer.
+
+        If own_file_handle is True, also closes the file handle.
+        """
+        if self.own_file_handle:
+            self.file_handle.close()
+        self.file_handle = None
 
 
 class JSONWriter(Writer):
@@ -59,9 +71,7 @@ class JSONWriter(Writer):
         closed when the writer is closed. Otherwise the file handle will be
         left open.
         """
-        super(JSONWriter, self).__init__()
-        self.file_handle = file_handle
-        self.own_file_handle = own_file_handle
+        super(JSONWriter, self).__init__(file_handle, own_file_handle)
         self.write_count = 0
         self.file_handle.write('[')
 
@@ -69,8 +79,7 @@ class JSONWriter(Writer):
         """
         Writes a record.
         """
-        if not isinstance(record, Record):
-            raise WriteNeedsRecord
+        Writer.write(self, record)
         if self.write_count > 0:
             self.file_handle.write(',')
         json.dump(record.as_dict(), self.file_handle, separators=(',', ':'))
@@ -78,14 +87,12 @@ class JSONWriter(Writer):
 
     def close(self):
         """
-        Closes the file.
+        Closes the writer.
 
         If own_file_handle is True, also closes the file handle.
         """
         self.file_handle.write(']')
-        if self.own_file_handle:
-            self.file_handle.close()
-        self.file_handle = None
+        Writer.close(self)
 
 
 class MARCWriter(Writer):
@@ -115,27 +122,14 @@ class MARCWriter(Writer):
         closed when the writer is closed. Otherwise the file handle will be
         left open.
         """
-        super(MARCWriter, self).__init__()
-        self.file_handle = file_handle
-        self.own_file_handle = own_file_handle
+        super(MARCWriter, self).__init__(file_handle, own_file_handle)
 
     def write(self, record):
         """
         Writes a record.
         """
-        if not isinstance(record, Record):
-            raise WriteNeedsRecord
+        Writer.write(self, record)
         self.file_handle.write(record.as_marc())
-
-    def close(self):
-        """
-        Closes the file.
-
-        If own_file_handle is True, also closes the file handle.
-        """
-        if self.own_file_handle:
-            self.file_handle.close()
-        self.file_handle = None
 
 
 class TextWriter(Writer):
@@ -169,31 +163,18 @@ class TextWriter(Writer):
         closed when the writer is closed. Otherwise the file handle will be
         left open.
         """
-        super(TextWriter, self).__init__()
-        self.file_handle = file_handle
-        self.own_file_handle = own_file_handle
+        super(TextWriter, self).__init__(file_handle, own_file_handle)
         self.write_count = 0
 
     def write(self, record):
         """
         Writes a record.
         """
-        if not isinstance(record, Record):
-            raise WriteNeedsRecord
+        Writer.write(self, record)
         if self.write_count > 0:
             self.file_handle.write('\n')
         self.file_handle.write(str(record))
         self.write_count += 1
-
-    def close(self):
-        """
-        Closes the file.
-
-        If own_file_handle is True, also closes the file handle.
-        """
-        if self.own_file_handle:
-            self.file_handle.close()
-        self.file_handle = None
 
 
 class XMLWriter(Writer):
@@ -229,9 +210,7 @@ class XMLWriter(Writer):
         closed when the writer is closed. Otherwise the file handle will be
         left open.
         """
-        super(XMLWriter, self).__init__()
-        self.file_handle = file_handle
-        self.own_file_handle = own_file_handle
+        super(XMLWriter, self).__init__(file_handle, own_file_handle)
         self.file_handle.write(
             b'<?xml version="1.0" encoding="UTF-8"?>')
         self.file_handle.write(
@@ -241,18 +220,15 @@ class XMLWriter(Writer):
         """
         Writes a record.
         """
-        if not isinstance(record, Record):
-            raise WriteNeedsRecord
+        Writer.write(self, record)
         node = pymarc.record_to_xml_node(record)
         self.file_handle.write(ET.tostring(node, encoding='utf-8'))
 
     def close(self):
         """
-        Closes the file.
+        Closes the writer.
 
         If own_file_handle is True, also closes the file handle.
         """
         self.file_handle.write(b'</collection>')
-        if self.own_file_handle:
-            self.file_handle.close()
-        self.file_handle = None
+        Writer.close(self)
