@@ -1,9 +1,14 @@
 from pymarc import Record, WriteNeedsRecord
 
+
 class Writer(object):
 
     def write(self, record):
         pass
+
+    def close(self):
+        pass
+
 
 class MARCWriter(Writer):
     """
