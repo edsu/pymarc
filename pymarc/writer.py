@@ -29,12 +29,17 @@ class MARCWriter(Writer):
         print string
     """
 
-    def __init__(self, file_handle):
+    def __init__(self, file_handle, own_file_handle = True):
         """
         You need to pass in a file like object.
+
+        If own_file_handle is True (the default) then the file handle will be
+        closed when the writer is closed. Otherwise the file handle will be
+        left open.
         """
         super(MARCWriter, self).__init__()
         self.file_handle = file_handle
+        self.own_file_handle = own_file_handle
 
     def write(self, record):
         """
@@ -47,7 +52,10 @@ class MARCWriter(Writer):
     def close(self):
         """
         Closes the file.
+
+        If own_file_handle is True, also closes the file handle.
         """
-        self.file_handle.close()
+        if self.own_file_handle:
+            self.file_handle.close()
         self.file_handle = None
 
