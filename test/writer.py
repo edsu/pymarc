@@ -20,7 +20,7 @@ class JSONWriterTest(unittest.TestCase):
 
     def test_close_true(self):
         """
-        If also_close_file_handle is true, then the file handle is also closed.
+        If close_fh is true, then the file handle is also closed.
         """
         file_handle = StringIO()
         self.assertFalse(
@@ -37,7 +37,7 @@ class JSONWriterTest(unittest.TestCase):
 
     def test_close_false(self):
         """
-        If also_close_file_handle is false, then the file handle is NOT closed.
+        If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = StringIO()
         self.assertFalse(
@@ -47,7 +47,7 @@ class JSONWriterTest(unittest.TestCase):
         self.assertFalse(
             file_handle.closed,
             'The file handle should still be open')
-        writer.close(also_close_file_handle = False)
+        writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
             'The file handle should NOT close when the writer closes')
@@ -59,7 +59,7 @@ class JSONWriterTest(unittest.TestCase):
         file_handle = StringIO()
         try:
             writer = pymarc.JSONWriter(file_handle)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
             self.assertEquals(actual, expected)
         finally:
@@ -79,7 +79,7 @@ class JSONWriterTest(unittest.TestCase):
             writer = pymarc.JSONWriter(file_handle)
             record = pymarc.Record()
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
             self.assertEquals(actual, expected)
         finally:
@@ -126,7 +126,7 @@ class JSONWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
             self.assertEquals(actual, expected)
         finally:
@@ -235,7 +235,7 @@ class JSONWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
             self.assertEquals(actual, expected)
         finally:
@@ -268,7 +268,7 @@ class MARCWriterTest(unittest.TestCase):
 
     def test_close_true(self):
         """
-        If also_close_file_handle is true, then the file handle is also closed.
+        If close_fh is true, then the file handle is also closed.
         """
         file_handle = BytesIO()
         self.assertFalse(
@@ -285,7 +285,7 @@ class MARCWriterTest(unittest.TestCase):
 
     def test_close_false(self):
         """
-        If also_close_file_handle is false, then the file handle is NOT closed.
+        If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = BytesIO()
         self.assertFalse(
@@ -295,7 +295,7 @@ class MARCWriterTest(unittest.TestCase):
         self.assertFalse(
             file_handle.closed,
             'The file handle should still be open')
-        writer.close(also_close_file_handle = False)
+        writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
             'The file handle should NOT close when the writer closes')
@@ -307,7 +307,7 @@ class TextWriterTest(unittest.TestCase):
         file_handle = StringIO()
         try:
             writer = pymarc.TextWriter(file_handle)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEqual(
                 file_handle.getvalue(),
                 '',
@@ -334,7 +334,7 @@ class TextWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
@@ -386,7 +386,7 @@ class TextWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
@@ -401,14 +401,14 @@ class TextWriterTest(unittest.TestCase):
             writer = pymarc.TextWriter(file_handle)
             record = pymarc.Record()
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
 
     def test_close_true(self):
         """
-        If also_close_file_handle is true, then the file handle is also closed.
+        If close_fh is true, then the file handle is also closed.
         """
         file_handle = StringIO()
         self.assertFalse(
@@ -425,7 +425,7 @@ class TextWriterTest(unittest.TestCase):
 
     def test_close_false(self):
         """
-        If also_close_file_handle is false, then the file handle is NOT closed.
+        If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = StringIO()
         self.assertFalse(
@@ -435,7 +435,7 @@ class TextWriterTest(unittest.TestCase):
         self.assertFalse(
             file_handle.closed,
             'The file handle should still be open')
-        writer.close(also_close_file_handle = False)
+        writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
             'The file handle should NOT close when the writer closes')
@@ -455,7 +455,7 @@ class XMLWriterTest(unittest.TestCase):
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
@@ -477,7 +477,7 @@ class XMLWriterTest(unittest.TestCase):
             writer = pymarc.XMLWriter(file_handle)
             record = pymarc.Record()
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
@@ -513,7 +513,7 @@ class XMLWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
@@ -587,14 +587,14 @@ class XMLWriterTest(unittest.TestCase):
                     ['0', '0'],
                     ['a', u('Foo /'), 'c', u('by me.')]))
             writer.write(record)
-            writer.close(also_close_file_handle = False)
+            writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
         finally:
             file_handle.close()
 
     def test_close_true(self):
         """
-        If also_close_file_handle is true, then the file handle is also closed.
+        If close_fh is true, then the file handle is also closed.
         """
         file_handle = BytesIO()
         self.assertFalse(
@@ -611,7 +611,7 @@ class XMLWriterTest(unittest.TestCase):
 
     def test_close_false(self):
         """
-        If also_close_file_handle is false, then the file handle is NOT closed.
+        If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = BytesIO()
         self.assertFalse(
@@ -621,7 +621,7 @@ class XMLWriterTest(unittest.TestCase):
         self.assertFalse(
             file_handle.closed,
             'The file handle should still be open')
-        writer.close(also_close_file_handle = False)
+        writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
             'The file handle should NOT close when the writer closes')

@@ -27,13 +27,14 @@ class Writer(object):
         if not isinstance(record, Record):
             raise WriteNeedsRecord
 
-    def close(self, also_close_file_handle = True):
+    def close(self, close_fh=True):
         """
         Closes the writer.
 
-        If also_close_file_handle is True, also closes the file handle.
+        If close_fh is False close will also close the underlying file handle
+        that was passed in to the constructor. The default is True.
         """
-        if also_close_file_handle:
+        if close_fh:
             self.file_handle.close()
         self.file_handle = None
 
@@ -56,9 +57,9 @@ class JSONWriter(Writer):
 
         ### writing to a string
         >>> string = StringIO()
-        >>> writer = JSONWriter(string, own_file_handle = False)
+        >>> writer = JSONWriter(string)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)  # Important!
+        >>> writer.close(close_fh=False)  # Important!
         >>> print string
     """
 
@@ -80,14 +81,15 @@ class JSONWriter(Writer):
         json.dump(record.as_dict(), self.file_handle, separators=(',', ':'))
         self.write_count += 1
 
-    def close(self, also_close_file_handle = True):
+    def close(self, close_fh=True):
         """
         Closes the writer.
 
-        If also_close_file_handle is True, also closes the file handle.
+        If close_fh is False close will also close the underlying file
+        handle that was passed in to the constructor. The default is True.
         """
         self.file_handle.write(']')
-        Writer.close(self, also_close_file_handle)
+        Writer.close(self, close_fh)
 
 
 class MARCWriter(Writer):
@@ -107,14 +109,14 @@ class MARCWriter(Writer):
         >>> string = StringIO()
         >>> writer = MARCWriter(string)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)
+        >>> writer.close(close_fh=False)
         >>> print string
 
         ### writing to memory (Python 3 only)
         >>> memory = BytesIO()
         >>> writer = MARCWriter(memory)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)
+        >>> writer.close(close_fh=False)
     """
 
     def __init__(self, file_handle):
@@ -148,9 +150,9 @@ class TextWriter(Writer):
 
         ### writing to a string
         >>> string = StringIO()
-        >>> writer = TextWriter(string, own_file_handle = False)
+        >>> writer = TextWriter(string)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)
+        >>> writer.close(close_fh=False)
         >>> print string
     """
 
@@ -192,14 +194,14 @@ class XMLWriter(Writer):
         >>> string = StringIO()
         >>> writer = XMLWriter(string)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)  # Important!
+        >>> writer.close(close_fh=False)  # Important!
         >>> print string
 
         ### writing to memory (Python 3 only)
         >>> memory = BytesIO()
         >>> writer = XMLWriter(memory)
         >>> writer.write(record)
-        >>> writer.close(also_close_file_handle = False)  # Important!
+        >>> writer.close(close_fh=False)  # Important!
     """
 
     def __init__(self, file_handle):
@@ -220,11 +222,12 @@ class XMLWriter(Writer):
         node = pymarc.record_to_xml_node(record)
         self.file_handle.write(ET.tostring(node, encoding='utf-8'))
 
-    def close(self, also_close_file_handle = True):
+    def close(self, close_fh=True):
         """
         Closes the writer.
 
-        If also_close_file_handle is True, also closes the file handle.
+        If close_fh is False close will also close the underlying file handle
+        that was passed in to the constructor. The default is True.
         """
         self.file_handle.write(b'</collection>')
-        Writer.close(self, also_close_file_handle)
+        Writer.close(self, close_fh)
