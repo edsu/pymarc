@@ -20,21 +20,20 @@ except ImportError:
 
 class Writer(object):
 
-    def __init__(self, file_handle, own_file_handle = True):
+    def __init__(self, file_handle):
         self.file_handle = file_handle
-        self.own_file_handle = own_file_handle
 
     def write(self, record):
         if not isinstance(record, Record):
             raise WriteNeedsRecord
 
-    def close(self):
+    def close(self, also_close_file_handle = True):
         """
         Closes the writer.
 
-        If own_file_handle is True, also closes the file handle.
+        If also_close_file_handle is True, also closes the file handle.
         """
-        if self.own_file_handle:
+        if also_close_file_handle:
             self.file_handle.close()
         self.file_handle = None
 
@@ -53,25 +52,21 @@ class JSONWriter(Writer):
         ### writing to a file
         >>> writer = JSONWriter(open('file.json','wt'))
         >>> writer.write(record)
-        >>> writer.close() # Important!
+        >>> writer.close()  # Important!
 
         ### writing to a string
         >>> string = StringIO()
         >>> writer = JSONWriter(string, own_file_handle = False)
         >>> writer.write(record)
-        >>> writer.close() # Important!
+        >>> writer.close(also_close_file_handle = False)  # Important!
         >>> print string
     """
 
-    def __init__(self, file_handle, own_file_handle = True):
+    def __init__(self, file_handle):
         """
         You need to pass in a text file like object.
-
-        If own_file_handle is True (the default) then the file handle will be
-        closed when the writer is closed. Otherwise the file handle will be
-        left open.
         """
-        super(JSONWriter, self).__init__(file_handle, own_file_handle)
+        super(JSONWriter, self).__init__(file_handle)
         self.write_count = 0
         self.file_handle.write('[')
 
@@ -85,14 +80,14 @@ class JSONWriter(Writer):
         json.dump(record.as_dict(), self.file_handle, separators=(',', ':'))
         self.write_count += 1
 
-    def close(self):
+    def close(self, also_close_file_handle = True):
         """
         Closes the writer.
 
-        If own_file_handle is True, also closes the file handle.
+        If also_close_file_handle is True, also closes the file handle.
         """
         self.file_handle.write(']')
-        Writer.close(self)
+        Writer.close(self, also_close_file_handle)
 
 
 class MARCWriter(Writer):
@@ -112,25 +107,21 @@ class MARCWriter(Writer):
         >>> string = StringIO()
         >>> writer = MARCWriter(string)
         >>> writer.write(record)
-        >>> writer.close()
+        >>> writer.close(also_close_file_handle = False)
         >>> print string
 
         ### writing to memory (Python 3 only)
         >>> memory = BytesIO()
         >>> writer = MARCWriter(memory)
         >>> writer.write(record)
-        >>> writer.close()
+        >>> writer.close(also_close_file_handle = False)
     """
 
-    def __init__(self, file_handle, own_file_handle = True):
+    def __init__(self, file_handle):
         """
         You need to pass in a byte file like object.
-
-        If own_file_handle is True (the default) then the file handle will be
-        closed when the writer is closed. Otherwise the file handle will be
-        left open.
         """
-        super(MARCWriter, self).__init__(file_handle, own_file_handle)
+        super(MARCWriter, self).__init__(file_handle)
 
     def write(self, record):
         """
@@ -159,19 +150,15 @@ class TextWriter(Writer):
         >>> string = StringIO()
         >>> writer = TextWriter(string, own_file_handle = False)
         >>> writer.write(record)
-        >>> writer.close()
+        >>> writer.close(also_close_file_handle = False)
         >>> print string
     """
 
-    def __init__(self, file_handle, own_file_handle = True):
+    def __init__(self, file_handle):
         """
         You need to pass in a text file like object.
-
-        If own_file_handle is True (the default) then the file handle will be
-        closed when the writer is closed. Otherwise the file handle will be
-        left open.
         """
-        super(TextWriter, self).__init__(file_handle, own_file_handle)
+        super(TextWriter, self).__init__(file_handle)
         self.write_count = 0
 
     def write(self, record):
@@ -199,31 +186,27 @@ class XMLWriter(Writer):
         ### writing to a file
         >>> writer = XMLWriter(open('file.xml','wb'))
         >>> writer.write(record)
-        >>> writer.close() # Important!
+        >>> writer.close()  # Important!
 
         ### writing to a string (Python 2 only)
         >>> string = StringIO()
         >>> writer = XMLWriter(string)
         >>> writer.write(record)
-        >>> writer.close() # Important!
+        >>> writer.close(also_close_file_handle = False)  # Important!
         >>> print string
 
         ### writing to memory (Python 3 only)
         >>> memory = BytesIO()
         >>> writer = XMLWriter(memory)
         >>> writer.write(record)
-        >>> writer.close() # Important!
+        >>> writer.close(also_close_file_handle = False)  # Important!
     """
 
-    def __init__(self, file_handle, own_file_handle = True):
+    def __init__(self, file_handle):
         """
         You need to pass in a binary file like object.
-
-        If own_file_handle is True (the default) then the file handle will be
-        closed when the writer is closed. Otherwise the file handle will be
-        left open.
         """
-        super(XMLWriter, self).__init__(file_handle, own_file_handle)
+        super(XMLWriter, self).__init__(file_handle)
         self.file_handle.write(
             b'<?xml version="1.0" encoding="UTF-8"?>')
         self.file_handle.write(
@@ -237,11 +220,11 @@ class XMLWriter(Writer):
         node = pymarc.record_to_xml_node(record)
         self.file_handle.write(ET.tostring(node, encoding='utf-8'))
 
-    def close(self):
+    def close(self, also_close_file_handle = True):
         """
         Closes the writer.
 
-        If own_file_handle is True, also closes the file handle.
+        If also_close_file_handle is True, also closes the file handle.
         """
         self.file_handle.write(b'</collection>')
-        Writer.close(self)
+        Writer.close(self, also_close_file_handle)
