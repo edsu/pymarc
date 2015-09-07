@@ -28,6 +28,7 @@ except ImportError:
 
 isbn_regex = re.compile(r'([0-9\-xX]+)')
 
+@six.python_2_unicode_compatible
 class Record(Iterator):
     """
     A class for representing a MARC record. Each Record object is made up of
@@ -82,7 +83,7 @@ class Record(Iterator):
         """
         # join is significantly faster than concatenation
         text_list = ['=LDR  %s' % self.leader]
-        text_list.extend([str(field) for field in self.fields])
+        text_list.extend([six.text_type(field) for field in self.fields])
         text = '\n'.join(text_list) + '\n'
         return text
 
