@@ -30,7 +30,7 @@ class MARC8Test(TestCase):
             self.assertEqual(type(utitle), text_type)
             self.assertEqual(utitle, u'De la solitude \xe0 la communaut\xe9.')
 
-    def test_marc8_reader_to_russian(self):
+    def test_marc8_reader_to_1251(self):
         with open('test/1251.dat', 'rb') as fh:
             reader = MARCReader(fh, file_encoding='cp1251')
             r = next(reader)
@@ -39,7 +39,7 @@ class MARC8Test(TestCase):
             self.assertEqual(type(utitle), text_type)
             self.assertEqual(utitle, u'Основы гидравлического расчета инженерных сетей')
 
-    def test_marc8_reader_to_russian2(self):
+    def test_marc8_reader_to_1251_without_1251(self):
         with open('test/1251.dat', 'rb') as fh:
             reader = MARCReader(fh,)
             try:
