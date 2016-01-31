@@ -56,7 +56,7 @@ class MARCReader(Reader):
 
     """
     def __init__(self, marc_target, to_unicode=True, force_utf8=False,
-        hide_utf8_warnings=False, utf8_handling='strict'):
+        hide_utf8_warnings=False, utf8_handling='strict',file_encoding = 'iso8859-1'):
         """
         The constructor to which you can pass either raw marc or a file-like
         object. Basically the argument you pass in should be raw MARC in
@@ -67,6 +67,7 @@ class MARCReader(Reader):
         self.force_utf8 = force_utf8
         self.hide_utf8_warnings = hide_utf8_warnings
         self.utf8_handling = utf8_handling
+        self.file_encoding = file_encoding
         if (hasattr(marc_target, "read") and callable(marc_target.read)):
             self.file_handle = marc_target
         else:
@@ -94,7 +95,8 @@ class MARCReader(Reader):
                         to_unicode=self.to_unicode,
                         force_utf8=self.force_utf8,
                         hide_utf8_warnings=self.hide_utf8_warnings,
-                        utf8_handling=self.utf8_handling)
+                        utf8_handling=self.utf8_handling,
+                        file_encoding = self.file_encoding)
         return record
 
 def map_records(f, *files):

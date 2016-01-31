@@ -1,3 +1,4 @@
+# coding: utf-8
 import unittest
 import sys
 
@@ -29,6 +30,15 @@ class FieldTest(unittest.TestCase):
             ]
         )
 
+        self.russianfield = Field(
+            tag = '245',
+            indicators = ['1', '0'],
+            subfields = [
+                'a', u'Нелинейные системы: геометрические методы анализа и синтеза',
+                'c', u'В. И. Краснощеченко, А. П. Крищенко'
+            ]
+        )
+
     def test_string(self):
         self.assertEqual(str(self.field),
             '=245  01$aHuckleberry Finn: $bAn American Odyssey')
@@ -36,6 +46,10 @@ class FieldTest(unittest.TestCase):
     def test_controlfield_string(self):
         self.assertEqual(str(self.controlfield),
             r'=008  831227m19799999nyu\\\\\\\\\\\|||\|\ger\\')
+
+    def test_russianfield(self):
+        self.assertEqual(str(self.russianfield)),
+            u'=245  10$aНелинейные системы: геометрические методы анализа и синтеза$cВ. И. Краснощеченко, А. П. Крищенко')
 
     def test_indicators(self):
         self.assertEqual(self.field.indicator1, '0')
