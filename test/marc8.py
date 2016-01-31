@@ -1,3 +1,4 @@
+# coding: utf-8
 from unittest import TestCase, makeSuite
 
 import os
@@ -28,6 +29,30 @@ class MARC8Test(TestCase):
             utitle = r['240']['a']
             self.assertEqual(type(utitle), text_type)
             self.assertEqual(utitle, u'De la solitude \xe0 la communaut\xe9.')
+
+    def test_marc8_reader_to_russian(self):
+        with open('test/1251.dat', 'rb') as fh:
+            reader = MARCReader(fh, file_encoding='cp1251')
+            r = next(reader)
+            self.assertEqual(type(r), Record)
+            utitle = r['245']['a']
+            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(utitle, u'Основы гидравлического расчета инженерных сетей')
+
+    def test_marc8_reader_to_russian2(self):
+        with open('test/1251.dat', 'rb') as fh:
+            reader = MARCReader(fh,)
+            try:
+                r = next(reader)
+                r = next(reader)
+                self.assertEqual(type(r), Record)
+                utitle = r['245']['a']
+                self.assertEqual(type(utitle), text_type)
+                self.assertEqual(utitle, u'Психологический тренинг с подростками')
+            except AssertionError:
+                self.assertTrue("Was enable to decode invalid MARC")
+
+
 
     def test_marc8_reader_to_unicode_bad_eacc_sequence(self):
         with open('test/bad_eacc_encoding.dat', 'rb') as fh:
