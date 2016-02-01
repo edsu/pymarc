@@ -53,6 +53,10 @@ class MARCReader(Reader):
     the utf8_handling parameter, which takes the same values ('strict',
     'replace', and 'ignore') as the Python Unicode codecs (see
     http://docs.python.org/library/codecs.html for more info).
+    
+    Although, it's not legal in MARC-21 to use anything but MARC-8 or UTF-8, but
+    if you have a file in incorrect encode and you know what it is, you can
+    try to use your encode in parameter "file_encoding".
 
     """
     def __init__(self, marc_target, to_unicode=True, force_utf8=False,
