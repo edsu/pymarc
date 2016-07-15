@@ -1,1 +1,1 @@
-prune test
+recursive-include test *
