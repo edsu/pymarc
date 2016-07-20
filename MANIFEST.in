@@ -1,1 +1,1 @@
-recursive-include test *
+recursive-include test *.py *.dat *.xml *.json *.mrc *.txt *.xml
