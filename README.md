@@ -168,7 +168,7 @@ channel on [Freenode](http://freenode.net) is a good place for both.
 Copyright
 ---------
 
-Copyright (c) 2005-2014 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
+Copyright (c) 2005-2016 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
 
 License
 -------
