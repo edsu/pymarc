@@ -3,14 +3,31 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pymarc's documentation!
-==================================
+pymarc
+======
+
+Release v\ |version|
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   modules
+
+API Docs
+========
+.. autosummary::
+   pymarc
+   pymarc.constants
+   pymarc.exceptions
+   pymarc.field
+   pymarc.marc8
+   pymarc.marc8_mapping
+   pymarc.marcxml
+   pymarc.reader
+   pymarc.record
+   pymarc.writer
 
 
 Indices and tables
@@ -19,4 +36,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
