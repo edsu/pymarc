@@ -20,7 +20,7 @@ class Field(Iterator):
                 'a', 'The pragmatic programmer : ',
                 'b', 'from journeyman to master /',
                 'c', 'Andrew Hunt, David Thomas.',
-            ]
+            ])
 
     If you want to create a control field, don't pass in the indicators
     and use a data parameter rather than a subfields parameter:
@@ -122,7 +122,9 @@ class Field(Iterator):
             num_code -= 1
 
     def __next__(self):
-        "Needed for iteration."
+        """
+        Needed for iteration.
+        """
         if not hasattr(self, 'subfields'):
             raise StopIteration
         while self.__pos < len(self.subfields):
