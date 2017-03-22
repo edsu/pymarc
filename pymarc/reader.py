@@ -75,7 +75,7 @@ class MARCReader(Reader):
     def close(self):
         if self.file_handle:
             self.file_handle.close()
-            self.file_hand = None
+            self.file_handle = None
 
     def __next__(self):
         """
