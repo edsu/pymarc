@@ -1,4 +1,4 @@
-version = '3.1.6'
+version = '3.1.7'
 
 from setuptools import setup
 
@@ -32,6 +32,6 @@ setup(
     packages = ['pymarc'],
     install_requires = install_requires,
     description = 'read, write and modify MARC bibliographic data',
-    classifiers = filter(None, classifiers.split('\n')),
+    classifiers = list(filter(None, classifiers.split('\n'))),
     test_suite = 'test',
 )
