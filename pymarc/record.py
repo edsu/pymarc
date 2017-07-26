@@ -380,7 +380,7 @@ class Record(Iterator):
 
         return leader + directory + fields
 
-    # alias for backwards compatability
+    # alias for backwards compatibility
     as_marc21 = as_marc
 
     def as_dict(self):
