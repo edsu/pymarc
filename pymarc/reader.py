@@ -87,7 +87,11 @@ class MARCReader(Reader):
         if len(first5) < 5:
             raise RecordLengthInvalid
 
-        length = int(first5)
+        try:
+            length = int(first5)
+        except ValueError:
+            raise RecordLengthInvalid
+
         chunk = self.file_handle.read(length - 5)
         chunk = first5 + chunk
         record = Record(chunk,
