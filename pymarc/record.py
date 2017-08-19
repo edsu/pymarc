@@ -285,19 +285,20 @@ class Record(Iterator):
                 # blank spaces, and any more than 2 are dropped on the floor.
 
                 first_indicator = second_indicator = ' '
-                subs[0] = subs[0].decode('ascii')
                 if len(subs[0]) == 0:
                     logging.warning("missing indicators: %s", entry_data)
                     first_indicator = second_indicator = ' '
                 elif len(subs[0]) == 1:
                     logging.warning("only 1 indicator found: %s", entry_data)
-                    first_indicator = subs[0][0]
+                    first_indicator = subs[0].decode('ascii')
                     second_indicator = ' '
                 elif len(subs[0]) > 2:
                     logging.warning("more than 2 indicators found: %s", entry_data)
+                    subs[0] = subs[0][:2].decode('ascii')
                     first_indicator = subs[0][0]
                     second_indicator = subs[0][1]
                 else:
+                    subs[0] = subs[0].decode('ascii')
                     first_indicator = subs[0][0]
                     second_indicator = subs[0][1]
 
