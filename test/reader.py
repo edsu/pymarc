@@ -76,6 +76,12 @@ class MARCReaderFileTest(unittest.TestCase):
             self.assertEqual(record['752']['b'], 'Kostroma Oblast')
             self.assertEqual(record['752']['d'], 'Kostroma')
 
+    def test_regression_106(self):
+        # https://github.com/edsu/pymarc/pull/106
+        with open('test/regression106.dat', 'rb') as fh:
+            reader = pymarc.MARCReader(fh)
+            record = next(reader)
+            self.assertEqual(record['001'].data, 'b12310438')
 
 class MARCReaderStringTest(MARCReaderFileTest):
 
