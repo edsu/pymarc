@@ -16,7 +16,7 @@ MARC records. It was mostly designed to be an emergency eject seat, for
 getting your data assets out of MARC and into some kind of saner
 representation. However over the years it has been used to create and
 modify MARC records, since despite
-[repeated calls](http://marc-must-die.info/index.php/Main_Page) for it to die
+[repeated calls](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page) for it to die
 as a format, MARC seems to be living quite happily as a zombie.
 
 Below are some common examples of how you might want to use pymarc. If
