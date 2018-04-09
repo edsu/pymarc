@@ -181,9 +181,12 @@ class Field(Iterator):
         """
         try:
             index = self.subfields.index(code)
-            value = self.subfields.pop(index + 1)
-            self.subfields.pop(index)
-            return value
+            if index % 2 == 0:
+                value = self.subfields.pop(index + 1)
+                self.subfields.pop(index)
+                return value
+            else:
+                return None
         except ValueError:
             return None
 
