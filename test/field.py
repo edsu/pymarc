@@ -152,6 +152,12 @@ class FieldTest(unittest.TestCase):
         self.field['a'] = 'changed'
         self.assertEqual(self.field['a'], 'changed')
 
+    def test_delete_subfield_only_by_code(self):
+        self.field.delete_subfield('An American Odyssey')
+        self.assertEqual(self.field['b'], 'An American Odyssey')
+        self.field.delete_subfield('b')
+        self.assertIsNone(self.field['b'])
+
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')
     return test_suite
