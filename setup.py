@@ -1,4 +1,4 @@
-version = '3.1.8'
+version = '3.1.9'
 
 from setuptools import setup
 
@@ -11,7 +11,6 @@ except ImportError:
 import sys
 if sys.version_info < (2 , 6):
     install_requires.append('simplejson>=1.7.3')
-del sys
 
 classifiers = """
 Intended Audience :: Education
@@ -22,6 +21,9 @@ Programming Language :: Python
 Topic :: Text Processing :: General
 """
 
+with open("README.md") as f:
+    long_description = f.read()
+
 setup(
     name = 'pymarc',
     version = version,
@@ -31,7 +33,9 @@ setup(
     license = 'http://www.opensource.org/licenses/bsd-license.php',
     packages = ['pymarc'],
     install_requires = install_requires,
-    description = 'read, write and modify MARC bibliographic data',
+    description = 'Read, write and modify MARC bibliographic data',
+    long_description = long_description,
+    long_description_content_type = "text/markdown",
     classifiers = list(filter(None, classifiers.split('\n'))),
     test_suite = 'test',
 )
