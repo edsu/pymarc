@@ -156,7 +156,7 @@ class FieldTest(unittest.TestCase):
         self.field.delete_subfield('An American Odyssey')
         self.assertEqual(self.field['b'], 'An American Odyssey')
         self.field.delete_subfield('b')
-        self.assertIsNone(self.field['b'])
+        self.assertTrue(self.field['b'] is None)
 
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')

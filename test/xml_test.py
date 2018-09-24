@@ -124,12 +124,12 @@ class XmlTest(unittest.TestCase):
         #   and write them to sys.stderr
         xml = pymarc.record_to_xml(record, namespace=False)
         # look for the xmlns in the written xml, should be -1
-        self.assertNotIn(b'xmlns="http://www.loc.gov/MARC21/slim"', xml)
+        self.assertFalse(b'xmlns="http://www.loc.gov/MARC21/slim"' in xml)
 
         # record_to_xml() with quiet set to True should not generate errors
         xml = pymarc.record_to_xml(record, namespace=True)
         # look for the xmlns in the written xml, should be >= 0
-        self.assertIn(b'xmlns="http://www.loc.gov/MARC21/slim"', xml)
+        self.assertTrue(b'xmlns="http://www.loc.gov/MARC21/slim"' in xml)
 
         fh.close()
 
