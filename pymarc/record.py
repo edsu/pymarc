@@ -62,7 +62,7 @@ class Record(Iterator):
 
     def __init__(self, data='', to_unicode=True, force_utf8=False,
         hide_utf8_warnings=False, utf8_handling='strict',
-        leader=' ' * LEADER_LEN):
+        leader=' ' * LEADER_LEN, file_encoding = 'iso8859-1'):
         self.leader = leader[0:10] + '22' + leader[12:20] + '4500'
         self.fields = list()
         self.pos = 0
@@ -71,7 +71,8 @@ class Record(Iterator):
             self.decode_marc(data, to_unicode=to_unicode,
                              force_utf8=force_utf8,
                              hide_utf8_warnings=hide_utf8_warnings,
-                             utf8_handling=utf8_handling)
+                             utf8_handling=utf8_handling,
+                             encoding=file_encoding)
         elif force_utf8:
             self.leader = self.leader[0:9] + 'a' + self.leader[10:]
 
@@ -219,7 +220,7 @@ class Record(Iterator):
         return [f for f in self.fields if f.tag in args]
 
     def decode_marc(self, marc, to_unicode=True, force_utf8=False,
-        hide_utf8_warnings=False, utf8_handling='strict'):
+        hide_utf8_warnings=False, utf8_handling='strict',encoding = 'iso8859-1'):
         """
         decode_marc() accepts a MARC record in transmission format as a
         a string argument, and will populate the object based on the data
@@ -234,8 +235,6 @@ class Record(Iterator):
 
         if self.leader[9] == 'a' or self.force_utf8:
             encoding = 'utf-8'
-        else:
-            encoding = 'iso8859-1'
 
         # extract the byte offset where the record data starts
         base_address = int(marc[12:17])
@@ -264,7 +263,6 @@ class Record(Iterator):
             entry_offset = int(entry[7:12])
             entry_data = marc[base_address + entry_offset :
                 base_address + entry_offset + entry_length - 1]
-
             # assume controlfields are numeric; replicates ruby-marc behavior
             if entry_tag < '010' and entry_tag.isdigit():
                 if to_unicode:
@@ -310,8 +308,10 @@ class Record(Iterator):
                     if to_unicode:
                         if self.leader[9] == 'a' or force_utf8:
                             data = data.decode('utf-8', utf8_handling)
-                        else:
+                        elif encoding == 'iso8859-1':
                             data = marc8_to_unicode(data, hide_utf8_warnings)
+                        else:
+                            data = data.decode(encoding)
                     subfields.append(code)
                     subfields.append(data)
                 if to_unicode:
