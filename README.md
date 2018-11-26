@@ -103,9 +103,8 @@ record.add_field(
             'b', 'from journeyman to master /',
             'c', 'Andrew Hunt, David Thomas.'
         ]))
-out = open('file.dat', 'wb')
-out.write(record.as_marc())
-out.close()
+with open('file.dat', 'wb') as out:
+    out.write(record.as_marc())
 ```
 
 ### Updating
@@ -119,10 +118,8 @@ with open('test/marc.dat', 'rb') as fh:
     reader = MARCReader(fh)
     record = next(reader)
     record['245']['a'] = 'The Zombie Programmer'
-
-out = open('file.dat', 'wb')
-out.write(record.as_marc())
-out.close()
+with open('file.dat', 'wb') as out:
+    out.write(record.as_marc())
 ```
 
 
