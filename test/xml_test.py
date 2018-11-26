@@ -85,7 +85,7 @@ class XmlTest(unittest.TestCase):
         # redirect stderr
         sys.stderr = open(outfile, 'wb')
         # reload pymarc so it picks up the new sys.stderr
-        reload(pymarc)
+        six.moves.reload_module(pymarc)
         # get problematic record
         record = next(pymarc.reader.MARCReader(open('test/utf8_errors.dat', 'rb')))
         # record_to_xml() with quiet set to False should generate errors
@@ -102,7 +102,7 @@ class XmlTest(unittest.TestCase):
         self.assertEqual(getsize(outfile), 0)
         # redirect stderr again
         sys.stderr = open(outfile, 'wb')
-        reload(pymarc)
+        six.moves.reload_module(pymarc)
         # record_to_xml() with quiet set to True should not generate errors
         xml = pymarc.record_to_xml(record, quiet=True)
         # close dummy stderr
