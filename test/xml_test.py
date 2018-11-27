@@ -1,10 +1,9 @@
 import sys
+import pymarc
 import unittest
 
-import six
-import pymarc
-
 from os.path import getsize
+from six import BytesIO
 from six.moves import cStringIO as StringIO
 
 
@@ -53,7 +52,7 @@ class XmlTest(unittest.TestCase):
         # generate xml
         xml = pymarc.record_to_xml(record1)
         # parse generated xml
-        record2 = pymarc.parse_xml_to_array(six.BytesIO(xml))[0]
+        record2 = pymarc.parse_xml_to_array(BytesIO(xml))[0]
 
         # compare original and resulting record
         self.assertEqual(record1.leader, record2.leader)
@@ -71,44 +70,6 @@ class XmlTest(unittest.TestCase):
                 self.assertEqual(field1[pos].get_subfields(), field2[pos].get_subfields())
                 self.assertEqual(field1[pos].indicators, field2[pos].indicators)
             pos += 1
-
-    # this test stopped working when Record.as_marc started returning a
-    # utf-8 encoded string, and Record.decode_marc started decoding utf-8
-
-    def disabled_test_xml_quiet(self):
-        """ Tests the 'quiet' parameter of the MARC8ToUnicode class,
-            passed in via the pymarc.record_to_xml() method
-        """
-        outfile = 'test/dummy_stderr.txt'
-        # truncate outfile in case someone's fiddled with it
-        open(outfile, 'wb').close()
-        # redirect stderr
-        sys.stderr = open(outfile, 'wb')
-        # reload pymarc so it picks up the new sys.stderr
-        six.moves.reload_module(pymarc)
-        # get problematic record
-        record = next(pymarc.reader.MARCReader(open('test/utf8_errors.dat', 'rb')))
-        # record_to_xml() with quiet set to False should generate errors
-        #   and write them to sys.stderr
-        xml = pymarc.record_to_xml(record, quiet=False)
-        # close dummy stderr so we can accurately get its size
-        sys.stderr.close()
-        # file size should be greater than 0
-        self.assertNotEqual(getsize(outfile), 0)
-
-        # truncate file again
-        open(outfile, 'wb').close()
-        # be sure its truncated
-        self.assertEqual(getsize(outfile), 0)
-        # redirect stderr again
-        sys.stderr = open(outfile, 'wb')
-        six.moves.reload_module(pymarc)
-        # record_to_xml() with quiet set to True should not generate errors
-        xml = pymarc.record_to_xml(record, quiet=True)
-        # close dummy stderr
-        sys.stderr.close()
-        # no errors should have been written
-        self.assertEqual(getsize(outfile), 0)
 
     def test_strict(self):
         a = pymarc.parse_xml_to_array(open('test/batch.xml'), strict=True)
