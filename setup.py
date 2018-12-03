@@ -2,16 +2,6 @@ version = '3.1.9'
 
 from setuptools import setup
 
-install_requires = ['six>=1.9.0']
-try:
-    import xml.etree
-except ImportError:
-    install_requires.append('elementtree>=1.2.6')
-
-import sys
-if sys.version_info < (2 , 6):
-    install_requires.append('simplejson>=1.7.3')
-
 classifiers = """
 Intended Audience :: Education
 Intended Audience :: Developers
@@ -41,10 +31,11 @@ setup(
     author_email = 'ehs@pobox.com',
     license = 'http://www.opensource.org/licenses/bsd-license.php',
     packages = ['pymarc'],
-    install_requires = install_requires,
+    install_requires = ['six>=1.9.0',],
     description = 'Read, write and modify MARC bibliographic data',
     long_description = long_description,
     long_description_content_type = "text/markdown",
     classifiers = list(filter(None, classifiers.split('\n'))),
     test_suite = 'test',
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*',
 )
