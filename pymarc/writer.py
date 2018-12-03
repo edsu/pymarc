@@ -178,7 +178,7 @@ class XMLWriter(Writer):
     """
     A class for writing records as a MARCXML collection.
 
-    IMPORTANT: You must the close an XMLWriter, otherwise you will not get
+    IMPORTANT: You must then close an XMLWriter, otherwise you will not get
     a valid XML document.
 
     Simple usage::

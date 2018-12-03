@@ -15,7 +15,7 @@ MARC records. It was mostly designed to be an emergency eject seat, for
 getting your data assets out of MARC and into some kind of saner
 representation. However over the years it has been used to create and
 modify MARC records, since despite
-[repeated calls](http://marc-must-die.info/index.php/Main_Page) for it to die
+[repeated calls](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page) for it to die
 as a format, MARC seems to be living quite happily as a zombie.
 
 Below are some common examples of how you might want to use pymarc. If
@@ -103,9 +103,8 @@ record.add_field(
             'b', 'from journeyman to master /',
             'c', 'Andrew Hunt, David Thomas.'
         ]))
-out = open('file.dat', 'wb')
-out.write(record.as_marc())
-out.close()
+with open('file.dat', 'wb') as out:
+    out.write(record.as_marc())
 ```
 
 ### Updating
@@ -119,10 +118,8 @@ with open('test/marc.dat', 'rb') as fh:
     reader = MARCReader(fh)
     record = next(reader)
     record['245']['a'] = 'The Zombie Programmer'
-
-out = open('file.dat', 'wb')
-out.write(record.as_marc())
-out.close()
+with open('file.dat', 'wb') as out:
+    out.write(record.as_marc())
 ```
 
 
@@ -158,7 +155,7 @@ And then install:
 Support
 -------
 
-The pymarc developers encourage you to join the [pymarc Google Group](http://groups.google.com/group/pymarc) if you need help.  Also, please feel free to use [issue tracking](https://github.com/edsu/pymarc/issues) on Github to to submit feature requests or bug reports. If you've got an itch to scratch, please scratch it, and send merge requests on [Github](http://github.com/edsu/pymarc).
+The pymarc developers encourage you to join the [pymarc Google Group](http://groups.google.com/group/pymarc) if you need help.  Also, please feel free to use [issue tracking](https://github.com/edsu/pymarc/issues) on Github to submit feature requests or bug reports. If you've got an itch to scratch, please scratch it, and send merge requests on [Github](http://github.com/edsu/pymarc).
 
 If you start working with MARC you may feel like you need moral support
 in addition to technical support. The [#code4lib](irc://freenode.net/code4lib)
