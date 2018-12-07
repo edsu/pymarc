@@ -132,7 +132,7 @@ class MARC8ToUnicode:
                 except KeyError:
                     pass
                 if not self.quiet:
-                    sys.stderr.write("couldn't find 0x%x in g0=%s g1=%s\n" %
+                    sys.stderr.write("Unable to parse character 0x%x in g0=%s g1=%s\n" %
                         (code_point, self.g0, self.g1))
                 uni = ord(' ')
                 cflag = False
