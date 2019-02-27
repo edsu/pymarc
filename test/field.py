@@ -158,9 +158,21 @@ class FieldTest(unittest.TestCase):
         self.field.delete_subfield('b')
         self.assertTrue(self.field['b'] is None)
 
+    def test_set_indicators_affects_str(self):
+        self.field.indicators[0] = '9'
+        self.field.indicator2 = '9'
+        self.assertEquals(str(self.field), '=245  99$aHuckleberry Finn: $bAn American Odyssey')
+
+    def test_set_indicators_affects_marc(self):
+        self.field.indicators[0] = '9'
+        self.field.indicator2 = '9'
+        self.assertEquals(self.field.as_marc('utf-8'), b'99\x1faHuckleberry Finn: \x1fbAn American Odyssey\x1e')
+
+
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')
     return test_suite
+
 
 if __name__ == "__main__":
     unittest.main()

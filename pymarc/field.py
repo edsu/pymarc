@@ -45,7 +45,7 @@ class Field(Iterator):
         if self.tag < '010' and self.tag.isdigit():
             self.data = data
         else:
-            self.indicator1, self.indicator2 = self.indicators = indicators
+            self.indicators = indicators
             self.subfields = subfields
 
     def __iter__(self):
@@ -242,6 +242,22 @@ class Field(Iterator):
         if self.tag.startswith('6'):
             return True
         return False
+
+    @property
+    def indicator1(self):
+        return self.indicators[0]
+
+    @indicator1.setter
+    def indicator1(self, value):
+        self.indicators[0] = value
+
+    @property
+    def indicator2(self):
+        return self.indicators[1]
+
+    @indicator2.setter
+    def indicator2(self, value):
+        self.indicators[1] = value
 
 
 class RawField(Field):
