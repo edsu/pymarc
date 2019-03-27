@@ -117,11 +117,12 @@ def map_xml(function, *files):
 
 def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
     """
-    parse an xml file and return the records as an array. If you would
-    like the parser to explicitly check the namespaces for the MARCSlim
-    namespace use the strict=True option.
-    Valid values for normalize_form are 'NFC', 'NFKC', 'NFD', and 'NFKD'. See
-    unicodedata.normalize info.
+    parse an xml file and return the records as an array. Instead of passing in
+    a file path you can also pass in an open file handle, or a file like object like
+    StringIO. If you would like the parser to explicitly check the namespaces
+    for the MARCSlim namespace use the strict=True option. Valid values for
+    normalize_form are 'NFC', 'NFKC', 'NFD', and 'NFKD'. See
+    unicodedata.normalize for more info on these.
     """
     handler = XmlHandler(strict, normalize_form)
     parse_xml(xml_file, handler)
@@ -133,10 +134,8 @@ def record_to_xml(record, quiet=False, namespace=False):
 
 def record_to_xml_node(record, quiet=False, namespace=False):
     """
-    converts a record object to a chunk of xml
-
-    # include the marcxml namespace in the root tag (default: False)
-    record_to_xml(record, namespace=True)
+    converts a record object to a chunk of xml. If you would like to
+    include the marcxml namespace in the root tag set namespace to True.
     """
     # helper for converting non-unicode data to unicode
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
