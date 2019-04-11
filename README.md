@@ -9,7 +9,7 @@
 [![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
 pymarc is a python library for working with bibliographic data encoded in
-[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It should work under
+[MARC21](https://en.wikipedia.org/wiki/MARC_standards). It should work under
 python 2.x and 3.x. It provides an API for reading, writing and modifying
 MARC records. It was mostly designed to be an emergency eject seat, for
 getting your data assets out of MARC and into some kind of saner
@@ -75,7 +75,7 @@ print(record['245']['a'])
 ```
 
 Some fields like subjects can repeat. In cases like that you will want to use
-`get_fields` to get all of them as `pmarc.Field` objects, which you can then
+`get_fields` to get all of them as `pymarc.Field` objects, which you can then
 interact with further:
 
 ```python
