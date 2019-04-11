@@ -53,7 +53,7 @@ by writing to the author.
     ...             'c', 'Andrew Hunt, David Thomas.'
     ...         ]))
     >>> out = open('file.dat', 'wb')
-    >>> out.write(record.asMARC21())
+    >>> out.write(record.as_marc())
     >>> out.close()
 
 '''
