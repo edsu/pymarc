@@ -201,7 +201,7 @@ record = MARCReader('test/one.dat')
 print(record.as_json(indent=2))
 ```
 
-```json
+```javascript
 {
   "fields": [
     {
