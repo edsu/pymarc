@@ -203,95 +203,20 @@ print(record.as_json(indent=2))
 
 ```javascript
 {
+  "leader": "01060cam  22002894a 4500",
   "fields": [
     {
-      "001": "fol05731351 "
-    }, 
-    {
-      "003": "IMchF"
-    }, 
-    {
-      "005": "20000613133448.0"
-    }, 
-    {
-      "008": "000107s2000    nyua          001 0 eng  "
+      "001": "11778504"
     }, 
     {
       "010": {
         "ind1": " ", 
         "subfields": [
           {
-            "a": "   00020737 "
+            "a": "   99043581 "
           }
         ], 
         "ind2": " "
-      }
-    }, 
-    {
-      "020": {
-        "ind1": " ", 
-        "subfields": [
-          {
-            "a": "0471383147 (paper/cd-rom : alk. paper)"
-          }
-        ], 
-        "ind2": " "
-      }
-    }, 
-    {
-      "040": {
-        "ind1": " ", 
-        "subfields": [
-          {
-            "a": "DLC"
-          }, 
-          {
-            "c": "DLC"
-          }, 
-          {
-            "d": "DLC"
-          }
-        ], 
-        "ind2": " "
-      }
-    }, 
-    {
-      "042": {
-        "ind1": " ", 
-        "subfields": [
-          {
-            "a": "pcc"
-          }
-        ], 
-        "ind2": " "
-      }
-    }, 
-    {
-      "050": {
-        "ind1": "0", 
-        "subfields": [
-          {
-            "a": "QA76.73.P22"
-          }, 
-          {
-            "b": "M33 2000"
-          }
-        ], 
-        "ind2": "0"
-      }
-    }, 
-    {
-      "082": {
-        "ind1": "0", 
-        "subfields": [
-          {
-            "a": "005.13/3"
-          }, 
-          {
-            "2": "21"
-          }
-        ], 
-        "ind2": "0"
       }
     }, 
     {
@@ -299,10 +224,10 @@ print(record.as_json(indent=2))
         "ind1": "1", 
         "subfields": [
           {
-            "a": "Martinsson, Tobias,"
+            "a": "Hunt, Andrew,"
           }, 
           {
-            "d": "1976-"
+            "d": "1964-"
           }
         ], 
         "ind2": " "
@@ -313,13 +238,16 @@ print(record.as_json(indent=2))
         "ind1": "1", 
         "subfields": [
           {
-            "a": "ActivePerl with ASP and ADO /"
+            "a": "The pragmatic programmer :"
           }, 
           {
-            "c": "Tobias Martinsson."
+            "b": "from journeyman to master /"
+          }, 
+          {
+            "c": "Andrew Hunt, David Thomas."
           }
         ], 
-        "ind2": "0"
+        "ind2": "4"
       }
     }, 
     {
@@ -327,10 +255,10 @@ print(record.as_json(indent=2))
         "ind1": " ", 
         "subfields": [
           {
-            "a": "New York :"
+            "a": "Reading, Mass :"
           }, 
           {
-            "b": "John Wiley & Sons,"
+            "b": "Addison-Wesley,"
           }, 
           {
             "c": "2000."
@@ -344,27 +272,21 @@ print(record.as_json(indent=2))
         "ind1": " ", 
         "subfields": [
           {
-            "a": "xxi, 289 p. :"
+            "a": "xxiv, 321 p. ;"
           }, 
           {
-            "b": "ill. ;"
-          }, 
-          {
-            "c": "23 cm. +"
-          }, 
-          {
-            "e": "1 computer  laser disc (4 3/4 in.)"
+            "c": "24 cm."
           }
         ], 
         "ind2": " "
       }
     }, 
     {
-      "500": {
+      "504": {
         "ind1": " ", 
         "subfields": [
           {
-            "a": "\"Wiley Computer Publishing.\""
+            "a": "Includes bibliographical references."
           }
         ], 
         "ind2": " "
@@ -375,39 +297,29 @@ print(record.as_json(indent=2))
         "ind1": " ", 
         "subfields": [
           {
-            "a": "Perl (Computer program language)"
+            "a": "Computer programming."
           }
         ], 
         "ind2": "0"
       }
     }, 
     {
-      "630": {
-        "ind1": "0", 
+      "700": {
+        "ind1": "1", 
         "subfields": [
           {
-            "a": "Active server pages."
-          }
-        ], 
-        "ind2": "0"
-      }
-    }, 
-    {
-      "630": {
-        "ind1": "0", 
-        "subfields": [
+            "a": "Thomas, David,"
+          }, 
           {
-            "a": "ActiveX."
+            "d": "1956-"
           }
         ], 
-        "ind2": "0"
+        "ind2": " "
       }
     }
-  ], 
-  "leader": "00755cam  22002414a 4500"
+  ]
 }
 ```
-
 
 Support
 -------
