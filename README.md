@@ -22,6 +22,25 @@ Below are some common examples of how you might want to use pymarc. If
 you run across an example that you think should be here please send a
 pull request.
 
+### Installation
+
+You'll probably just want to use pip to install pymarc:
+
+    pip install pymarc
+
+If you'd like to download and install the latest source you'll need git:
+
+    git clone git://github.com/edsu/pymarc.git
+
+You'll also need [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Once you have the source and setuptools run the pymarc test
+suite to make sure things are in order with the distribution:
+
+    python setup.py test
+
+And then install:
+
+    python setup.py install
+
 ### Reading
 
 Most often you will have some MARC data and will want to extract data
@@ -126,31 +145,269 @@ with open('file.dat', 'wb') as out:
 ### JSON and XML
 
 If you find yourself using MARC data a fair bit, and distributing it, you may
-make other developers a bit happier by using the JSON or XML serializations.
-pymarc has support for both. The main benefit here is that the UTF8 character
-encoding is used, rather than the frustratingly archaic MARC8 encoding. Also
-they will be able to use JSON and XML tools to get at the data they want instead
-of some crazy MARC processing library like, ahem, pymarc.
+make other developers a bit happier by using the JSON or XML serializations. The
+main benefit to using XML or JSON is that the UTF8 character encoding is used,
+rather than the frustratingly archaic MARC8 encoding. Also they will be able to
+use standard JSON and XML reading/writing tools to get at the data they want
+instead of some crazy MARC processing library like, ahem, pymarc.
 
-Installation
-------------
+pymarc's support for JSON and XML is currently a bit lopsided and ad hoc. pymarc
+allows you to read XML in a variety of ways, but not write it. On the other hand
+pymarc allows you to write JSON, but not read it. Part of the reason for this
+unevenness is that the functionality was added to solve a particular persons
+need at the time. If you are interested in providing a more holistic solution
+pull requests (with unit tests) are always welcome.
 
-You'll probably just want to use pip to install pymarc:
+**XML**
 
-    pip install pymarc
+To parse a file of MARCXML records you can:
 
-If you'd like to download and install the latest source you'll need git:
+    ```python
+    
+    from pymarc import parse_xml_to_array
+    
+    records = parse_xml_to_array('test/batch.xml')
+    ```
 
-    git clone git://github.com/edsu/pymarc.git
+If you have a large XML file and would rather not read them all into memory you
+can:
 
-You'll also need [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Once you have the source and setuptools run the pymarc test
-suite to make sure things are in order with the distribution:
+    ```python
 
-    python setup.py test
+    from pymarc import map_xml
 
-And then install:
+    def print_title(r):
+        print(r.title())
 
-    python setup.py install
+    map_xml(print_title, 'test/batch.xml')
+    ```
+
+Also, if you prefer you can pass in a file like object in addition to the path
+to both *map_xml* and *parse_xml_to_array*:
+
+    ```python
+    records = parse_xml_to_array(open('batch.xml'))
+    ``
+
+**JSON**`
+
+JSON support is fairly minimal in that you can call a `pymarc.Record`'s
+`as_json()` method to return JSON for a given MARC Record:
+
+```python
+from pymarc import MARCReader
+
+record = MARCReader('test/one.dat')
+print(record.as_json(indent=2))
+```
+
+```json
+{
+  "fields": [
+    {
+      "001": "fol05731351 "
+    }, 
+    {
+      "003": "IMchF"
+    }, 
+    {
+      "005": "20000613133448.0"
+    }, 
+    {
+      "008": "000107s2000    nyua          001 0 eng  "
+    }, 
+    {
+      "010": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "   00020737 "
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "020": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "0471383147 (paper/cd-rom : alk. paper)"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "040": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "DLC"
+          }, 
+          {
+            "c": "DLC"
+          }, 
+          {
+            "d": "DLC"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "042": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "pcc"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "050": {
+        "ind1": "0", 
+        "subfields": [
+          {
+            "a": "QA76.73.P22"
+          }, 
+          {
+            "b": "M33 2000"
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "082": {
+        "ind1": "0", 
+        "subfields": [
+          {
+            "a": "005.13/3"
+          }, 
+          {
+            "2": "21"
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "100": {
+        "ind1": "1", 
+        "subfields": [
+          {
+            "a": "Martinsson, Tobias,"
+          }, 
+          {
+            "d": "1976-"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "245": {
+        "ind1": "1", 
+        "subfields": [
+          {
+            "a": "ActivePerl with ASP and ADO /"
+          }, 
+          {
+            "c": "Tobias Martinsson."
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "260": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "New York :"
+          }, 
+          {
+            "b": "John Wiley & Sons,"
+          }, 
+          {
+            "c": "2000."
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "300": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "xxi, 289 p. :"
+          }, 
+          {
+            "b": "ill. ;"
+          }, 
+          {
+            "c": "23 cm. +"
+          }, 
+          {
+            "e": "1 computer  laser disc (4 3/4 in.)"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "500": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "\"Wiley Computer Publishing.\""
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "650": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "Perl (Computer program language)"
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "630": {
+        "ind1": "0", 
+        "subfields": [
+          {
+            "a": "Active server pages."
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "630": {
+        "ind1": "0", 
+        "subfields": [
+          {
+            "a": "ActiveX."
+          }
+        ], 
+        "ind2": "0"
+      }
+    }
+  ], 
+  "leader": "00755cam  22002414a 4500"
+}
+```
+
 
 Support
 -------
