@@ -185,9 +185,9 @@ map_xml(print_title, 'test/batch.xml')
 Also, if you prefer you can pass in a file like object in addition to the path
 to both *map_xml* and *parse_xml_to_array*:
 
-    ```python
-    records = parse_xml_to_array(open('batch.xml'))
-    ```
+```python
+records = parse_xml_to_array(open('batch.xml'))
+```
 
 **JSON**
 
