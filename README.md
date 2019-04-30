@@ -189,7 +189,7 @@ to both *map_xml* and *parse_xml_to_array*:
     records = parse_xml_to_array(open('batch.xml'))
     ``
 
-**JSON**`
+**JSON**
 
 JSON support is fairly minimal in that you can call a `pymarc.Record`'s
 `as_json()` method to return JSON for a given MARC Record:
