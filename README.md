@@ -187,7 +187,7 @@ to both *map_xml* and *parse_xml_to_array*:
 
     ```python
     records = parse_xml_to_array(open('batch.xml'))
-    ``
+    ```
 
 **JSON**
 
