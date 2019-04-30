@@ -162,25 +162,25 @@ pull requests (with unit tests) are always welcome.
 
 To parse a file of MARCXML records you can:
 
-    ```python
-    
-    from pymarc import parse_xml_to_array
-    
-    records = parse_xml_to_array('test/batch.xml')
-    ```
+```python
+
+from pymarc import parse_xml_to_array
+
+records = parse_xml_to_array('test/batch.xml')
+```
 
 If you have a large XML file and would rather not read them all into memory you
 can:
 
-    ```python
+```python
 
-    from pymarc import map_xml
+from pymarc import map_xml
 
-    def print_title(r):
-        print(r.title())
+def print_title(r):
+    print(r.title())
 
-    map_xml(print_title, 'test/batch.xml')
-    ```
+map_xml(print_title, 'test/batch.xml')
+```
 
 Also, if you prefer you can pass in a file like object in addition to the path
 to both *map_xml* and *parse_xml_to_array*:
