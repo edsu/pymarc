@@ -154,8 +154,8 @@ instead of some crazy MARC processing library like, ahem, pymarc.
 pymarc's support for JSON and XML is currently a bit lopsided and ad hoc. pymarc
 allows you to read XML in a variety of ways, but not write it. On the other hand
 pymarc allows you to write JSON, but not read it. Part of the reason for this
-unevenness is that the functionality was added to solve a particular persons
-need at the time. If you are interested in providing a more holistic solution
+unevenness is that the functionality was added to solve a particular need at a
+particular time. If you are interested in providing a more holistic solution
 pull requests (with unit tests) are always welcome.
 
 **XML**
