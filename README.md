@@ -187,7 +187,7 @@ Also, if you prefer you can pass in a file like object in addition to the path
 to both *map_xml* and *parse_xml_to_array*:
 
 ```python
-records = parse_xml_to_array(open('batch.xml'))
+records = parse_xml_to_array(open('test/batch.xml'))
 ```
 
 **JSON**
@@ -198,8 +198,10 @@ JSON support is fairly minimal in that you can call a `pymarc.Record`'s
 ```python
 from pymarc import MARCReader
 
-record = MARCReader('test/one.dat')
-print(record.as_json(indent=2))
+with open('test/one.dat','rb') as fh:
+    reader = MARCReader(fh)
+    for record in reader:
+        print(record.as_json(indent=2))
 ```
 
 ```javascript
