@@ -1,0 +1,204 @@
+{
+  "leader": "00755cam  22002414a 4500",
+  "fields": [
+    {
+      "001": "fol05731351 "
+    },
+    {
+      "003": "IMchF"
+    },
+    {
+      "005": "20000613133448.0"
+    },
+    {
+      "008": "000107s2000    nyua          001 0 eng  "
+    },
+    {
+      "010": {
+        "subfields": [
+          {
+            "a": "   00020737 "
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "020": {
+        "subfields": [
+          {
+            "a": "0471383147 (paper/cd-rom : alk. paper)"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "040": {
+        "subfields": [
+          {
+            "a": "DLC"
+          },
+          {
+            "c": "DLC"
+          },
+          {
+            "d": "DLC"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "042": {
+        "subfields": [
+          {
+            "a": "pcc"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "050": {
+        "subfields": [
+          {
+            "a": "QA76.73.P22"
+          },
+          {
+            "b": "M33 2000"
+          }
+        ],
+        "ind1": "0",
+        "ind2": "0"
+      }
+    },
+    {
+      "082": {
+        "subfields": [
+          {
+            "a": "005.13/3"
+          },
+          {
+            "2": "21"
+          }
+        ],
+        "ind1": "0",
+        "ind2": "0"
+      }
+    },
+    {
+      "100": {
+        "subfields": [
+          {
+            "a": "Martinsson, Tobias,"
+          },
+          {
+            "d": "1976-"
+          }
+        ],
+        "ind1": "1",
+        "ind2": " "
+      }
+    },
+    {
+      "245": {
+        "subfields": [
+          {
+            "a": "ActivePerl with ASP and ADO /"
+          },
+          {
+            "c": "Tobias Martinsson."
+          }
+        ],
+        "ind1": "1",
+        "ind2": "0"
+      }
+    },
+    {
+      "260": {
+        "subfields": [
+          {
+            "a": "New York :"
+          },
+          {
+            "b": "John Wiley & Sons,"
+          },
+          {
+            "c": "2000."
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "300": {
+        "subfields": [
+          {
+            "a": "xxi, 289 p. :"
+          },
+          {
+            "b": "ill. ;"
+          },
+          {
+            "c": "23 cm. +"
+          },
+          {
+            "e": "1 computer  laser disc (4 3/4 in.)"
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "500": {
+        "subfields": [
+          {
+            "a": "\"Wiley Computer Publishing.\""
+          }
+        ],
+        "ind1": " ",
+        "ind2": " "
+      }
+    },
+    {
+      "650": {
+        "subfields": [
+          {
+            "a": "Perl (Computer program language)"
+          }
+        ],
+        "ind1": " ",
+        "ind2": "0"
+      }
+    },
+    {
+      "630": {
+        "subfields": [
+          {
+            "a": "Active server pages."
+          }
+        ],
+        "ind1": "0",
+        "ind2": "0"
+      }
+    },
+    {
+      "630": {
+        "subfields": [
+          {
+            "a": "ActiveX."
+          }
+        ],
+        "ind1": "0",
+        "ind2": "0"
+      }
+    }
+  ]
+}
