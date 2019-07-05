@@ -89,6 +89,10 @@ class FieldTest(unittest.TestCase):
         field = Field(tag='245', indicators=[0, 1], subfields=['a', 'foo'])
         field.add_subfield('a','bar')
         self.assertEqual(field.__str__(), '=245  01$afoo$abar')
+        field.add_subfield('b','baz',0)
+        self.assertEqual(field.__str__(), '=245  01$bbaz$afoo$abar')
+        field.add_subfield('c','qux',2)
+        self.assertEqual(field.__str__(), '=245  01$bbaz$afoo$cqux$abar')
 
     def test_delete_subfield(self):
         field = Field(tag='200', indicators=[0,1], subfields=['a','My Title', 'a', 'Kinda Bogus Anyhow'])
