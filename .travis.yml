@@ -1,15 +1,18 @@
+dist: "xenial"
+
 language: python
 script: python setup.py test
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.6"
 
 matrix:
   include:
+    - python: "2.6"
+      dist: "trusty"
+    - python: "2.7"
+    - python: "3.3"
+      dist: "trusty"
+    - python: "3.4"
+    - python: "3.5"
+    - python: "3.6"
     - python: "3.7"
-      dist: "xenial"
-      sudo: true
+    - python: "pypy"
+    - python: "pypy3"
