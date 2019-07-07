@@ -163,22 +163,22 @@ class Field(Iterator):
 
     def add_subfield(self, code, value, pos=None):
         """
-        Adds a subfield code/value pair to the field.
+        Adds a subfield code/value to the end of a field or optionally at a position (pos).
 
             field.add_subfield('u', 'http://www.loc.gov')
             field.add_subfield('u', 'http://www.loc.gov', 0)
         
-        If the position is invalid, the subfield is add in at the end.
+        If pos is not supplied or out of range, the subfield will be added at the end.
         """
-        pos_invalid = pos == None or not len(self.subfields)>pos*2>-1
+        append = pos is None or (pos + 1) * 2 > len(self.subfields)
 
-        if pos_invalid:
+        if append:
             self.subfields.append(code)
             self.subfields.append(value)
         else:
-            pos *= 2
-            self.subfields.insert(pos,code)
-            self.subfields.insert(pos+1,value)
+            i = pos * 2
+            self.subfields.insert(i, code)
+            self.subfields.insert(i + 1, value)
 
     def delete_subfield(self, code):
         """
