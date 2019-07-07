@@ -103,6 +103,24 @@ class JsonTest(unittest.TestCase):
         for record in self.reader:
             self.assertEqual(dict, json.loads(record.as_json()).__class__)
 
+class JsonParse(unittest.TestCase):
+    def setUp(self):
+        self.reader_dat = pymarc.MARCReader(open('test/one.dat','rb'))
+        self.parse_json = pymarc.parse_json_to_array(open('test/one.json'))
+        
+        self.batch_xml = pymarc.parse_xml_to_array(open('test/batch.xml'))
+        self.batch_json = pymarc.parse_json_to_array(open('test/batch.json'))
+
+    def testRoundtrip(self):
+        recs = list(self.reader_dat)
+        self.assertEqual(len(self.parse_json), len(recs),"Incorrect number of records found")
+        for from_dat,from_json in zip(recs,self.parse_json):
+            self.assertEqual(from_dat.as_marc(),from_json.as_marc(),'Icorrect Record')
+    
+    def testParseJsonXml(self):
+        self.assertEqual(len(self.batch_json), len(self.batch_xml),"Incorrect number of parse records found")
+        for from_dat,from_json in zip(self.batch_json,self.batch_xml):
+            self.assertEqual(from_dat.as_marc(),from_json.as_marc(),'Icorrect Record')
 
 def suite():
     test_suite = unittest.makeSuite(JsonTest, 'test')

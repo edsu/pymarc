@@ -9,45 +9,32 @@ _|          _|_|
 
 [![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
-pymarc is a python library for working with bibliographic data encoded in
-[MARC21](https://en.wikipedia.org/wiki/MARC_standards). It should work under
-python 2.x and 3.x. It provides an API for reading, writing and modifying
-MARC records. It was mostly designed to be an emergency eject seat, for
-getting your data assets out of MARC and into some kind of saner
-representation. However over the years it has been used to create and
-modify MARC records, since despite
-[repeated calls](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page) for it to die
-as a format, MARC seems to be living quite happily as a zombie.
+pymarc é uma biblioteca de python para trabalhar com dados bibliográficos codificaos
+[MARC21](https://en.wikipedia.org/wiki/MARC_standards). Isto deve funcionar no python 2.x e 3.x. Fornece uma API para a leitura, escrita e modificação de registros MARC. Ela foi projetada principalmente para ser uma medida de emergência na obtenção dos dados ativos do MARC em outra representação mais segura. Porém, ao longo dos anos, foi utilizado para criar e modificar registros MARC, uma vez que apesar de [diversas chamadas](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page) para que ele moorra como um formato, MARC parece estar vivendo muito feliz como um zumbi.
 
-Below are some common examples of how you might want to use pymarc. If
-you run across an example that you think should be here please send a
-pull request.
+Abaixo estão alguns exemplos comuns de como você pode querer usar o pymarc. E se você se deparar com um exemplo que  acha que deveria estar por aqui, por facor envie uma pull request.
 
-### Installation
+### Instalação
 
-You'll probably just want to use pip to install pymarc:
+Você provavelmente vai querer usar o pip para instalar o pymarc:
 
     pip install pymarc
 
-If you'd like to download and install the latest source you'll need git:
+Se você quiser baixar e instalar a versão mais recente, precisará do git:
 
     git clone git://github.com/edsu/pymarc.git
 
-You'll also need [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Once you have the source and setuptools run the pymarc test
-suite to make sure things are in order with the distribution:
+Você também vai precisar do [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Após ter a fonte e o setuptools, execute o pymarc test suite para garantirque as tudo está em ordem com a distribuição:
 
     python setup.py test
 
-And then install:
+E então instale:
 
     python setup.py install
 
-### Reading
+### Leitura
 
-Most often you will have some MARC data and will want to extract data
-from it. Here's an example of reading a batch of records and printing out
-the title. If you are curious this example uses the batch file
-available here in pymarc repository:
+Na maioria das vezes, você terá alguns dados MARC e desejará extrair dados a partir dele. Aqui está um exemplo de leitura de um lote de registros e print do título. Se estiver curioso, este exemplo usa o arquivo de lote disponível aqui no repositório pymarc:
 
 ```python
 from pymarc import MARCReader
@@ -81,35 +68,24 @@ Introduction to algorithms /
 ANSI Common Lisp /
 ```
 
-A `pymarc.Record` object has a few handy methods like `title` for getting at
-bits of a bibliographic record, others include: `author`, `isbn`, `subjects`,
-`location`, `notes`, `physicaldescription`, `publisher`, `pubyear`. But
-really, to work with MARC data you need to understand the numeric field tags
-and subfield codes that are used to designate various bits of information. There
-is a lot more hiding in a MARC record than these methods provide access to.
-For example the `title` method extracts the information from the `245` field,
-subfields `a` and `b`. You can access `245a` like so:
+Um objeto `pymarc.Record` tem alguns métodos úteis como `title` para obter o título de um registro bibliográfico, outros inclusos:`author`, `isbn`, `subjects`, `location`, `notes`, `physicaldescription`, `publisher`, `pubyear`. Mas realmente, para trabalhar com dados MARC você precisa enteder as tags de campo numérico e os códigos de subcampo que são usados para designar vários bits de informação. Há muito mais escondido em um registro MARC do que esses métodos fornecem acesso. Por exemplo, o método `title` extrai as informações do campo `245`, subcampos `a` e `b`. Você pode acessar o campo `245a`assim:
 
 ```python
 print(record['245']['a'])
 ```
 
-Some fields like subjects can repeat. In cases like that you will want to use
-`get_fields` to get all of them as `pymarc.Field` objects, which you can then
-interact with further:
+Alguns campos, como assuntos, podem se repetir. Em casos como este, vocẽ vai querer usar `get_fields` para obter todos eles commo objetos `pymarc.Field`, que então você pode interagir mais:
 
 ```python
 for f in record.get_fields('650'):
     print(f)
 ```
 
-If you are new to MARC fields [Understanding
-MARC](http://www.loc.gov/marc/umb/) is a pretty good primer, and the [MARC 21
-Formats](http://www.loc.gov/marc/marcdocz.html) page at the Library of Congress is a good reference once you understand the basics.
+Se você é novo nos campos MARC  [Understanding MARC](http://www.loc.gov/marc/umb/) é um bom começo, e a paǵina [MARC 21 Formats](http://www.loc.gov/marc/marcdocz.html) na Biblioteca do Congresso é uma boa referência, uma vez que você entende o básico.
 
-### Writing
+### Escrita
 
-Here's an example of creating a record and writing it out to a file.
+Aqui está um exemplo de como criar um registro, e escrevê-lo em um arquivo.
 
 ```python
 from pymarc import Record, Field
@@ -127,10 +103,9 @@ with open('file.dat', 'wb') as out:
     out.write(record.as_marc())
 ```
 
-### Updating
+### Atualização
 
-Updating works the same way, you read it in, modify it, and then write it out
-again:
+A atualização funciona da mesma forma, você lê, modifica e então escreve novamente.
 
 ```python
 from pymarc import MARCReader
@@ -143,25 +118,15 @@ with open('file.dat', 'wb') as out:
 ```
 
 
-### JSON and XML
+### JSON e XML
 
-If you find yourself using MARC data a fair bit, and distributing it, you may
-make other developers a bit happier by using the JSON or XML serializations. The
-main benefit to using XML or JSON is that the UTF8 character encoding is used,
-rather than the frustratingly archaic MARC8 encoding. Also they will be able to
-use standard JSON and XML reading/writing tools to get at the data they want
-instead of some crazy MARC processing library like, ahem, pymarc.
+Se você estiver usando os dados do MARC pouco e distribuindo-s, poderá deixar outros desenvolvedores um pouco felizes usando as serializações JSON ou XML. O benefício em usar XML ou JSON é que a codificação de caracteres UTF8 é usada, ao invés da codificação MARC8 frustrantemente arcaica. Eles também poderão usar ferramentas de leitura/gravação pdrão JSON e XML para obter os dados desejdos, em vez de alguma biblioteca de processamento MARC, como pymarc.
 
-pymarc's support for JSON and XML is currently a bit lopsided and ad hoc. pymarc
-allows you to read XML in a variety of ways, but not write it. On the other hand
-pymarc allows you to write JSON, but not read it. Part of the reason for this
-unevenness is that the functionality was added to solve a particular need at a
-particular time. If you are interested in providing a more holistic solution
-pull requests (with unit tests) are always welcome.
+O suporte pymarc para JSON e XML é atualmente um pouco desequilibrado e ad hoc. Pymarc permite que você leia XML de várias maneiras, mas não o escreva. Por outro lado, pymarc permite que você escreva JSON, mas não o leia. Parte da razão para esse desalinhamento é que a funcionalidade foi adicionada para resolver uma necessidade particular em um tempo particular. Se estiver interessado em fornecer uma solução mais holística, as PRs (com testes de unidade) são bem vindos.
 
 **XML**
 
-To parse a file of MARCXML records you can:
+Para o parse de um arquivo de registros você pode:
 
 ```python
 
@@ -170,8 +135,7 @@ from pymarc import parse_xml_to_array
 records = parse_xml_to_array('test/batch.xml')
 ```
 
-If you have a large XML file and would rather not read them all into memory you
-can:
+Se você tem um arquivo XML grande e prefere não lê-lo todo em memória, você pode:
 
 ```python
 
@@ -183,8 +147,7 @@ def print_title(r):
 map_xml(print_title, 'test/batch.xml')
 ```
 
-Also, if you prefer you can pass in a file like object in addition to the path
-to both *map_xml* and *parse_xml_to_array*:
+Além disso, se preferir, pode passar um arquivo como objeto, além do caminho para *map_xml* e *parse_xml_to_array*:
 
 ```python
 records = parse_xml_to_array(open('test/batch.xml'))
@@ -192,8 +155,7 @@ records = parse_xml_to_array(open('test/batch.xml'))
 
 **JSON**
 
-JSON support is fairly minimal in that you can call a `pymarc.Record`'s
-`as_json()` method to return JSON for a given MARC Record:
+O suporte para JSON é razoavelmente mínimo, em que você poode chamar o método `pymarc.Record.as_json()` para retornar o JSON para um determinado registro MARC.
 
 ```python
 from pymarc import MARCReader
@@ -324,7 +286,7 @@ with open('test/one.dat','rb') as fh:
 }
 ```
 
-If you write To parse a file of MARCJSON records you can:
+Se você deseja analisar um arquivo de registros MARCJSON, você pode:
 
 ```python
 from pymarc import parse_json_to_array
@@ -356,14 +318,12 @@ print(records[0])
 =700  1\$aCharles, Ray,$d1930-$4prf
 ```
 
-Support
+Suporte
 -------
 
-The pymarc developers encourage you to join the [pymarc Google Group](http://groups.google.com/group/pymarc) if you need help.  Also, please feel free to use [issue tracking](https://github.com/edsu/pymarc/issues) on Github to submit feature requests or bug reports. If you've got an itch to scratch, please scratch it, and send merge requests on [Github](http://github.com/edsu/pymarc).
+Os desenvolvedores pymarc incentivam você a participar do [pymarc Google Group](http://groups.google.com/group/pymarc) se precisar de ajuda.  Além disso, sinte-se à vontade para usar o [issue tracking](https://github.com/edsu/pymarc/issues) no Github para submeter novos recursos ou relatórios de bugs. Se você tiver um comichão, copie-a e envie PRs no [Github](http://github.com/edsu/pymarc).
 
-If you start working with MARC you may feel like you need moral support
-in addition to technical support. The [#code4lib](irc://freenode.net/code4lib)
-channel on [Freenode](http://freenode.net) is a good place for both.
+Se você iniciou a trabalhar com MARC, pode sentir que precisa de apoio moral além de técnico. O canal [#code4lib](irc://freenode.net/code4lib) em [Freenode](http://freenode.net) é um bom lugar para ambos.
 
 Copyright
 ---------
