@@ -38,3 +38,6 @@ class NoActiveFile(PymarcException):
 class FieldNotFound(PymarcException):
     def __str__(self):
         return "Record does not contain the specified field"
+
+class BadSubfieldCodeWarning(Warning):
+    """Warning about a non-ASCII subfield code"""

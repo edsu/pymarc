@@ -61,6 +61,12 @@ class MARCReaderFileTest(unittest.TestCase):
             record = next(reader)
             self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
 
+    def test_bad_subfield(self):
+        with open('test/bad_subfield_code.dat', 'rb') as fh:
+            reader = pymarc.MARCReader(fh)
+            record = next(reader)
+            self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
+
     def test_bad_indicator(self):
         with open('test/bad_indicator.dat', 'rb') as fh:
             reader = pymarc.MARCReader(fh)

@@ -1,12 +1,14 @@
 import re
 import six
 import logging
+import unicodedata
+import warnings
 
 from six import Iterator
 
 from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
         BaseAddressNotFound, RecordDirectoryInvalid, NoFieldsFound, \
-        FieldNotFound
+        FieldNotFound, BadSubfieldCodeWarning
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field, RawField
@@ -300,10 +302,15 @@ class Record(Iterator):
                     second_indicator = subs[0][1]
 
                 for subfield in subs[1:]:
+                    skip_bytes = 1
                     if len(subfield) == 0:
                         continue
-                    code = subfield[0:1].decode('ascii')
-                    data = subfield[1:]
+                    try:
+                        code = subfield[0:1].decode('ascii')
+                    except UnicodeDecodeError:
+                        warnings.warn(BadSubfieldCodeWarning())
+                        code, skip_bytes = normalize_subfield_code(subfield)
+                    data = subfield[skip_bytes:]
 
                     if to_unicode:
                         if self.leader[9] == 'a' or force_utf8:
@@ -551,3 +558,14 @@ def map_marc8_record(r):
     l[9] = 'a' # see http://www.loc.gov/marc/specifications/speccharucs.html
     r.leader = "".join(l)
     return r
+
+def normalize_subfield_code(subfield):
+    skip_bytes = 1
+    try:
+        text_subfield = subfield.decode('utf-8')
+        skip_bytes = len(text_subfield[0].encode('utf-8'))
+    except UnicodeDecodeError:
+        text_subfield = subfield.decode('latin-1')
+    decomposed = unicodedata.normalize('NFKD', text_subfield)
+    without_diacritics = decomposed.encode('ascii', 'ignore').decode('ascii')
+    return without_diacritics[0], skip_bytes
