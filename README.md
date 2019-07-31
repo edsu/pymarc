@@ -364,13 +364,3 @@ The pymarc developers encourage you to join the [pymarc Google Group](http://gro
 If you start working with MARC you may feel like you need moral support
 in addition to technical support. The [#code4lib](irc://freenode.net/code4lib)
 channel on [Freenode](http://freenode.net) is a good place for both.
-
-Copyright
----------
-
-Copyright (c) 2005-2016 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
-
-License
--------
-
-[BSD](http://www.opensource.org/licenses/bsd-license.php)
