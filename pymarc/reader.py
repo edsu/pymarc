@@ -75,8 +75,8 @@ class MARCReader(Reader):
                 print(
                     "Current chunk: ",
                     reader.current_chunk,
-                    " was ignored with the following exception ",
-                    ex
+                    " was ignored because the following exception raised: ",
+                    reader.current_exception
                 )
             else:
                 # do something with record
