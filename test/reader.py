@@ -4,7 +4,6 @@ import unittest
 import six
 import pymarc
 
-from six.moves.urllib.request import urlopen
 
 class MARCReaderBaseTest(object):
 
@@ -12,11 +11,12 @@ class MARCReaderBaseTest(object):
         count = 0
         for record in self.reader:
             count += 1
-        self.assertEqual(count, 10,
-                'found expected number of MARC21 records')
+        self.assertEqual(
+            count, 10,
+            'found expected number of MARC21 records')
 
     def test_string(self):
-        ## basic test of stringification
+        # basic test of stringification
         starts_with_leader = re.compile('^=LDR')
         has_numeric_tag = re.compile('\n=\d\d\d ')
         for record in self.reader:
@@ -40,6 +40,7 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
 
     def test_map_records(self):
         self.count = 0
+
         def f(r):
             self.count += 1
         with open('test/test.dat', 'rb') as fh:
@@ -48,6 +49,7 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
 
     def test_multi_map_records(self):
         self.count = 0
+
         def f(r):
             self.count += 1
         fh1 = open('test/test.dat', 'rb')
@@ -62,13 +64,15 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
         with codecs.open('test/test.dat', encoding='utf-8') as fh:
             reader = pymarc.MARCReader(fh)
             record = next(reader)
-            self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
+            self.assertEqual(
+                record['245']['a'], u'ActivePerl with ASP and ADO /')
 
     def test_bad_subfield(self):
         with open('test/bad_subfield_code.dat', 'rb') as fh:
             reader = pymarc.MARCReader(fh)
             record = next(reader)
-            self.assertEqual(record['245']['a'], u'ActivePerl with ASP and ADO /')
+            self.assertEqual(
+                record['245']['a'], u'ActivePerl with ASP and ADO /')
 
     def test_bad_indicator(self):
         with open('test/bad_indicator.dat', 'rb') as fh:
@@ -86,7 +90,8 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
             self.assertEqual(record['752']['d'], 'Kostroma')
 
     def test_strict_mode(self):
-        with self.assertRaises(pymarc.exceptions.BaseAddressInvalid),  open('test/bad_records.mrc', 'rb') as fh:
+        with self.assertRaises(pymarc.exceptions.BaseAddressInvalid), \
+                open('test/bad_records.mrc', 'rb') as fh:
             reader = pymarc.MARCReader(fh)
             for record in reader:
                 self.assertIsNotNone(reader.current_chunk)
@@ -113,7 +118,8 @@ class MARCReaderFilePermissiveTest(unittest.TestCase):
 
     """
     def setUp(self):
-        self.reader = pymarc.MARCReader(open('test/bad_records.mrc', 'rb'), permissive=True)
+        self.reader = pymarc.MARCReader(
+            open('test/bad_records.mrc', 'rb'), permissive=True)
 
     def tearDown(self):
         if self.reader:
@@ -122,13 +128,13 @@ class MARCReaderFilePermissiveTest(unittest.TestCase):
     def test_permissive_mode(self):
         """In bad_records.mrc we expect following records in the given order
 
-            * 1 working record
-            * 1 record raising BaseAddressInvalid (base_address (99937) >= len(marc))
-            * 1 record raising BaseAddressNotFound (base_address (00000) <= 0)
-            * 1 record raising RecordDirectoryInvalid (len(directory) % DIRECTORY_ENTRY_LEN != 0)
-            * 1 record raising UnicodeDecodeError (directory with non ascii code (245ù0890000))
-            * 1 record raising ValueError (base_address with literal (f0037))
-            * last record should be ok
+        * working record
+        * BaseAddressInvalid (base_address (99937) >= len(marc))
+        * BaseAddressNotFound (base_address (00000) <= 0)
+        * RecordDirectoryInvalid (len(directory) % DIRECTORY_ENTRY_LEN != 0)
+        * UnicodeDecodeError (directory with non ascii code (245ù0890000))
+        * ValueError (base_address with literal (f0037))
+        * last record should be ok
         """
         expected_exceptions = [
             None,
@@ -146,9 +152,12 @@ class MARCReaderFilePermissiveTest(unittest.TestCase):
             if exception_type is None:
                 self.assertIsNotNone(record)
                 self.assertIsNone(self.reader.current_exception)
-                self.assertEqual(record["245"]["a"], 'The pragmatic programmer : ')
-                self.assertEqual(record["245"]["b"], 'from journeyman to master /')
-                self.assertEqual(record["245"]["c"], 'Andrew Hunt, David Thomas.')
+                self.assertEqual(
+                    record["245"]["a"], 'The pragmatic programmer : ')
+                self.assertEqual(
+                    record["245"]["b"], 'from journeyman to master /')
+                self.assertEqual(
+                    record["245"]["c"], 'Andrew Hunt, David Thomas.')
             else:
                 self.assertIsNone(
                     record,
@@ -158,15 +167,20 @@ class MARCReaderFilePermissiveTest(unittest.TestCase):
                 self.assertTrue(
                     isinstance(self.reader.current_exception, exception_type),
                     "expected %r exception, "
-                    "received: %r" % (exception_type, self.reader.current_exception)
+                    "received: %r" % (
+                        exception_type, self.reader.current_exception)
                 )
+
 
 def suite():
     file_suite = unittest.makeSuite(MARCReaderFileTest, 'test')
     string_suite = unittest.makeSuite(MARCReaderStringTest, 'test')
-    permissive_file_suite = unittest.makeSuite(MARCReaderFilePermissiveTest, 'test')
-    test_suite = unittest.TestSuite((file_suite, string_suite, permissive_file_suite))
+    permissive_file_suite = unittest.makeSuite(
+        MARCReaderFilePermissiveTest, 'test')
+    test_suite = unittest.TestSuite(
+        (file_suite, string_suite, permissive_file_suite))
     return test_suite
+
 
 if __name__ == '__main__':
     unittest.main()
