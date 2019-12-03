@@ -6,7 +6,7 @@ from six import Iterator
 from six import BytesIO, StringIO
 
 from pymarc import Record, Field
-from pymarc.exceptions import RecordLengthInvalid
+from pymarc.exceptions import PymarcException, RecordLengthInvalid
 
 class Reader(Iterator):
     """
@@ -58,9 +58,43 @@ class MARCReader(Reader):
     if you have a file in incorrect encode and you know what it is, you can
     try to use your encode in parameter "file_encoding".
 
+    You may want to parse data in a permissive way to avoid stop on the first
+    wrong record and reads as much as records as possible:
+
+        reader = MARCReader(file('file.dat'), permissive=True)
+
+    In such case ``None`` is return by the iterator.
+    This give you the full control to implement the expected behavior getting
+    exception information under ``reader.last_exception`` which will store
+    a tuple with (<chunk_data>, <catched exception>):
+
+        reader = MARCReader(file('file.dat'), permissive=True)
+        for record in reader:
+            if record is None:
+                print(
+                    "Current chunk: ",
+                    reader.current_chunk,
+                    " was ignored with the following exception ",
+                    ex
+                )
+            else:
+                # do something with record
+
     """
+    _current_chunk = None
+    _current_exception = None
+
+    @property
+    def current_chunk(self):
+        return self._current_chunk
+
+    @property
+    def current_exception(self):
+        return self._current_exception
+
     def __init__(self, marc_target, to_unicode=True, force_utf8=False,
-        hide_utf8_warnings=False, utf8_handling='strict',file_encoding = 'iso8859-1'):
+        hide_utf8_warnings=False, utf8_handling='strict',file_encoding = 'iso8859-1',
+        permissive=False):
         """
         The constructor to which you can pass either raw marc or a file-like
         object. Basically the argument you pass in should be raw MARC in
@@ -72,6 +106,7 @@ class MARCReader(Reader):
         self.hide_utf8_warnings = hide_utf8_warnings
         self.utf8_handling = utf8_handling
         self.file_encoding = file_encoding
+        self.permissive = permissive
         if (hasattr(marc_target, "read") and callable(marc_target.read)):
             self.file_handle = marc_target
         else:
@@ -99,12 +134,21 @@ class MARCReader(Reader):
 
         chunk = self.file_handle.read(length - 5)
         chunk = first5 + chunk
-        record = Record(chunk,
-                        to_unicode=self.to_unicode,
-                        force_utf8=self.force_utf8,
-                        hide_utf8_warnings=self.hide_utf8_warnings,
-                        utf8_handling=self.utf8_handling,
-                        file_encoding = self.file_encoding)
+        self._current_chunk = chunk
+        self._current_exception = None
+        try:
+            record = Record(chunk,
+                            to_unicode=self.to_unicode,
+                            force_utf8=self.force_utf8,
+                            hide_utf8_warnings=self.hide_utf8_warnings,
+                            utf8_handling=self.utf8_handling,
+                            file_encoding = self.file_encoding)
+        except (PymarcException, UnicodeDecodeError, ValueError) as ex:
+            if self.permissive:
+                self._current_exception = ex
+                record = None
+            else:
+                raise ex
         return record
 
 def map_records(f, *files):

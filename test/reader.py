@@ -85,6 +85,13 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
             self.assertEqual(record['752']['b'], 'Kostroma Oblast')
             self.assertEqual(record['752']['d'], 'Kostroma')
 
+    def test_strict_mode(self):
+        with self.assertRaises(pymarc.exceptions.BaseAddressInvalid),  open('test/bad_records.mrc', 'rb') as fh:
+            reader = pymarc.MARCReader(fh)
+            for record in reader:
+                self.assertIsNotNone(reader.current_chunk)
+
+    # inherit same tests from MARCReaderBaseTest
 
 
 class MARCReaderStringTest(unittest.TestCase, MARCReaderBaseTest):
@@ -96,12 +103,69 @@ class MARCReaderStringTest(unittest.TestCase, MARCReaderBaseTest):
 
         self.reader = pymarc.reader.MARCReader(six.b(raw))
 
-    # inherit same tests from MARCReaderTestFile
+    # inherit same tests from MARCReaderBaseTest
+
+
+class MARCReaderFilePermissiveTest(unittest.TestCase):
+    """
+    Tests for the pymarc.MARCReader class which provides iterator
+    based access to a MARC file in a permissive way
+
+    """
+    def setUp(self):
+        self.reader = pymarc.MARCReader(open('test/bad_records.mrc', 'rb'), permissive=True)
+
+    def tearDown(self):
+        if self.reader:
+            self.reader.close()
+
+    def test_permissive_mode(self):
+        """In bad_records.mrc we expect following records in the given order
+
+            * 1 working record
+            * 1 record raising BaseAddressInvalid (base_address (99937) >= len(marc))
+            * 1 record raising BaseAddressNotFound (base_address (00000) <= 0)
+            * 1 record raising RecordDirectoryInvalid (len(directory) % DIRECTORY_ENTRY_LEN != 0)
+            * 1 record raising UnicodeDecodeError (directory with non ascii code (245ù0890000))
+            * 1 record raising ValueError (base_address with literal (f0037))
+            * last record should be ok
+        """
+        expected_exceptions = [
+            None,
+            pymarc.exceptions.BaseAddressInvalid,
+            pymarc.exceptions.BaseAddressNotFound,
+            pymarc.exceptions.RecordDirectoryInvalid,
+            UnicodeDecodeError,
+            ValueError,
+            pymarc.exceptions.NoFieldsFound,
+            None,
+        ]
+        for exception_type in expected_exceptions:
+            record = next(self.reader)
+            self.assertIsNotNone(self.reader.current_chunk)
+            if exception_type is None:
+                self.assertIsNotNone(record)
+                self.assertIsNone(self.reader.current_exception)
+                self.assertEqual(record["245"]["a"], 'The pragmatic programmer : ')
+                self.assertEqual(record["245"]["b"], 'from journeyman to master /')
+                self.assertEqual(record["245"]["c"], 'Andrew Hunt, David Thomas.')
+            else:
+                self.assertIsNone(
+                    record,
+                    "expected parsing error with the following "
+                    "exception %r" % exception_type
+                )
+                self.assertTrue(
+                    isinstance(self.reader.current_exception, exception_type),
+                    "expected %r exception, "
+                    "received: %r" % (exception_type, self.reader.current_exception)
+                )
 
 def suite():
     file_suite = unittest.makeSuite(MARCReaderFileTest, 'test')
     string_suite = unittest.makeSuite(MARCReaderStringTest, 'test')
-    test_suite = unittest.TestSuite((file_suite, string_suite))
+    permissive_file_suite = unittest.makeSuite(MARCReaderFilePermissiveTest, 'test')
+    test_suite = unittest.TestSuite((file_suite, string_suite, permissive_file_suite))
     return test_suite
 
 if __name__ == '__main__':
