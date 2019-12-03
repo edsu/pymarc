@@ -8,6 +8,7 @@ from six import BytesIO, StringIO
 from pymarc import Record, Field
 from pymarc.exceptions import PymarcException, RecordLengthInvalid
 
+
 class Reader(Iterator):
     """
     A base class for all iterating readers in the pymarc package.
