@@ -37,5 +37,5 @@ setup(
     long_description_content_type = "text/markdown",
     classifiers = list(filter(None, classifiers.split('\n'))),
     test_suite = 'test',
-    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*',
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*',
 )
