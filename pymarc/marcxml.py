@@ -160,9 +160,9 @@ def record_to_xml_node(record, quiet=False, namespace=False):
             control_field.text = translate(field.data)
         else:
             data_field = ET.SubElement(root, 'datafield')
-            data_field.set('tag', field.tag)
             data_field.set('ind1', field.indicators[0])
             data_field.set('ind2', field.indicators[1])
+            data_field.set('tag', field.tag)
             for subfield in field:
                 data_subfield = ET.SubElement(data_field, 'subfield')
                 data_subfield.set('code', subfield[0])
