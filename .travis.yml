@@ -5,8 +5,6 @@ script: python setup.py test
 
 matrix:
   include:
-    - python: "2.6"
-      dist: "trusty"
     - python: "2.7"
     - python: "3.3"
       dist: "trusty"
