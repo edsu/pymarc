@@ -419,7 +419,7 @@ class Record(Iterator):
 
     def title(self):
         """
-        Returns the title of the record (245 $a an $b).
+        Returns the title of the record (245 $a and $b).
         """
         try:
             title = self['245']['a']
@@ -428,6 +428,21 @@ class Record(Iterator):
         if title:
             try:
                 title += " " + self['245']['b']
+            except TypeError:
+                pass
+        return title
+
+    def issn_title(self):
+        """
+        Returns the key title of the record (222 $a and $b).
+        """
+        try:
+            title = self['222']['a']
+        except TypeError:
+            title = None
+        if title:
+            try:
+                title += " " + self['222']['b']
             except TypeError:
                 pass
         return title
@@ -450,6 +465,15 @@ class Record(Iterator):
             # ISBN not set
             pass
         return None
+
+    def issn(self):
+        """
+        Returns the ISSN number [022]['a'] in the record or None
+        """
+        try:
+            return self['022']['a']
+        except TypeError:
+            return None
 
     def sudoc(self):
         """
