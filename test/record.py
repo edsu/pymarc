@@ -111,6 +111,23 @@ class RecordTest(unittest.TestCase):
             subfields=['a', "Farghin"]))
         self.assertEqual(record.title(), "Farghin")
 
+    def test_issn_title(self):
+        record = Record()
+        self.assertEqual(record.issn_title(), None)
+        record.add_field(Field('222', ["", ""],
+            subfields=['a', 'Foo :', 'b', 'bar']))
+        self.assertEqual(record.issn_title(), 'Foo : bar')
+
+        record = Record()
+        record.add_field(Field('222', ["", ""],
+            subfields=['a', "Farghin"]))
+        self.assertEqual(record.issn_title(), "Farghin")
+
+        record = Record()
+        record.add_field(Field('222', ["", ""],
+            subfields=['b', "bar"]))
+        self.assertEqual(record.issn_title(), None)
+
     def test_isbn(self):
         record = Record()
         self.assertEqual(record.isbn(), None)
@@ -132,6 +149,12 @@ class RecordTest(unittest.TestCase):
         record = Record()
         record.add_field(Field('020', [' ', ' '], subfields=['a', '006073132X']))
         self.assertEqual(record.isbn(), '006073132X')
+
+    def test_issn(self):
+        record = Record()
+        self.assertEqual(record.issn(), None)
+        record.add_field(Field(tag="022", indicators=["0", ""], subfields=["a", "0395-2037"]))
+        self.assertEqual(record.issn(), '0395-2037')
 
     def test_multiple_isbn(self):
         with open('test/multi_isbn.dat', 'rb') as fh:
