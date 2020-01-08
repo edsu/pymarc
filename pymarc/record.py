@@ -397,7 +397,7 @@ class Record(Iterator):
         Turn a MARC record into a dictionary, which is used for ``as_json``.
         """
         record = {}
-        record['leader'] = self.leader
+        record['leader'] = str(self.leader)
         record['fields'] = []
         for field in self:
             if field.is_control_field():
