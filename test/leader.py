@@ -55,28 +55,25 @@ class LeaderTest(unittest.TestCase):
     def test_getters(self):
         leader = Leader(LEADER)
         for field, index, expected in FIELDS:
-            with self.subTest(field=field, index=index, expected=expected):
-                self.assertEqual(getattr(leader, field), leader[index])
-                self.assertEqual(expected, leader[index])
+            self.assertEqual(getattr(leader, field), leader[index])
+            self.assertEqual(expected, leader[index])
 
     def test_setters(self):
         leader = Leader(LEADER)
         for field, index, expected in FIELDS:
-            with self.subTest(field=field, index=index, expected=expected):
-                value = random_string(len(expected))
-                leader[index] = value
-                self.assertEqual(getattr(leader, field), value)
-                value = random_string(len(expected))
-                setattr(leader, field, value)
-                self.assertEqual(leader[index], value)
+            value = random_string(len(expected))
+            leader[index] = value
+            self.assertEqual(getattr(leader, field), value)
+            value = random_string(len(expected))
+            setattr(leader, field, value)
+            self.assertEqual(leader[index], value)
 
     def test_setters_errors(self):
         leader = Leader(LEADER)
         for field, index, expected in FIELDS:
-            with self.subTest(field=field, index=index, expected=expected):
-                value = random_string(len(expected) + 1)
-                with self.assertRaises(BadLeaderValue):
-                    setattr(leader, field, value)
+            value = random_string(len(expected) + 1)
+            with self.assertRaises(BadLeaderValue):
+                setattr(leader, field, value)
 
 
 def suite():
