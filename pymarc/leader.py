@@ -89,7 +89,7 @@ class Leader:
         return self.leader[6]
 
     @type_of_record.setter
-    def type_of_record(self, value: str):
+    def type_of_record(self, value):
         # type: (str) -> str
         """Type of record (06)."""
         if len(value) != 1:
@@ -103,7 +103,7 @@ class Leader:
         return self.leader[7]
 
     @bibliographic_level.setter
-    def bibliographic_level(self, value: str):
+    def bibliographic_level(self, value):
         # type: (str) -> str
         """Bibliographic level (07)."""
         if len(value) != 1:
@@ -117,7 +117,7 @@ class Leader:
         return self.leader[8]
 
     @type_of_control.setter
-    def type_of_control(self, value: str):
+    def type_of_control(self, value):
         # type: (str) -> str
         """Type of control (08)."""
         if len(value) != 1:
@@ -131,7 +131,7 @@ class Leader:
         return self.leader[9]
 
     @coding_scheme.setter
-    def coding_scheme(self, value: str):
+    def coding_scheme(self, value):
         # type: (str) -> str
         """Character coding scheme (09)."""
         if len(value) != 1:
@@ -147,7 +147,7 @@ class Leader:
         return self.leader[10]
 
     @indicator_count.setter
-    def indicator_count(self, value: str):
+    def indicator_count(self, value):
         # type: (str) -> str
         """Indicator count (10)."""
         if len(value) != 1:
@@ -161,7 +161,7 @@ class Leader:
         return self.leader[11]
 
     @subfield_code_count.setter
-    def subfield_code_count(self, value: str):
+    def subfield_code_count(self, value):
         # type: (str) -> str
         """Subfield code count (11)."""
         if len(value) != 1:
@@ -175,7 +175,7 @@ class Leader:
         return self.leader[12:17]
 
     @base_address.setter
-    def base_address(self, value: str):
+    def base_address(self, value):
         # type: (str) -> str
         """Base address of data (12-16)."""
         if len(value) != 5:
@@ -191,7 +191,7 @@ class Leader:
         return self.leader[17]
 
     @encoding_level.setter
-    def encoding_level(self, value: str):
+    def encoding_level(self, value):
         # type: (str) -> str
         """Encoding level (17)."""
         if len(value) != 1:
@@ -205,7 +205,7 @@ class Leader:
         return self.leader[18]
 
     @cataloging_form.setter
-    def cataloging_form(self, value: str):
+    def cataloging_form(self, value):
         # type: (str) -> str
         """Descriptive cataloging form (18)."""
         if len(value) != 1:
@@ -221,7 +221,7 @@ class Leader:
         return self.leader[19]
 
     @multipart_ressource.setter
-    def multipart_ressource(self, value: str):
+    def multipart_ressource(self, value):
         # type: (str) -> str
         """Multipart resource record level (19)."""
         if len(value) != 1:
@@ -237,7 +237,7 @@ class Leader:
         return self.leader[20]
 
     @length_of_field_length.setter
-    def length_of_field_length(self, value: str):
+    def length_of_field_length(self, value):
         # type: (str) -> str
         """Length of the length-of-field portion (20)."""
         if len(value) != 1:
@@ -253,7 +253,7 @@ class Leader:
         return self.leader[21]
 
     @starting_character_position_length.setter
-    def starting_character_position_length(self, value: str):
+    def starting_character_position_length(self, value):
         # type: (str) -> str
         """Length of the starting-character-position portion (21)."""
         if len(value) != 1:
@@ -270,7 +270,7 @@ class Leader:
         return self.leader[22]
 
     @implementation_defined_length.setter
-    def implementation_defined_length(self, value: str):
+    def implementation_defined_length(self, value):
         # type: (str) -> str
         """Length of the starting-character-position portion (22)."""
         if len(value) != 1:
