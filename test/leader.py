@@ -46,6 +46,11 @@ class LeaderTest(unittest.TestCase):
     def test_str(self):
         leader = Leader(LEADER)
         self.assertEqual(str(leader), LEADER)
+    
+    def test_add(self):
+        leader = Leader(LEADER)
+        new_leader = leader[0:9] + 'b' + leader[10:]
+        self.assertEqual(new_leader, "00475casab2200169 ib4500")
 
     def test_getters(self):
         leader = Leader(LEADER)
