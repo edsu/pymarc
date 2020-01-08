@@ -2,9 +2,9 @@
 import random
 import string
 import unittest
-from pymarc.constants import LEADER_LEN
-from pymarc.leader import Leader
+
 from pymarc.exceptions import BadLeaderValue, RecordLeaderInvalid
+from pymarc.leader import Leader
 
 LEADER = "00475casaa2200169 ib4500"
 
@@ -46,7 +46,7 @@ class LeaderTest(unittest.TestCase):
     def test_str(self):
         leader = Leader(LEADER)
         self.assertEqual(str(leader), LEADER)
-    
+
     def test_add(self):
         leader = Leader(LEADER)
         new_leader = leader[0:9] + 'b' + leader[10:]
