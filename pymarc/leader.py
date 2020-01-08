@@ -3,7 +3,7 @@ from pymarc.constants import LEADER_LEN
 from pymarc.exceptions import BadLeaderValue, RecordLeaderInvalid
 
 
-class Leader:
+class Leader(object):
     """Mutable leader."""
 
     def __init__(self, leader):
@@ -71,6 +71,7 @@ class Leader:
 
     @property
     def record_status(self):
+        # type: () -> str
         """Record status (05)."""
         return self.leader[5]
 
