@@ -12,7 +12,9 @@ from pymarc.exceptions import BaseAddressInvalid, RecordLeaderInvalid, \
 from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
 from pymarc.field import Field, SUBFIELD_INDICATOR, END_OF_FIELD, \
         map_marc8_field, RawField
+from pymarc.leader import Leader
 from pymarc.marc8 import marc8_to_unicode
+
 
 izip_longest = six.moves.zip_longest
 
@@ -65,7 +67,7 @@ class Record(Iterator):
     def __init__(self, data='', to_unicode=True, force_utf8=False,
         hide_utf8_warnings=False, utf8_handling='strict',
         leader=' ' * LEADER_LEN, file_encoding = 'iso8859-1'):
-        self.leader = leader[0:10] + '22' + leader[12:20] + '4500'
+        self.leader = Leader(leader[0:10] + '22' + leader[12:20] + '4500')
         self.fields = list()
         self.pos = 0
         self.force_utf8 = force_utf8
@@ -395,7 +397,7 @@ class Record(Iterator):
         Turn a MARC record into a dictionary, which is used for ``as_json``.
         """
         record = {}
-        record['leader'] = self.leader
+        record['leader'] = str(self.leader)
         record['fields'] = []
         for field in self:
             if field.is_control_field():

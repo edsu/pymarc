@@ -41,3 +41,6 @@ class FieldNotFound(PymarcException):
 
 class BadSubfieldCodeWarning(Warning):
     """Warning about a non-ASCII subfield code"""
+
+class BadLeaderValue(PymarcException):
+    """Error when setting a leader value."""

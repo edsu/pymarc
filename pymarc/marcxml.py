@@ -152,7 +152,7 @@ def record_to_xml_node(record, quiet=False, namespace=False):
         root.set('xmlns:xsi', XSI_NS)
         root.set('xsi:schemaLocation', MARC_XML_SCHEMA)
     leader = ET.SubElement(root, 'leader')
-    leader.text = record.leader
+    leader.text = str(record.leader)
     for field in record:
         if field.is_control_field():
             control_field = ET.SubElement(root, 'controlfield')
