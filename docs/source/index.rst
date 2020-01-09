@@ -22,6 +22,7 @@ API Docs
    pymarc.constants
    pymarc.exceptions
    pymarc.field
+   pymarc.leader
    pymarc.marc8
    pymarc.marc8_mapping
    pymarc.marcxml

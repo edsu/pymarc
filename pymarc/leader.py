@@ -4,7 +4,42 @@ from pymarc.exceptions import BadLeaderValue, RecordLeaderInvalid
 
 
 class Leader(object):
-    """Mutable leader."""
+    """Mutable leader.
+
+    A class to manipulate a `Record`'s leader.
+
+    You can use the properties (`status`, `bibliographic_level`, etc.) or their
+    slices/index equivalent (`leader[5]`, `leader[7]`, etc.) to read and write
+    values.
+
+    See `LoC's documentation
+    <https://www.loc.gov/marc/bibliographic/bdleader.html>`_
+    for more infos about those fields.
+
+    .. code-block:: python
+
+        leader = Leader("00475cas a2200169 i 4500")
+        leader[0:4]  # returns "00475"
+        leader.status  # returns "c"
+        leader.status = "a"  # sets the status to "a"
+        leader[5] # returns the status "a"
+        leader[5] = "b" # sets the status to "b"
+        str(leader)  # "00475bas a2200169 i 4500"
+
+    Usually the leader is accessed through the `leader` property of a record.
+
+    .. code-block:: python
+
+        from pymarc import MARCReader
+        with open('test/marc.dat', 'rb') as fh:
+            reader = MARCReader(fh)
+            for record in reader:
+                print(record.leader)
+
+    When creating/updating a `Record` please note that `record_length` and
+    `base_address` will only be generated in the marc21 output of
+    :func:`record.as_marc() <pymarc.record.Record.as_marc>`
+    """
 
     def __init__(self, leader):
         # type: (str)

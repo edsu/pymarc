@@ -77,6 +77,14 @@ pymarc.writer module
     :show-inheritance:
 
 
+pymarc.leader module
+--------------------
+
+.. automodule:: pymarc.leader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Module contents
 ---------------
 
