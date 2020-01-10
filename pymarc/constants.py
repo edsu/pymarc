@@ -1,4 +1,5 @@
-"Constants for pymarc."
+"""Constants for pymarc."""
+
 from six import unichr
 
 LEADER_LEN = 24

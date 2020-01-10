@@ -1,4 +1,4 @@
-"The pymarc.field file."
+"""The pymarc.field file."""
 
 import logging
 
@@ -10,8 +10,9 @@ from pymarc.marc8 import marc8_to_unicode
 
 
 class Field(Iterator):
-    """
-    Field() pass in the field tag, indicators and subfields for the tag.
+    """Field() pass in the field tag, indicators and subfields for the tag.
+
+    .. code-block:: python
 
         field = Field(
             tag = '245',
@@ -25,14 +26,16 @@ class Field(Iterator):
     If you want to create a control field, don't pass in the indicators
     and use a data parameter rather than a subfields parameter:
 
-        field = Field(tag='001', data='fol05731351')
+    .. code-block:: python
 
+        field = Field(tag='001', data='fol05731351')
     """
 
     def __init__(self, tag, indicators=None, subfields=None, data=u""):
-        if indicators == None:
+        """Initialize a field `tag`."""
+        if indicators is None:
             indicators = []
-        if subfields == None:
+        if subfields is None:
             subfields = []
         indicators = [text_type(x) for x in indicators]
 
@@ -54,13 +57,14 @@ class Field(Iterator):
         return self
 
     def __str__(self):
-        """
+        """String representation of the field.
+
         A Field object in a string context will return the tag, indicators
         and subfield as a string. This follows MARCMaker format; see [1]
         and [2] for further reference. Special character mnemonic strings
         have yet to be implemented (see [3]), so be forewarned. Note also
         for complete MARCMaker compatibility, you will need to change your
-        newlines to DOS format ('\r\n').
+        newlines to DOS format ('CRLF').
 
         [1] http://www.loc.gov/marc/makrbrkr.html#mechanics
         [2] http://search.cpan.org/~eijabb/MARC-File-MARCMaker/
@@ -80,8 +84,9 @@ class Field(Iterator):
         return text
 
     def __getitem__(self, subfield):
-        """
-        Retrieve the first subfield with a given subfield code in a field:
+        """Retrieve the first subfield with a given subfield code in a field.
+
+        .. code-block:: python
 
             field['a']
 
@@ -93,8 +98,9 @@ class Field(Iterator):
         return None
 
     def __contains__(self, subfield):
-        """
-        Allows a shorthand test of field membership:
+        """Allows a shorthand test of field membership.
+
+        .. code-block:: python
 
             'a' in field
 
@@ -103,8 +109,9 @@ class Field(Iterator):
         return len(subfields) > 0
 
     def __setitem__(self, code, value):
-        """
-        Set the values of the subfield code in a field:
+        """Set the values of the subfield code in a field.
+
+        .. code-block:: python
 
             field['a'] = 'value'
 
@@ -123,9 +130,6 @@ class Field(Iterator):
             num_code -= 1
 
     def __next__(self):
-        """
-        Needed for iteration.
-        """
         if not hasattr(self, "subfields"):
             raise StopIteration
         while self.__pos < len(self.subfields):
@@ -135,10 +139,7 @@ class Field(Iterator):
         raise StopIteration
 
     def value(self):
-        """
-        Returns the field as a string without tag, indicators, and
-        subfield indicators.
-        """
+        """Returns the field as a string w/ tag, indicators, and subfield indicators."""
         if self.is_control_field():
             return self.data
         value_list = []
@@ -147,13 +148,16 @@ class Field(Iterator):
         return " ".join(value_list)
 
     def get_subfields(self, *codes):
-        """
+        """Get subfields matching `codes`.
+
         get_subfields() accepts one or more subfield codes and returns
         a list of subfield values.  The order of the subfield values
         in the list will be the order that they appear in the field.
 
-            print field.get_subfields('a')
-            print field.get_subfields('a', 'b', 'z')
+        .. code-block:: python
+
+            print(field.get_subfields('a'))
+            print(field.get_subfields('a', 'b', 'z'))
         """
         values = []
         for subfield in self:
@@ -162,12 +166,13 @@ class Field(Iterator):
         return values
 
     def add_subfield(self, code, value, pos=None):
-        """
-        Adds a subfield code/value to the end of a field or optionally at a position (pos).
+        """Adds a subfield code/value to the end of a field or at a position (pos).
+
+        .. code-block:: python
 
             field.add_subfield('u', 'http://www.loc.gov')
             field.add_subfield('u', 'http://www.loc.gov', 0)
-        
+
         If pos is not supplied or out of range, the subfield will be added at the end.
         """
         append = pos is None or (pos + 1) * 2 > len(self.subfields)
@@ -181,11 +186,11 @@ class Field(Iterator):
             self.subfields.insert(i + 1, value)
 
     def delete_subfield(self, code):
-        """
-        Deletes the first subfield with the specified 'code' and returns
-        its value:
+        """Deletes the first subfield with the specified 'code' and returns its value.
 
-            field.delete_subfield('a')
+        .. code-block:: python
+
+            value = field.delete_subfield('a')
 
         If no subfield is found with the specified code None is returned.
         """
@@ -201,8 +206,8 @@ class Field(Iterator):
             return None
 
     def is_control_field(self):
-        """
-        Returns true or false if the field is considered a control field.
+        """Returns true or false if the field is considered a control field.
+
         Control fields lack indicators and subfields.
         """
         if self.tag < "010" and self.tag.isdigit():
@@ -210,9 +215,7 @@ class Field(Iterator):
         return False
 
     def as_marc(self, encoding):
-        """
-        used during conversion of a field to raw marc
-        """
+        """Used during conversion of a field to raw marc."""
         if self.is_control_field():
             return (self.data + END_OF_FIELD).encode(encoding)
         marc = self.indicator1 + self.indicator2
@@ -225,9 +228,9 @@ class Field(Iterator):
     as_marc21 = as_marc
 
     def format_field(self):
-        """
-        Returns the field as a string without tag, indicators, and
-        subfield indicators. Like pymarc.Field.value(), but prettier
+        """Returns the field as a string w/ tag, indicators, and subfield indicators.
+
+        Like :func:`Field.value() <pymarc.field.Field.value>`, but prettier
         (adds spaces, formats subject headings).
         """
         if self.is_control_field():
@@ -246,9 +249,9 @@ class Field(Iterator):
         return fielddata.strip()
 
     def is_subject_field(self):
-        """
-        Returns True or False if the field is considered a subject
-        field.  Used by format_field.
+        """Returns True or False if the field is considered a subject field.
+
+        Used by :func:`format_field() <pymarc.field.Field.format_field>` .
         """
         if self.tag.startswith("6"):
             return True
@@ -256,32 +259,33 @@ class Field(Iterator):
 
     @property
     def indicator1(self):
+        """Indicator 1."""
         return self.indicators[0]
 
     @indicator1.setter
     def indicator1(self, value):
+        """Indicator 1 (setter)."""
         self.indicators[0] = value
 
     @property
     def indicator2(self):
+        """Indicator 2."""
         return self.indicators[1]
 
     @indicator2.setter
     def indicator2(self, value):
+        """Indicator 2 (setter)."""
         self.indicators[1] = value
 
 
 class RawField(Field):
-    """
-    MARC field that keeps data in raw, undecoded byte strings.
+    """MARC field that keeps data in raw, undecoded byte strings.
 
     Should only be used when input records are wrongly encoded.
     """
 
     def as_marc(self, encoding=None):
-        """
-        used during conversion of a field to raw marc
-        """
+        """Used during conversion of a field to raw marc."""
         if encoding is not None:
             logging.warn("Attempt to force a RawField into encoding %s", encoding)
         if self.is_control_field():
@@ -293,6 +297,7 @@ class RawField(Field):
 
 
 def map_marc8_field(f):
+    """Map MARC8 field."""
     if f.is_control_field():
         f.data = marc8_to_unicode(f.data)
     else:

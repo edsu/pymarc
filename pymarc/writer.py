@@ -1,3 +1,4 @@
+"""Pymarc Writer."""
 import pymarc
 from pymarc import Record, WriteNeedsRecord
 
@@ -19,16 +20,19 @@ except ImportError:
 
 
 class Writer(object):
+    """Base Writer object."""
+
     def __init__(self, file_handle):
+        """Init."""
         self.file_handle = file_handle
 
     def write(self, record):
+        """Write."""
         if not isinstance(record, Record):
             raise WriteNeedsRecord
 
     def close(self, close_fh=True):
-        """
-        Closes the writer.
+        """Closes the writer.
 
         If close_fh is False close will also close the underlying file handle
         that was passed in to the constructor. The default is True.
@@ -39,41 +43,38 @@ class Writer(object):
 
 
 class JSONWriter(Writer):
-    """
-    A class for writing records as an array of MARC-in-JSON objects.
+    """A class for writing records as an array of MARC-in-JSON objects.
 
     IMPORTANT: You must the close a JSONWriter,
     otherwise you will not get valid JSON.
 
     Simple usage::
 
-        >>> from pymarc import JSONWriter
+    .. code-block:: python
 
-        ### writing to a file
-        >>> writer = JSONWriter(open('file.json','wt'))
-        >>> writer.write(record)
-        >>> writer.close()  # Important!
+        from pymarc import JSONWriter
 
-        ### writing to a string
-        >>> string = StringIO()
-        >>> writer = JSONWriter(string)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)  # Important!
-        >>> print string
+        # writing to a file
+        writer = JSONWriter(open('file.json','wt'))
+        writer.write(record)
+        writer.close()  # Important!
+
+        # writing to a string
+        string = StringIO()
+        writer = JSONWriter(string)
+        writer.write(record)
+        writer.close(close_fh=False)  # Important!
+        print(string)
     """
 
     def __init__(self, file_handle):
-        """
-        You need to pass in a text file like object.
-        """
+        """You need to pass in a text file like object."""
         super(JSONWriter, self).__init__(file_handle)
         self.write_count = 0
         self.file_handle.write("[")
 
     def write(self, record):
-        """
-        Writes a record.
-        """
+        """Writes a record."""
         Writer.write(self, record)
         if self.write_count > 0:
             self.file_handle.write(",")
@@ -81,8 +82,7 @@ class JSONWriter(Writer):
         self.write_count += 1
 
     def close(self, close_fh=True):
-        """
-        Closes the writer.
+        """Closes the writer.
 
         If close_fh is False close will also close the underlying file
         handle that was passed in to the constructor. The default is True.
@@ -92,80 +92,75 @@ class JSONWriter(Writer):
 
 
 class MARCWriter(Writer):
-    """
-    A class for writing MARC21 records in transmission format.
+    """A class for writing MARC21 records in transmission format.
 
     Simple usage::
 
-        >>> from pymarc import MARCWriter
+    .. code-block:: python
 
-        ### writing to a file
-        >>> writer = MARCWriter(open('file.dat','wb'))
-        >>> writer.write(record)
-        >>> writer.close()
+        from pymarc import MARCWriter
 
-        ### writing to a string (Python 2 only)
-        >>> string = StringIO()
-        >>> writer = MARCWriter(string)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)
-        >>> print string
+        # writing to a file
+        writer = MARCWriter(open('file.dat','wb'))
+        writer.write(record)
+        writer.close()
 
-        ### writing to memory (Python 3 only)
-        >>> memory = BytesIO()
-        >>> writer = MARCWriter(memory)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)
+        # writing to a string (Python 2 only)
+        string = StringIO()
+        writer = MARCWriter(string)
+        writer.write(record)
+        writer.close(close_fh=False)
+        print(string)
+
+        # writing to memory (Python 3 only)
+
+        memory = BytesIO()
+        writer = MARCWriter(memory)
+        writer.write(record)
+        writer.close(close_fh=False)
     """
 
     def __init__(self, file_handle):
-        """
-        You need to pass in a byte file like object.
-        """
+        """You need to pass in a byte file like object."""
         super(MARCWriter, self).__init__(file_handle)
 
     def write(self, record):
-        """
-        Writes a record.
-        """
+        """Writes a record."""
         Writer.write(self, record)
         self.file_handle.write(record.as_marc())
 
 
 class TextWriter(Writer):
-    """
-    A class for writing records in prettified text MARCMaker format.
+    """A class for writing records in prettified text MARCMaker format.
 
     A blank line separates each record.
 
-    Simple usage::
+    Simple usage:
 
-        >>> from pymarc import TextWriter
+    .. code-block:: python
 
-        ### writing to a file
-        >>> writer = TextWriter(open('file.txt','wt'))
-        >>> writer.write(record)
-        >>> writer.close()
+        from pymarc import TextWriter
 
-        ### writing to a string
-        >>> string = StringIO()
-        >>> writer = TextWriter(string)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)
-        >>> print string
+        # writing to a file
+        writer = TextWriter(open('file.txt','wt'))
+        writer.write(record)
+        writer.close()
+
+        # writing to a string
+        string = StringIO()
+        writer = TextWriter(string)
+        writer.write(record)
+        writer.close(close_fh=False)
+        print(string)
     """
 
     def __init__(self, file_handle):
-        """
-        You need to pass in a text file like object.
-        """
+        """You need to pass in a text file like object."""
         super(TextWriter, self).__init__(file_handle)
         self.write_count = 0
 
     def write(self, record):
-        """
-        Writes a record.
-        """
+        """Writes a record."""
         Writer.write(self, record)
         if self.write_count > 0:
             self.file_handle.write("\n")
@@ -174,54 +169,50 @@ class TextWriter(Writer):
 
 
 class XMLWriter(Writer):
-    """
-    A class for writing records as a MARCXML collection.
+    """A class for writing records as a MARCXML collection.
 
     IMPORTANT: You must then close an XMLWriter, otherwise you will not get
     a valid XML document.
 
-    Simple usage::
+    Simple usage:
 
-        >>> from pymarc import XMLWriter
+    .. code-block:: python
 
-        ### writing to a file
-        >>> writer = XMLWriter(open('file.xml','wb'))
-        >>> writer.write(record)
-        >>> writer.close()  # Important!
+        from pymarc import XMLWriter
 
-        ### writing to a string (Python 2 only)
-        >>> string = StringIO()
-        >>> writer = XMLWriter(string)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)  # Important!
-        >>> print string
+        # writing to a file
+        writer = XMLWriter(open('file.xml','wb'))
+        writer.write(record)
+        writer.close()  # Important!
 
-        ### writing to memory (Python 3 only)
-        >>> memory = BytesIO()
-        >>> writer = XMLWriter(memory)
-        >>> writer.write(record)
-        >>> writer.close(close_fh=False)  # Important!
+        # writing to a string (Python 2 only)
+        string = StringIO()
+        writer = XMLWriter(string)
+        writer.write(record)
+        writer.close(close_fh=False)  # Important!
+        print(string)
+
+        # writing to memory (Python 3 only)
+        memory = BytesIO()
+        writer = XMLWriter(memory)
+        writer.write(record)
+        writer.close(close_fh=False)  # Important!
     """
 
     def __init__(self, file_handle):
-        """
-        You need to pass in a binary file like object.
-        """
+        """You need to pass in a binary file like object."""
         super(XMLWriter, self).__init__(file_handle)
         self.file_handle.write(b'<?xml version="1.0" encoding="UTF-8"?>')
         self.file_handle.write(b'<collection xmlns="http://www.loc.gov/MARC21/slim">')
 
     def write(self, record):
-        """
-        Writes a record.
-        """
+        """Writes a record."""
         Writer.write(self, record)
         node = pymarc.record_to_xml_node(record)
         self.file_handle.write(ET.tostring(node, encoding="utf-8"))
 
     def close(self, close_fh=True):
-        """
-        Closes the writer.
+        """Closes the writer.
 
         If close_fh is False close will also close the underlying file handle
         that was passed in to the constructor. The default is True.

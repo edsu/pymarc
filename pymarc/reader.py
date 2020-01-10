@@ -1,3 +1,4 @@
+"""Pymarc Reader."""
 import os
 import sys
 import json
@@ -10,19 +11,18 @@ from pymarc.exceptions import PymarcException, RecordLengthInvalid
 
 
 class Reader(Iterator):
-    """
-    A base class for all iterating readers in the pymarc package.
-    """
+    """A base class for all iterating readers in the pymarc package."""
 
     def __iter__(self):
         return self
 
 
 class MARCReader(Reader):
-    """
-    An iterator class for reading a file of MARC21 records.
+    """An iterator class for reading a file of MARC21 records.
 
     Simple usage:
+
+    .. code-block:: python
 
         from pymarc import MARCReader
 
@@ -39,6 +39,8 @@ class MARCReader(Reader):
     If you would like to have your Record object contain unicode strings
     use the to_unicode parameter:
 
+    .. code-block:: python
+
         reader = MARCReader(file('file.dat'), to_unicode=True)
 
     This will decode from MARC-8 or UTF-8 depending on the value in the
@@ -48,6 +50,8 @@ class MARCReader(Reader):
     is utf-8 encoded without the leader set appropriately you can use
     the force_utf8 parameter:
 
+    .. code-block:: python
+
         reader = MARCReader(file('file.dat'), to_unicode=True,
             force_utf8=True)
 
@@ -56,7 +60,7 @@ class MARCReader(Reader):
     the utf8_handling parameter, which takes the same values ('strict',
     'replace', and 'ignore') as the Python Unicode codecs (see
     http://docs.python.org/library/codecs.html for more info).
-    
+
     Although, it's not legal in MARC-21 to use anything but MARC-8 or UTF-8, but
     if you have a file in incorrect encode and you know what it is, you can
     try to use your encode in parameter "file_encoding".
@@ -64,12 +68,16 @@ class MARCReader(Reader):
     You may want to parse data in a permissive way to avoid stop on the first
     wrong record and reads as much as records as possible:
 
+    .. code-block:: python
+
         reader = MARCReader(file('file.dat'), permissive=True)
 
     In such case ``None`` is return by the iterator.
     This give you the full control to implement the expected behavior getting
     exception information under ``reader.last_exception`` which will store
     a tuple with (<chunk_data>, <catched exception>):
+
+    .. code-block:: python
 
         reader = MARCReader(file('file.dat'), permissive=True)
         for record in reader:
@@ -82,7 +90,6 @@ class MARCReader(Reader):
                 )
             else:
                 # do something with record
-
     """
 
     _current_chunk = None
@@ -90,10 +97,12 @@ class MARCReader(Reader):
 
     @property
     def current_chunk(self):
+        """Current chunk."""
         return self._current_chunk
 
     @property
     def current_exception(self):
+        """Current exception."""
         return self._current_exception
 
     def __init__(
@@ -106,10 +115,10 @@ class MARCReader(Reader):
         file_encoding="iso8859-1",
         permissive=False,
     ):
-        """
-        The constructor to which you can pass either raw marc or a file-like
-        object. Basically the argument you pass in should be raw MARC in
-        transmission format or an object that responds to read().
+        """The constructor to which you can pass either raw marc or a file-like object.
+
+        Basically the argument you pass in should be raw MARC in transmission format or
+        an object that responds to read().
         """
         super(MARCReader, self).__init__()
         self.to_unicode = to_unicode
@@ -124,14 +133,12 @@ class MARCReader(Reader):
             self.file_handle = BytesIO(marc_target)
 
     def close(self):
+        """Close the handle."""
         if self.file_handle:
             self.file_handle.close()
             self.file_handle = None
 
     def __next__(self):
-        """
-        To support iteration.
-        """
         first5 = self.file_handle.read(5)
         if not first5:
             raise StopIteration
@@ -166,21 +173,29 @@ class MARCReader(Reader):
 
 
 def map_records(f, *files):
-    """
-    Applies a given function to each record in a batch. You can
-    pass in multiple batches.
+    """Applies a given function to each record in a batch.
 
-    >>> def print_title(r):
-    >>>     print(r['245'])
-    >>>
-    >>> map_records(print_title, file('marc.dat'))
+    You can pass in multiple batches.
+
+    .. code-block:: python
+
+        def print_title(r):
+            print(r['245'])
+        map_records(print_title, file('marc.dat'))
     """
     for file in files:
         list(map(f, MARCReader(file)))
 
 
 class JSONReader(Reader):
+    """JSON Reader."""
+
     def __init__(self, marc_target, encoding="utf-8", stream=False):
+        """The constructor to which you can pass either raw marc or a file-like object.
+
+        Basically the argument you pass in should be raw JSON in transmission format or
+        an object that responds to read().
+        """
         self.encoding = encoding
         if hasattr(marc_target, "read") and callable(marc_target.read):
             self.file_handle = marc_target

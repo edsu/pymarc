@@ -1,31 +1,21 @@
-import re
-import six
+"""Pymarc Record."""
 import logging
+import re
 import unicodedata
 import warnings
 
+import six
 from six import Iterator
 
-from pymarc.exceptions import (
-    BaseAddressInvalid,
-    RecordLeaderInvalid,
-    BaseAddressNotFound,
-    RecordDirectoryInvalid,
-    NoFieldsFound,
-    FieldNotFound,
-    BadSubfieldCodeWarning,
-)
-from pymarc.constants import LEADER_LEN, DIRECTORY_ENTRY_LEN, END_OF_RECORD
-from pymarc.field import (
-    Field,
-    SUBFIELD_INDICATOR,
-    END_OF_FIELD,
-    map_marc8_field,
-    RawField,
-)
+from pymarc.constants import DIRECTORY_ENTRY_LEN, END_OF_RECORD, LEADER_LEN
+from pymarc.exceptions import (BadSubfieldCodeWarning, BaseAddressInvalid,
+                               BaseAddressNotFound, FieldNotFound,
+                               NoFieldsFound, RecordDirectoryInvalid,
+                               RecordLeaderInvalid)
+from pymarc.field import (END_OF_FIELD, SUBFIELD_INDICATOR, Field, RawField,
+                          map_marc8_field)
 from pymarc.leader import Leader
 from pymarc.marc8 import marc8_to_unicode
-
 
 izip_longest = six.moves.zip_longest
 
@@ -46,12 +36,15 @@ isbn_regex = re.compile(r"([0-9\-xX]+)")
 
 @six.python_2_unicode_compatible
 class Record(Iterator):
-    """
-    A class for representing a MARC record. Each Record object is made up of
-    multiple Field objects. You'll probably want to look at the docs for Field
-    to see how to fully use a Record object.
+    """A class for representing a MARC record.
+
+    Each Record object is made up of multiple Field objects. You'll probably want to look
+    at the docs for :class:`Field <pymarc.record.Field>` to see how to fully use a Record
+    object.
 
     Basic usage:
+
+    .. code-block:: python
 
         field = Field(
             tag = '245',
@@ -66,9 +59,13 @@ class Record(Iterator):
 
     Or creating a record from a chunk of MARC in transmission format:
 
+    .. code-block:: python
+
         record = Record(data=chunk)
 
     Or getting a record as serialized MARC21.
+
+    .. code-block:: python
 
         raw = record.as_marc()
 
@@ -86,6 +83,7 @@ class Record(Iterator):
         leader=" " * LEADER_LEN,
         file_encoding="iso8859-1",
     ):
+        """Initialize a Record."""
         self.leader = Leader(leader[0:10] + "22" + leader[12:20] + "4500")
         self.fields = list()
         self.pos = 0
@@ -103,10 +101,9 @@ class Record(Iterator):
             self.leader = self.leader[0:9] + "a" + self.leader[10:]
 
     def __str__(self):
-        """
-        In a string context a Record object will return a prettified version
-        of the record in MARCMaker format. See the docstring for Field.__str__
-        for more information.
+        """Will return a prettified version of the record in MARCMaker format.
+
+        See :func:`Field.__str__() <pymarc.record.Field.__str__>` for more information.
         """
         # join is significantly faster than concatenation
         text_list = ["=LDR  %s" % self.leader]
@@ -115,11 +112,11 @@ class Record(Iterator):
         return text
 
     def __getitem__(self, tag):
-        """
-        Allows a shorthand lookup by tag:
+        """Allows a shorthand lookup by tag.
+
+        .. code-block:: python
 
             record['245']
-
         """
         fields = self.get_fields(tag)
         if len(fields) > 0:
@@ -127,11 +124,11 @@ class Record(Iterator):
         return None
 
     def __contains__(self, tag):
-        """
-        Allows a shorthand test of tag membership:
+        """Allows a shorthand test of tag membership.
+
+        .. code-block:: python
 
             '245' in record
-
         """
         fields = self.get_fields(tag)
         return len(fields) > 0
@@ -147,17 +144,17 @@ class Record(Iterator):
         return self.fields[self.__pos - 1]
 
     def add_field(self, *fields):
-        """
-        add_field() will add pymarc.Field objects to a Record object.
+        """Add pymarc.Field objects to a Record object.
+
         Optionally you can pass in multiple fields.
         """
         self.fields.extend(fields)
 
     def add_grouped_field(self, *fields):
-        """
-        add_grouped_field() will add pymarc.Field objects to a Record object,
-        attempting to maintain a loose numeric order per the MARC standard for
-        "Organization of the record" (http://www.loc.gov/marc/96principl.html)
+        """Add pymarc.Field objects to a Record object and sort them "grouped".
+
+        Which means, attempting to maintain a loose numeric order per the MARC standard
+        for "Organization of the record" (http://www.loc.gov/marc/96principl.html).
         Optionally you can pass in multiple fields.
         """
         for f in fields:
@@ -167,9 +164,9 @@ class Record(Iterator):
             self._sort_fields(f, "grouped")
 
     def add_ordered_field(self, *fields):
-        """
-        add_ordered_field() will add pymarc.Field objects to a Record object,
-        attempting to maintain a strict numeric order.
+        """Add pymarc.Field objects to a Record object and sort them "ordered".
+
+        Which means, attempting to maintain a strict numeric order.
         Optionally you can pass in multiple fields.
         """
         for f in fields:
@@ -179,6 +176,7 @@ class Record(Iterator):
             self._sort_fields(f, "ordered")
 
     def _sort_fields(self, field, mode):
+        """Sort fields by `mode`."""
         if mode == "grouped":
             tag = int(field.tag[0])
         else:
@@ -204,10 +202,7 @@ class Record(Iterator):
                 break
 
     def remove_field(self, *fields):
-        """
-        remove_field() will remove one or more pymarc.Field objects from
-        a Record object.
-        """
+        """Remove one or more pymarc.Field objects from a Record object."""
         for f in fields:
             try:
                 self.fields.remove(f)
@@ -215,25 +210,26 @@ class Record(Iterator):
                 raise FieldNotFound
 
     def remove_fields(self, *tags):
-        """
-        Remove all the fields with the tags passed to the function:
+        """Remove all the fields with the tags passed to the function.
 
+        .. code-block:: python
+
+            # remove all the fields marked with tags '200' or '899'.
             self.remove_fields('200', '899')
-
-        will remove all the fields marked with tags '200' or '899'.
         """
         self.fields[:] = (field for field in self.fields if field.tag not in tags)
 
     def get_fields(self, *args):
-        """
-        When passed a tag ('245'), get_fields() will return a list of all the
-        fields in a record with a given tag.
+        """Return a list of all the fields in a record tags matching `args`.
+
+        .. code-block:: python
 
             title = record.get_fields('245')
 
-        If no fields with the specified
-        tag are found then an empty list is returned. If you are interested
-        in more than one tag you can pass in a list:
+        If no fields with the specified tag are found then an empty list is returned.
+        If you are interested in more than one tag you can pass it as multiple arguments.
+
+        .. code-block:: python
 
             subjects = record.get_fields('600', '610', '650')
 
@@ -254,12 +250,10 @@ class Record(Iterator):
         utf8_handling="strict",
         encoding="iso8859-1",
     ):
-        """
-        decode_marc() accepts a MARC record in transmission format as a
-        a string argument, and will populate the object based on the data
-        found. The Record constructor actually uses decode_marc() behind
-        the scenes when you pass in a chunk of MARC data to it.
+        """Populate the object based on the `marc`` record in transmission format.
 
+        The Record constructor actually uses decode_marc() behind the scenes when you
+        pass in a chunk of MARC data to it.
         """
         # extract record leader
         self.leader = marc[0:LEADER_LEN].decode("ascii")
@@ -376,9 +370,7 @@ class Record(Iterator):
             raise NoFieldsFound
 
     def as_marc(self):
-        """
-        returns the record serialized as MARC21
-        """
+        """Returns the record serialized as MARC21."""
         fields = b""
         directory = b""
         offset = 0
@@ -431,9 +423,7 @@ class Record(Iterator):
     as_marc21 = as_marc
 
     def as_dict(self):
-        """
-        Turn a MARC record into a dictionary, which is used for ``as_json``.
-        """
+        """Turn a MARC record into a dictionary, which is used for ``as_json``."""
         record = {}
         record["leader"] = str(self.leader)
         record["fields"] = []
@@ -451,16 +441,15 @@ class Record(Iterator):
         return record  # as dict
 
     def as_json(self, **kwargs):
-        """
-        Serialize a record as JSON according to
+        """Serialize a record as JSON.
+
+        See:
         http://dilettantes.code4lib.org/blog/2010/09/a-proposal-to-serialize-marc-in-json/
         """
         return json.dumps(self.as_dict(), **kwargs)
 
     def title(self):
-        """
-        Returns the title of the record (245 $a and $b).
-        """
+        """Returns the title of the record (245 $a and $b)."""
         try:
             title = self["245"]["a"]
         except TypeError:
@@ -473,9 +462,7 @@ class Record(Iterator):
         return title
 
     def issn_title(self):
-        """
-        Returns the key title of the record (222 $a and $b).
-        """
+        """Returns the key title of the record (222 $a and $b)."""
         try:
             title = self["222"]["a"]
         except TypeError:
@@ -488,9 +475,9 @@ class Record(Iterator):
         return title
 
     def isbn(self):
-        """
-        Returns the first ISBN in the record or None if one is not
-        present. The returned ISBN will be all numeric, except for an
+        """Returns the first ISBN in the record or None if one is not present.
+
+        The returned ISBN will be all numeric, except for an
         x/X which may occur in the checksum position.  Dashes and
         extraneous information will be automatically removed. If you need
         this information you'll want to look directly at the 020 field,
@@ -507,16 +494,15 @@ class Record(Iterator):
         return None
 
     def issn(self):
-        """
-        Returns the ISSN number [022]['a'] in the record or None
-        """
+        """Returns the ISSN number [022]['a'] in the record or None."""
         try:
             return self["022"]["a"]
         except TypeError:
             return None
 
     def sudoc(self):
-        """
+        """Returns a SuDoc classification number.
+
         Returns a Superintendent of Documents (SuDoc) classification number
         held in the 086 MARC tag. Classification number will be made up of
         a variety of dashes, dots, slashes, and colons. More information
@@ -528,6 +514,7 @@ class Record(Iterator):
         return None
 
     def author(self):
+        """Returns the author from field 100, 110 or 111."""
         if self["100"]:
             return self["100"].format_field()
         elif self["110"]:
@@ -537,6 +524,7 @@ class Record(Iterator):
         return None
 
     def uniformtitle(self):
+        """Returns the uniform title from field 130 or 240."""
         if self["130"]:
             return self["130"].format_field()
         elif self["240"]:
@@ -544,19 +532,20 @@ class Record(Iterator):
         return None
 
     def series(self):
-        """
+        """Returns series fields.
+
         Note: 490 supersedes the 440 series statement which was both
         series statement and added entry. 8XX fields are added entries.
         """
-        serieslist = self.get_fields("440", "490", "800", "810", "811", "830")
-        return serieslist
+        return self.get_fields("440", "490", "800", "810", "811", "830")
 
     def subjects(self):
-        """
+        """Returns subjects fields.
+
         Note: Fields 690-699 are considered "local" added entry fields but
         occur with some frequency in OCLC and RLIN records.
         """
-        subjlist = self.get_fields(
+        return self.get_fields(
             "600",
             "610",
             "611",
@@ -578,14 +567,14 @@ class Record(Iterator):
             "698",
             "699",
         )
-        return subjlist
 
     def addedentries(self):
-        """
+        """Returns Added entries fields.
+
         Note: Fields 790-799 are considered "local" added entry fields but
         occur with some frequency in OCLC and RLIN records.
         """
-        aelist = self.get_fields(
+        return self.get_fields(
             "700",
             "710",
             "711",
@@ -604,17 +593,14 @@ class Record(Iterator):
             "798",
             "799",
         )
-        return aelist
 
     def location(self):
-        loc = self.get_fields("852")
-        return loc
+        """Returns location field (852)."""
+        return self.get_fields("852")
 
     def notes(self):
-        """
-        Return all 5xx fields in an array.
-        """
-        notelist = self.get_fields(
+        """Return notes fields (all 5xx fields)."""
+        return self.get_fields(
             "500",
             "501",
             "502",
@@ -674,16 +660,14 @@ class Record(Iterator):
             "598",
             "599",
         )
-        return notelist
 
     def physicaldescription(self):
-        """
-        Return all 300 fields in an array
-        """
+        """Return physical description fields (300)."""
         return self.get_fields("300")
 
     def publisher(self):
-        """
+        """Return publisher from 260 or 264.
+
         Note: 264 field with second indicator '1' indicates publisher.
         """
         for f in self.get_fields("260", "264"):
@@ -695,24 +679,26 @@ class Record(Iterator):
         return None
 
     def pubyear(self):
+        """Returns publication year from 260 or 264."""
         for f in self.get_fields("260", "264"):
             if self["260"]:
                 return self["260"]["c"]
             if self["264"] and f.indicator2 == "1":
                 return self["264"]["c"]
-
         return None
 
 
-def map_marc8_record(r):
-    r.fields = map(map_marc8_field, r.fields)
-    l = list(r.leader)
-    l[9] = "a"  # see http://www.loc.gov/marc/specifications/speccharucs.html
-    r.leader = "".join(l)
-    return r
+def map_marc8_record(record):
+    """Map MARC-8 record."""
+    record.fields = map(map_marc8_field, record.fields)
+    leader = list(record.leader)
+    leader[9] = "a"  # see http://www.loc.gov/marc/specifications/speccharucs.html
+    record.leader = "".join(leader)
+    return record
 
 
 def normalize_subfield_code(subfield):
+    """Normalize subfield code."""
     skip_bytes = 1
     try:
         text_subfield = subfield.decode("utf-8")

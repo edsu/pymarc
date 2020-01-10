@@ -1,17 +1,20 @@
-"pymarc marcjson file."
+"""From JSON to MARC21."""
 
 from pymarc import Field, Record, JSONReader
-import json, re
 
 
 class JsonHandler:
+    """Handle JSON."""
+
     def __init__(self):
+        """Init."""
         self.records = []
         self._record = None
         self._field = None
         self._text = []
 
     def element(self, element_dict, name=None):
+        """Converts a JSON `element_dict` to pymarc fields."""
         if not name:
             self._record = Record()
             self.element(element_dict, "leader")
@@ -39,6 +42,7 @@ class JsonHandler:
                 self._field.add_subfield(code, text)
 
     def elements(self, dict_list):
+        """Sends `dict_list` to `element`."""
         if type(dict_list) is not list:
             dict_list = [dict_list]
         for rec in dict_list:
@@ -46,10 +50,12 @@ class JsonHandler:
         return self.records
 
     def process_record(self, record):
+        """Append `record` to `self.records`."""
         self.records.append(record)
 
 
 def parse_json_to_array(json_file):
+    """JSON to elements."""
     json_reader = JSONReader(json_file)
     handler = JsonHandler()
     return handler.elements(json_reader.records)

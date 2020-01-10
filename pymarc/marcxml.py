@@ -1,18 +1,18 @@
-"pymarc marcxml file."
+"""From XML to MARC21 and back again."""
 
-import logging
+import unicodedata
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
-import unicodedata
 
 import six
+
+from pymarc import Field, MARC8ToUnicode, Record
 
 try:
     import xml.etree.ElementTree as ET  # builtin in Python 2.5
 except ImportError:
     import elementtree.ElementTree as ET
 
-from pymarc import Record, Field, MARC8ToUnicode
 
 XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
 MARC_XML_NS = "http://www.loc.gov/MARC21/slim"
@@ -20,8 +20,8 @@ MARC_XML_SCHEMA = "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/m
 
 
 class XmlHandler(ContentHandler):
+    """XML Handler.
 
-    """
     You can subclass XmlHandler and add your own process_record
     method that'll be passed a pymarc.Record as it becomes
     available. This could be useful if you want to stream the
@@ -30,6 +30,11 @@ class XmlHandler(ContentHandler):
     """
 
     def __init__(self, strict=False, normalize_form=None):
+        """Initialize XmlHandler.
+
+        * `strict` will ignore elements not matching MARC_XML_NS.
+        * see unicodedata.normalize for valid `normalize_form` values
+        """
         self.records = []
         self._record = None
         self._field = None
@@ -39,6 +44,7 @@ class XmlHandler(ContentHandler):
         self.normalize_form = normalize_form
 
     def startElementNS(self, name, qname, attrs):
+        """Start element NS."""
         if self._strict and name[0] != MARC_XML_NS:
             return
 
@@ -59,6 +65,7 @@ class XmlHandler(ContentHandler):
             self._subfield_code = attrs[(None, "code")]
 
     def endElementNS(self, name, qname):
+        """End element NS."""
         if self._strict and name[0] != MARC_XML_NS:
             return
 
@@ -88,16 +95,16 @@ class XmlHandler(ContentHandler):
         self._text = []
 
     def characters(self, chars):
+        """Append `chars` to `_text`."""
         self._text.append(chars)
 
     def process_record(self, record):
+        """Append `record` to `records`."""
         self.records.append(record)
 
 
 def parse_xml(xml_file, handler):
-    """
-    parse a file with a given subclass of xml.sax.handler.ContentHandler
-    """
+    """Parse a file with a given subclass of xml.sax.handler.ContentHandler."""
     parser = make_parser()
     parser.setContentHandler(handler)
     parser.setFeature(feature_namespaces, 1)
@@ -105,14 +112,17 @@ def parse_xml(xml_file, handler):
 
 
 def map_xml(function, *files):
-    """
-    map a function onto the file, so that for each record that is
-    parsed the function will get called with the extracted record
+    """Map a function onto the file.
 
-    def do_it(r):
-      print(r)
+    So that for each record that is parsed the function will get called with the
+    extracted record
 
-    map_xml(do_it, 'marc.xml')
+    .. code-block:: python
+
+        def do_it(r):
+            print(r)
+
+        map_xml(do_it, 'marc.xml')
     """
     handler = XmlHandler()
     handler.process_record = function
@@ -121,11 +131,11 @@ def map_xml(function, *files):
 
 
 def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
-    """
-    parse an xml file and return the records as an array. Instead of passing in
-    a file path you can also pass in an open file handle, or a file like object like
-    StringIO. If you would like the parser to explicitly check the namespaces
-    for the MARCSlim namespace use the strict=True option. Valid values for
+    """Parse an XML file and return the records as an array.
+
+    Instead of passing in a file path you can also pass in an open file handle, or a file
+    like object like StringIO. If you would like the parser to explicitly check the
+    namespaces for the MARCSlim namespace use the strict=True option. Valid values for
     normalize_form are 'NFC', 'NFKC', 'NFD', and 'NFKD'. See
     unicodedata.normalize for more info on these.
     """
@@ -135,14 +145,16 @@ def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
 
 
 def record_to_xml(record, quiet=False, namespace=False):
+    """From MARC to XML."""
     node = record_to_xml_node(record, quiet, namespace)
     return ET.tostring(node)
 
 
 def record_to_xml_node(record, quiet=False, namespace=False):
-    """
-    converts a record object to a chunk of xml. If you would like to
-    include the marcxml namespace in the root tag set namespace to True.
+    """Converts a record object to a chunk of XML.
+
+    If you would like to include the marcxml namespace in the root tag set namespace to
+    True.
     """
     # helper for converting non-unicode data to unicode
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?

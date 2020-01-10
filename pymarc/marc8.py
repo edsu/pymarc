@@ -1,5 +1,7 @@
-# see http://www.loc.gov/marc/specifications/speccharmarc8.html
-"pymarc marc8.py file."
+"""Handle MARC-8 files.
+
+see http://www.loc.gov/marc/specifications/speccharmarc8.html
+"""
 
 import sys
 import unicodedata
@@ -9,11 +11,11 @@ from pymarc import marc8_mapping
 
 
 def marc8_to_unicode(marc8, hide_utf8_warnings=False):
-    """
-    Pass in a string, and get back a Unicode object.
+    """Pass in a string, and get back a Unicode object.
 
-      print marc8_to_unicode(record.title())
+    .. code-block:: python
 
+        print marc8_to_unicode(record.title())
     """
     # XXX: might be good to stash away a converter somehow
     # instead of always re-creating it
@@ -41,10 +43,11 @@ def marc8_to_unicode(marc8, hide_utf8_warnings=False):
 
 
 class MARC8ToUnicode:
-    """
-    Converts MARC-8 to Unicode.  Note that currently, unicode strings
-    aren't normalized, and some codecs (e.g. iso8859-1) will fail on
-    such strings.  When I can require python 2.3, this will go away.
+    """Converts MARC-8 to Unicode.
+
+    Note that currently, unicode strings aren't normalized, and some codecs (e.g.
+    iso8859-1) will fail on such strings.  When I can require python 2.3, this will go
+    away.
 
     Warning: MARC-8 EACC (East Asian characters) makes some
     distinctions which aren't captured in Unicode.  The LC tables give
@@ -63,6 +66,7 @@ class MARC8ToUnicode:
     ansel = 0x45
 
     def __init__(self, G0=basic_latin, G1=ansel, quiet=False):
+        """Init."""
         self.g0 = G0
         self.g0_set = set([b"(", b",", b"$"])
         self.g1 = G1
@@ -70,6 +74,7 @@ class MARC8ToUnicode:
         self.quiet = quiet
 
     def translate(self, marc8_string):
+        """Translate."""
         # don't choke on empty marc8_string
         if not marc8_string:
             return u""
