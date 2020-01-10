@@ -19,7 +19,6 @@ except ImportError:
 
 
 class Writer(object):
-
     def __init__(self, file_handle):
         self.file_handle = file_handle
 
@@ -69,7 +68,7 @@ class JSONWriter(Writer):
         """
         super(JSONWriter, self).__init__(file_handle)
         self.write_count = 0
-        self.file_handle.write('[')
+        self.file_handle.write("[")
 
     def write(self, record):
         """
@@ -77,8 +76,8 @@ class JSONWriter(Writer):
         """
         Writer.write(self, record)
         if self.write_count > 0:
-            self.file_handle.write(',')
-        json.dump(record.as_dict(), self.file_handle, separators=(',', ':'))
+            self.file_handle.write(",")
+        json.dump(record.as_dict(), self.file_handle, separators=(",", ":"))
         self.write_count += 1
 
     def close(self, close_fh=True):
@@ -88,7 +87,7 @@ class JSONWriter(Writer):
         If close_fh is False close will also close the underlying file
         handle that was passed in to the constructor. The default is True.
         """
-        self.file_handle.write(']')
+        self.file_handle.write("]")
         Writer.close(self, close_fh)
 
 
@@ -169,7 +168,7 @@ class TextWriter(Writer):
         """
         Writer.write(self, record)
         if self.write_count > 0:
-            self.file_handle.write('\n')
+            self.file_handle.write("\n")
         self.file_handle.write(str(record))
         self.write_count += 1
 
@@ -209,10 +208,8 @@ class XMLWriter(Writer):
         You need to pass in a binary file like object.
         """
         super(XMLWriter, self).__init__(file_handle)
-        self.file_handle.write(
-            b'<?xml version="1.0" encoding="UTF-8"?>')
-        self.file_handle.write(
-            b'<collection xmlns="http://www.loc.gov/MARC21/slim">')
+        self.file_handle.write(b'<?xml version="1.0" encoding="UTF-8"?>')
+        self.file_handle.write(b'<collection xmlns="http://www.loc.gov/MARC21/slim">')
 
     def write(self, record):
         """
@@ -220,7 +217,7 @@ class XMLWriter(Writer):
         """
         Writer.write(self, record)
         node = pymarc.record_to_xml_node(record)
-        self.file_handle.write(ET.tostring(node, encoding='utf-8'))
+        self.file_handle.write(ET.tostring(node, encoding="utf-8"))
 
     def close(self, close_fh=True):
         """
@@ -229,5 +226,5 @@ class XMLWriter(Writer):
         If close_fh is False close will also close the underlying file handle
         that was passed in to the constructor. The default is True.
         """
-        self.file_handle.write(b'</collection>')
+        self.file_handle.write(b"</collection>")
         Writer.close(self, close_fh)

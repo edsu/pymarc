@@ -8,23 +8,26 @@ from six.moves import cStringIO as StringIO
 
 
 class XmlTest(unittest.TestCase):
-
     def test_map_xml(self):
         self.seen = 0
+
         def count(record):
             self.seen += 1
-        pymarc.map_xml(count, 'test/batch.xml')
+
+        pymarc.map_xml(count, "test/batch.xml")
         self.assertEqual(2, self.seen)
 
     def test_multi_map_xml(self):
         self.seen = 0
+
         def count(record):
             self.seen += 1
-        pymarc.map_xml(count, 'test/batch.xml', 'test/batch.xml')
+
+        pymarc.map_xml(count, "test/batch.xml", "test/batch.xml")
         self.assertEqual(4, self.seen)
 
     def test_parse_to_array(self):
-        records = pymarc.parse_xml_to_array('test/batch.xml')
+        records = pymarc.parse_xml_to_array("test/batch.xml")
         self.assertEqual(len(records), 2)
 
         # should've got two records
@@ -36,19 +39,20 @@ class XmlTest(unittest.TestCase):
         self.assertEqual(len(record.get_fields()), 18)
 
         # check the content of a control field
-        self.assertEqual(record['008'].data,
-                         u'910926s1957    nyuuun              eng  ')
+        self.assertEqual(
+            record["008"].data, u"910926s1957    nyuuun              eng  "
+        )
 
         # check a data field with subfields
-        field = record['245']
-        self.assertEqual(field.indicator1, '0')
-        self.assertEqual(field.indicator2, '4')
-        self.assertEqual(field['a'], u'The Great Ray Charles')
-        self.assertEqual(field['h'], u'[sound recording].')
+        field = record["245"]
+        self.assertEqual(field.indicator1, "0")
+        self.assertEqual(field.indicator2, "4")
+        self.assertEqual(field["a"], u"The Great Ray Charles")
+        self.assertEqual(field["h"], u"[sound recording].")
 
     def test_xml(self):
         # read in xml to a record
-        record1 = pymarc.parse_xml_to_array('test/batch.xml')[0]
+        record1 = pymarc.parse_xml_to_array("test/batch.xml")[0]
         # generate xml
         xml = pymarc.record_to_xml(record1)
         # parse generated xml
@@ -67,19 +71,21 @@ class XmlTest(unittest.TestCase):
             if field1[pos].is_control_field():
                 self.assertEqual(field1[pos].data, field2[pos].data)
             else:
-                self.assertEqual(field1[pos].get_subfields(), field2[pos].get_subfields())
+                self.assertEqual(
+                    field1[pos].get_subfields(), field2[pos].get_subfields()
+                )
                 self.assertEqual(field1[pos].indicators, field2[pos].indicators)
             pos += 1
 
     def test_strict(self):
-        a = pymarc.parse_xml_to_array(open('test/batch.xml'), strict=True)
+        a = pymarc.parse_xml_to_array(open("test/batch.xml"), strict=True)
         self.assertEqual(len(a), 2)
 
     def test_xml_namespaces(self):
         """ Tests the 'namespace' parameter of the record_to_xml() method
         """
         # get a test record
-        fh = open('test/test.dat', 'rb')
+        fh = open("test/test.dat", "rb")
         record = next(pymarc.reader.MARCReader(fh))
         # record_to_xml() with quiet set to False should generate errors
         #   and write them to sys.stderr
@@ -95,12 +101,14 @@ class XmlTest(unittest.TestCase):
         fh.close()
 
     def test_bad_tag(self):
-        a = pymarc.parse_xml_to_array(open('test/bad_tag.xml'))
+        a = pymarc.parse_xml_to_array(open("test/bad_tag.xml"))
         self.assertEqual(len(a), 1)
 
+
 def suite():
-    test_suite = unittest.makeSuite(XmlTest, 'test')
+    test_suite = unittest.makeSuite(XmlTest, "test")
     return test_suite
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

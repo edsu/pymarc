@@ -1,6 +1,6 @@
 # __init__.py
 
-r'''
+r"""
 pymarc is a python library for working with bibliographic data encoded
 in MARC21 (https://en.wikipedia.org/wiki/MARC_standards). It should
 work under python 2.x and 3.x. It provides an API for reading, writing
@@ -122,7 +122,7 @@ archaic MARC8 encoding. Also they will be able to use JSON and XML tools
 to get at the data they want instead of some crazy MARC processing
 library like, ahem, pymarc.
 
-'''
+"""
 
 
 from .record import *
@@ -137,5 +137,5 @@ from .marcjson import *
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
 
+    doctest.testmod()

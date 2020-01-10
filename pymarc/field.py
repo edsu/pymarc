@@ -28,7 +28,8 @@ class Field(Iterator):
         field = Field(tag='001', data='fol05731351')
 
     """
-    def __init__(self, tag, indicators=None, subfields=None, data=u''):
+
+    def __init__(self, tag, indicators=None, subfields=None, data=u""):
         if indicators == None:
             indicators = []
         if subfields == None:
@@ -37,12 +38,12 @@ class Field(Iterator):
 
         # attempt to normalize integer tags if necessary
         try:
-            self.tag = '%03i' % int(tag)
+            self.tag = "%03i" % int(tag)
         except ValueError:
-            self.tag = '%03s' % tag
+            self.tag = "%03s" % tag
 
         # assume controlfields are numeric only; replicates ruby-marc behavior
-        if self.tag < '010' and self.tag.isdigit():
+        if self.tag < "010" and self.tag.isdigit():
             self.data = data
         else:
             self.indicators = indicators
@@ -66,16 +67,16 @@ class Field(Iterator):
         [3] http://www.loc.gov/marc/mnemonics.html
         """
         if self.is_control_field():
-            text = '=%s  %s' % (self.tag, self.data.replace(' ','\\'))
+            text = "=%s  %s" % (self.tag, self.data.replace(" ", "\\"))
         else:
-            text = '=%s  ' % (self.tag)
+            text = "=%s  " % (self.tag)
             for indicator in self.indicators:
-                if indicator in (' ','\\'):
-                    text += '\\'
+                if indicator in (" ", "\\"):
+                    text += "\\"
                 else:
-                    text += '%s' % indicator
+                    text += "%s" % indicator
             for subfield in self:
-                text += ('$%s%s' % subfield)
+                text += "$%s%s" % subfield
         return text
 
     def __getitem__(self, subfield):
@@ -114,10 +115,10 @@ class Field(Iterator):
             raise KeyError("more than one code '%s'" % code)
         elif len(subfields) == 0:
             raise KeyError("no code '%s'" % code)
-        num_code = len(self.subfields)//2
+        num_code = len(self.subfields) // 2
         while num_code >= 0:
-            if self.subfields[(num_code*2)-2] == code:
-                self.subfields[(num_code*2)-1] = value
+            if self.subfields[(num_code * 2) - 2] == code:
+                self.subfields[(num_code * 2) - 1] = value
                 break
             num_code -= 1
 
@@ -125,11 +126,10 @@ class Field(Iterator):
         """
         Needed for iteration.
         """
-        if not hasattr(self, 'subfields'):
+        if not hasattr(self, "subfields"):
             raise StopIteration
         while self.__pos < len(self.subfields):
-            subfield = (self.subfields[ self.__pos ],
-                self.subfields[ self.__pos+1 ])
+            subfield = (self.subfields[self.__pos], self.subfields[self.__pos + 1])
             self.__pos += 2
             return subfield
         raise StopIteration
@@ -144,7 +144,7 @@ class Field(Iterator):
         value_list = []
         for subfield in self:
             value_list.append(subfield[1].strip())
-        return ' '.join(value_list)
+        return " ".join(value_list)
 
     def get_subfields(self, *codes):
         """
@@ -205,7 +205,7 @@ class Field(Iterator):
         Returns true or false if the field is considered a control field.
         Control fields lack indicators and subfields.
         """
-        if self.tag < '010' and self.tag.isdigit():
+        if self.tag < "010" and self.tag.isdigit():
             return True
         return False
 
@@ -232,16 +232,17 @@ class Field(Iterator):
         """
         if self.is_control_field():
             return self.data
-        fielddata = ''
+        fielddata = ""
         for subfield in self:
-            if subfield[0] == '6':
+            if subfield[0] == "6":
                 continue
             if not self.is_subject_field():
-                fielddata += ' %s' % subfield[1]
+                fielddata += " %s" % subfield[1]
             else:
-                if subfield[0] not in ('v', 'x', 'y', 'z'):
-                    fielddata += ' %s' % subfield[1]
-                else: fielddata += ' -- %s' % subfield[1]
+                if subfield[0] not in ("v", "x", "y", "z"):
+                    fielddata += " %s" % subfield[1]
+                else:
+                    fielddata += " -- %s" % subfield[1]
         return fielddata.strip()
 
     def is_subject_field(self):
@@ -249,7 +250,7 @@ class Field(Iterator):
         Returns True or False if the field is considered a subject
         field.  Used by format_field.
         """
-        if self.tag.startswith('6'):
+        if self.tag.startswith("6"):
             return True
         return False
 
@@ -276,6 +277,7 @@ class RawField(Field):
 
     Should only be used when input records are wrongly encoded.
     """
+
     def as_marc(self, encoding=None):
         """
         used during conversion of a field to raw marc
@@ -284,9 +286,9 @@ class RawField(Field):
             logging.warn("Attempt to force a RawField into encoding %s", encoding)
         if self.is_control_field():
             return self.data + END_OF_FIELD
-        marc = self.indicator1.encode('ascii') + self.indicator2.encode('ascii')
+        marc = self.indicator1.encode("ascii") + self.indicator2.encode("ascii")
         for subfield in self:
-            marc += SUBFIELD_INDICATOR.encode('ascii') + subfield[0] + subfield[1]
+            marc += SUBFIELD_INDICATOR.encode("ascii") + subfield[0] + subfield[1]
         return marc + END_OF_FIELD
 
 

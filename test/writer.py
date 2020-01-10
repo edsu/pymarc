@@ -17,45 +17,39 @@ except ImportError:
 
 
 class JSONWriterTest(unittest.TestCase):
-
     def test_close_true(self):
         """
         If close_fh is true, then the file handle is also closed.
         """
         file_handle = StringIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.JSONWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close()
         self.assertTrue(
-            file_handle.closed,
-            'The file handle should close when the writer closes')
+            file_handle.closed, "The file handle should close when the writer closes"
+        )
 
     def test_close_false(self):
         """
         If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = StringIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.JSONWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
-            'The file handle should NOT close when the writer closes')
+            "The file handle should NOT close when the writer closes",
+        )
 
     def test_writing_0_records(self):
-        expected = json.loads(r"""
+        expected = json.loads(
+            r"""
             []
-        """)
+        """
+        )
         file_handle = StringIO()
         try:
             writer = pymarc.JSONWriter(file_handle)
@@ -66,14 +60,16 @@ class JSONWriterTest(unittest.TestCase):
             file_handle.close()
 
     def test_writing_empty_record(self):
-        expected = json.loads(r"""
+        expected = json.loads(
+            r"""
             [
                 {
                     "leader" : "          22        4500",
                     "fields" : []
                 }
             ]
-        """)
+        """
+        )
         file_handle = StringIO()
         try:
             writer = pymarc.JSONWriter(file_handle)
@@ -86,7 +82,8 @@ class JSONWriterTest(unittest.TestCase):
             file_handle.close()
 
     def test_writing_1_record(self):
-        expected = json.loads(r"""
+        expected = json.loads(
+            r"""
             [
                 {
                     "leader" : "          22        4500",
@@ -113,18 +110,16 @@ class JSONWriterTest(unittest.TestCase):
                     ]
                 }
             ]
-        """)
+        """
+        )
         file_handle = StringIO()
         try:
             writer = pymarc.JSONWriter(file_handle)
             record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
@@ -133,7 +128,8 @@ class JSONWriterTest(unittest.TestCase):
             file_handle.close()
 
     def test_writing_3_records(self):
-        expected = json.loads(r"""
+        expected = json.loads(
+            r"""
             [
                 {
                     "leader" : "          22        4500",
@@ -202,38 +198,30 @@ class JSONWriterTest(unittest.TestCase):
                     ]
                 }
             ]
-        """)
+        """
+        )
         file_handle = StringIO()
         try:
             writer = pymarc.JSONWriter(file_handle)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field(
-                    '008',
-                    data=u('090227s2009    mau                 chi d')))
+                pymarc.Field("008", data=u("090227s2009    mau                 chi d"))
+            )
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
-            writer.write(record)
-            record = pymarc.Record()
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             actual = json.loads(file_handle.getvalue())
@@ -243,66 +231,57 @@ class JSONWriterTest(unittest.TestCase):
 
 
 class MARCWriterTest(unittest.TestCase):
-
     def test_write(self):
 
         # write a record off to a file
-        file_handle = open('test/writer-test.dat', 'wb')
+        file_handle = open("test/writer-test.dat", "wb")
         writer = pymarc.MARCWriter(file_handle)
         record = pymarc.Record()
-        field = pymarc.Field('245', ['0', '0'], ['a', 'foo'])
+        field = pymarc.Field("245", ["0", "0"], ["a", "foo"])
         record.add_field(field)
         writer.write(record)
         writer.close()
         self.assertTrue(
-            file_handle.closed,
-            'The file handle should close when the writer closes')
+            file_handle.closed, "The file handle should close when the writer closes"
+        )
 
         # read it back in
-        reader = pymarc.MARCReader(open('test/writer-test.dat', 'rb'))
+        reader = pymarc.MARCReader(open("test/writer-test.dat", "rb"))
         r = next(reader)
         reader.close()
 
         # remove it
-        os.remove('test/writer-test.dat')
+        os.remove("test/writer-test.dat")
 
     def test_close_true(self):
         """
         If close_fh is true, then the file handle is also closed.
         """
         file_handle = BytesIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.MARCWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close()
         self.assertTrue(
-            file_handle.closed,
-            'The file handle should close when the writer closes')
+            file_handle.closed, "The file handle should close when the writer closes"
+        )
 
     def test_close_false(self):
         """
         If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = BytesIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.MARCWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
-            'The file handle should NOT close when the writer closes')
+            "The file handle should NOT close when the writer closes",
+        )
 
 
 class TextWriterTest(unittest.TestCase):
-
     def test_writing_0_records(self):
         file_handle = StringIO()
         try:
@@ -310,8 +289,9 @@ class TextWriterTest(unittest.TestCase):
             writer.close(close_fh=False)
             self.assertEqual(
                 file_handle.getvalue(),
-                '',
-                'Nothing should be have been written to the file handle')
+                "",
+                "Nothing should be have been written to the file handle",
+            )
         finally:
             file_handle.close()
 
@@ -326,13 +306,10 @@ class TextWriterTest(unittest.TestCase):
         try:
             writer = pymarc.TextWriter(file_handle)
             record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
@@ -359,32 +336,23 @@ class TextWriterTest(unittest.TestCase):
             writer = pymarc.TextWriter(file_handle)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field(
-                    '008',
-                    data=u('090227s2009    mau                 chi d')))
+                pymarc.Field("008", data=u("090227s2009    mau                 chi d"))
+            )
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
-            writer.write(record)
-            record = pymarc.Record()
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
@@ -411,45 +379,37 @@ class TextWriterTest(unittest.TestCase):
         If close_fh is true, then the file handle is also closed.
         """
         file_handle = StringIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.TextWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close()
         self.assertTrue(
-            file_handle.closed,
-            'The file handle should close when the writer closes')
+            file_handle.closed, "The file handle should close when the writer closes"
+        )
 
     def test_close_false(self):
         """
         If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = StringIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.TextWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
-            'The file handle should NOT close when the writer closes')
+            "The file handle should NOT close when the writer closes",
+        )
 
 
 class XMLWriterTest(unittest.TestCase):
-
     def test_writing_0_records(self):
         expected = r"""
             <?xml version="1.0" encoding="UTF-8"?>
             <collection xmlns="http://www.loc.gov/MARC21/slim">
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace('\n', '')
+        expected = textwrap.dedent(expected[1:]).replace("\n", "")
         if str != binary_type:
             expected = expected.encode()
         file_handle = BytesIO()
@@ -469,7 +429,7 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace('\n', '')
+        expected = textwrap.dedent(expected[1:]).replace("\n", "")
         if str != binary_type:
             expected = expected.encode()
         file_handle = BytesIO()
@@ -498,20 +458,17 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace('\n', '')
+        expected = textwrap.dedent(expected[1:]).replace("\n", "")
         if str != binary_type:
             expected = expected.encode()
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)
             record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
@@ -552,7 +509,7 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace('\n', '')
+        expected = textwrap.dedent(expected[1:]).replace("\n", "")
         if str != binary_type:
             expected = expected.encode()
         file_handle = BytesIO()
@@ -560,32 +517,23 @@ class XMLWriterTest(unittest.TestCase):
             writer = pymarc.XMLWriter(file_handle)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field(
-                    '008',
-                    data=u('090227s2009    mau                 chi d')))
+                pymarc.Field("008", data=u("090227s2009    mau                 chi d"))
+            )
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
+            writer.write(record)
+            record = pymarc.Record()
+            record.add_field(pymarc.Field("100", ["0", "0"], ["a", u("me")]))
             record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             record = pymarc.Record()
             record.add_field(
-                pymarc.Field('100', ['0', '0'], ['a', u('me')]))
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
-            writer.write(record)
-            record = pymarc.Record()
-            record.add_field(
-                pymarc.Field(
-                    '245',
-                    ['0', '0'],
-                    ['a', u('Foo /'), 'c', u('by me.')]))
+                pymarc.Field("245", ["0", "0"], ["a", u("Foo /"), "c", u("by me.")])
+            )
             writer.write(record)
             writer.close(close_fh=False)
             self.assertEquals(file_handle.getvalue(), expected)
@@ -597,43 +545,37 @@ class XMLWriterTest(unittest.TestCase):
         If close_fh is true, then the file handle is also closed.
         """
         file_handle = BytesIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.XMLWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close()
         self.assertTrue(
-            file_handle.closed,
-            'The file handle should close when the writer closes')
+            file_handle.closed, "The file handle should close when the writer closes"
+        )
 
     def test_close_false(self):
         """
         If close_fh is false, then the file handle is NOT closed.
         """
         file_handle = BytesIO()
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should be open')
+        self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.XMLWriter(file_handle)
-        self.assertFalse(
-            file_handle.closed,
-            'The file handle should still be open')
+        self.assertFalse(file_handle.closed, "The file handle should still be open")
         writer.close(close_fh=False)
         self.assertFalse(
             file_handle.closed,
-            'The file handle should NOT close when the writer closes')
+            "The file handle should NOT close when the writer closes",
+        )
 
 
 def suite():
-    json_suite = unittest.makeSuite(JSONWriterTest, 'test')
-    marc_suite = unittest.makeSuite(MARCWriterTest, 'test')
-    text_suite = unittest.makeSuite(TextWriterTest, 'test')
-    xml_suite = unittest.makeSuite(XMLWriterTest, 'test')
+    json_suite = unittest.makeSuite(JSONWriterTest, "test")
+    marc_suite = unittest.makeSuite(MARCWriterTest, "test")
+    text_suite = unittest.makeSuite(TextWriterTest, "test")
+    xml_suite = unittest.makeSuite(XMLWriterTest, "test")
     test_suite = unittest.TestSuite((json_suite, marc_suite, text_suite, xml_suite))
     return test_suite
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

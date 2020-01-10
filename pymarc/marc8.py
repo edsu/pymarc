@@ -7,6 +7,7 @@ import unicodedata
 from six import unichr
 from pymarc import marc8_mapping
 
+
 def marc8_to_unicode(marc8, hide_utf8_warnings=False):
     """
     Pass in a string, and get back a Unicode object.
@@ -21,10 +22,22 @@ def marc8_to_unicode(marc8, hide_utf8_warnings=False):
         return converter.translate(marc8)
     except IndexError:
         # convert IndexError into UnicodeDecodeErrors
-        raise UnicodeDecodeError("marc8_to_unicode", marc8, 0, len(marc8), "invalid multibyte character encoding")
+        raise UnicodeDecodeError(
+            "marc8_to_unicode",
+            marc8,
+            0,
+            len(marc8),
+            "invalid multibyte character encoding",
+        )
     except TypeError:
         # convert TypeError into UnicodeDecodeErrors
-        raise UnicodeDecodeError("marc8_to_unicode", marc8, 0, len(marc8), "invalid multibyte character encoding")
+        raise UnicodeDecodeError(
+            "marc8_to_unicode",
+            marc8,
+            0,
+            len(marc8),
+            "invalid multibyte character encoding",
+        )
 
 
 class MARC8ToUnicode:
@@ -45,45 +58,50 @@ class MARC8ToUnicode:
     or if you need the private-use Unicode character translations,
     please inform me, asl2@pobox.com.
     """
+
     basic_latin = 0x42
     ansel = 0x45
+
     def __init__(self, G0=basic_latin, G1=ansel, quiet=False):
         self.g0 = G0
-        self.g0_set = set([b'(', b',', b'$'])
+        self.g0_set = set([b"(", b",", b"$"])
         self.g1 = G1
-        self.g1_set = set([b')', b'-', b'$'])
+        self.g1_set = set([b")", b"-", b"$"])
         self.quiet = quiet
 
     def translate(self, marc8_string):
         # don't choke on empty marc8_string
         if not marc8_string:
-            return u''
+            return u""
         uni_list = []
         combinings = []
         pos = 0
         while pos < len(marc8_string):
             # http://www.loc.gov/marc/specifications/speccharmarc8.html
-            if marc8_string[pos:pos+1] == b'\x1b':
-                next_byte = marc8_string[pos+1:pos+2]
-                if (next_byte in self.g0_set):
+            if marc8_string[pos : pos + 1] == b"\x1b":
+                next_byte = marc8_string[pos + 1 : pos + 2]
+                if next_byte in self.g0_set:
                     if len(marc8_string) >= pos + 3:
-                        if marc8_string[pos+2:pos+3] == b',' and next_byte == b'$':
+                        if (
+                            marc8_string[pos + 2 : pos + 3] == b","
+                            and next_byte == b"$"
+                        ):
                             pos += 1
-                        self.g0 = ord(marc8_string[pos+2:pos+3])
+                        self.g0 = ord(marc8_string[pos + 2 : pos + 3])
                         pos = pos + 3
                         continue
                     else:
                         # if there aren't enough remaining characters, readd
                         # the escape character so it doesn't get lost; may
                         # help users diagnose problem records
-                        uni_list.append(marc8_string[pos:pos+1].decode('ascii'))
+                        uni_list.append(marc8_string[pos : pos + 1].decode("ascii"))
                         pos += 1
                         continue
 
                 elif next_byte in self.g1_set:
-                    if marc8_string[pos+2:pos+3] == b'-' and next_byte == b'$':
+                    if marc8_string[pos + 2 : pos + 3] == b"-" and next_byte == b"$":
                         pos += 1
-                    self.g1 = ord(marc8_string[pos+2:pos+3])
+                    self.g1 = ord(marc8_string[pos + 2 : pos + 3])
                     pos = pos + 3
                     continue
                 else:
@@ -97,23 +115,23 @@ class MARC8ToUnicode:
                         if pos == len(marc8_string):
                             break
 
-
             def is_multibyte(charset):
                 return charset == 0x31
 
             mb_flag = is_multibyte(self.g0)
 
             if mb_flag:
-                code_point = (ord(marc8_string[pos:pos+1]) * 65536 +
-                              ord(marc8_string[pos+1:pos+2]) * 256 +
-                              ord(marc8_string[pos+2:pos+3]))
+                code_point = (
+                    ord(marc8_string[pos : pos + 1]) * 65536
+                    + ord(marc8_string[pos + 1 : pos + 2]) * 256
+                    + ord(marc8_string[pos + 2 : pos + 3])
+                )
                 pos += 3
             else:
-                code_point = ord(marc8_string[pos:pos+1])
+                code_point = ord(marc8_string[pos : pos + 1])
                 pos += 1
 
-            if (code_point < 0x20 or
-                (code_point > 0x80 and code_point < 0xa0)):
+            if code_point < 0x20 or (code_point > 0x80 and code_point < 0xA0):
                 uni = unichr(code_point)
                 continue
 
@@ -132,9 +150,11 @@ class MARC8ToUnicode:
                 except KeyError:
                     pass
                 if not self.quiet:
-                    sys.stderr.write("Unable to parse character 0x%x in g0=%s g1=%s\n" %
-                        (code_point, self.g0, self.g1))
-                uni = ord(' ')
+                    sys.stderr.write(
+                        "Unable to parse character 0x%x in g0=%s g1=%s\n"
+                        % (code_point, self.g0, self.g1)
+                    )
+                uni = ord(" ")
                 cflag = False
 
             if cflag:
@@ -149,7 +169,7 @@ class MARC8ToUnicode:
         uni_str = u"".join(uni_list)
 
         # unicodedata.normalize not available until Python 2.3
-        if hasattr(unicodedata, 'normalize'):
-            uni_str = unicodedata.normalize('NFC', uni_str)
+        if hasattr(unicodedata, "normalize"):
+            uni_str = unicodedata.normalize("NFC", uni_str)
 
         return uni_str

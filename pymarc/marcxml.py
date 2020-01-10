@@ -18,6 +18,7 @@ XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
 MARC_XML_NS = "http://www.loc.gov/MARC21/slim"
 MARC_XML_SCHEMA = "http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
 
+
 class XmlHandler(ContentHandler):
 
     """
@@ -27,6 +28,7 @@ class XmlHandler(ContentHandler):
     records elsewhere (like to a rdbms) without having to store
     them all in memory.
     """
+
     def __init__(self, strict=False, normalize_form=None):
         self.records = []
         self._record = None
@@ -43,18 +45,18 @@ class XmlHandler(ContentHandler):
         element = name[1]
         self._text = []
 
-        if element == 'record':
+        if element == "record":
             self._record = Record()
-        elif element == 'controlfield':
-            tag = attrs.getValue((None, u'tag'))
+        elif element == "controlfield":
+            tag = attrs.getValue((None, u"tag"))
             self._field = Field(tag)
-        elif element == 'datafield':
-            tag = attrs.getValue((None, u'tag'))
-            ind1 = attrs.get((None, u'ind1'), u' ')
-            ind2 = attrs.get((None, u'ind2'), u' ')
+        elif element == "datafield":
+            tag = attrs.getValue((None, u"tag"))
+            ind1 = attrs.get((None, u"ind1"), u" ")
+            ind2 = attrs.get((None, u"ind2"), u" ")
             self._field = Field(tag, [ind1, ind2])
-        elif element == 'subfield':
-            self._subfield_code = attrs[(None, 'code')]
+        elif element == "subfield":
+            self._subfield_code = attrs[(None, "code")]
 
     def endElementNS(self, name, qname):
         if self._strict and name[0] != MARC_XML_NS:
@@ -62,23 +64,23 @@ class XmlHandler(ContentHandler):
 
         element = name[1]
         if self.normalize_form is not None:
-            text = unicodedata.normalize(self.normalize_form, u''.join(self._text))
+            text = unicodedata.normalize(self.normalize_form, u"".join(self._text))
         else:
-            text = u''.join(self._text)
+            text = u"".join(self._text)
 
-        if element == 'record':
+        if element == "record":
             self.process_record(self._record)
             self._record = None
-        elif element == 'leader':
+        elif element == "leader":
             self._record.leader = text
-        elif element == 'controlfield':
+        elif element == "controlfield":
             self._field.data = text
             self._record.add_field(self._field)
             self._field = None
-        elif element == 'datafield':
+        elif element == "datafield":
             self._record.add_field(self._field)
             self._field = None
-        elif element == 'subfield':
+        elif element == "subfield":
             self._field.subfields.append(self._subfield_code)
             self._field.subfields.append(text)
             self._subfield_code = None
@@ -91,6 +93,7 @@ class XmlHandler(ContentHandler):
     def process_record(self, record):
         self.records.append(record)
 
+
 def parse_xml(xml_file, handler):
     """
     parse a file with a given subclass of xml.sax.handler.ContentHandler
@@ -99,6 +102,7 @@ def parse_xml(xml_file, handler):
     parser.setContentHandler(handler)
     parser.setFeature(feature_namespaces, 1)
     parser.parse(xml_file)
+
 
 def map_xml(function, *files):
     """
@@ -115,6 +119,7 @@ def map_xml(function, *files):
     for xml_file in files:
         parse_xml(xml_file, handler)
 
+
 def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
     """
     parse an xml file and return the records as an array. Instead of passing in
@@ -128,9 +133,11 @@ def parse_xml_to_array(xml_file, strict=False, normalize_form=None):
     parse_xml(xml_file, handler)
     return handler.records
 
+
 def record_to_xml(record, quiet=False, namespace=False):
     node = record_to_xml_node(record, quiet, namespace)
     return ET.tostring(node)
+
 
 def record_to_xml_node(record, quiet=False, namespace=False):
     """
@@ -140,32 +147,33 @@ def record_to_xml_node(record, quiet=False, namespace=False):
     # helper for converting non-unicode data to unicode
     # TODO: maybe should set g0 and g1 appropriately using 066 $a and $b?
     marc8 = MARC8ToUnicode(quiet=quiet)
+
     def translate(data):
         if type(data) == six.text_type:
             return data
         else:
             return marc8.translate(data)
 
-    root = ET.Element('record')
+    root = ET.Element("record")
     if namespace:
-        root.set('xmlns', MARC_XML_NS)
-        root.set('xmlns:xsi', XSI_NS)
-        root.set('xsi:schemaLocation', MARC_XML_SCHEMA)
-    leader = ET.SubElement(root, 'leader')
+        root.set("xmlns", MARC_XML_NS)
+        root.set("xmlns:xsi", XSI_NS)
+        root.set("xsi:schemaLocation", MARC_XML_SCHEMA)
+    leader = ET.SubElement(root, "leader")
     leader.text = str(record.leader)
     for field in record:
         if field.is_control_field():
-            control_field = ET.SubElement(root, 'controlfield')
-            control_field.set('tag', field.tag)
+            control_field = ET.SubElement(root, "controlfield")
+            control_field.set("tag", field.tag)
             control_field.text = translate(field.data)
         else:
-            data_field = ET.SubElement(root, 'datafield')
-            data_field.set('ind1', field.indicators[0])
-            data_field.set('ind2', field.indicators[1])
-            data_field.set('tag', field.tag)
+            data_field = ET.SubElement(root, "datafield")
+            data_field.set("ind1", field.indicators[0])
+            data_field.set("ind2", field.indicators[1])
+            data_field.set("tag", field.tag)
             for subfield in field:
-                data_subfield = ET.SubElement(data_field, 'subfield')
-                data_subfield.set('code', subfield[0])
+                data_subfield = ET.SubElement(data_field, "subfield")
+                data_subfield.set("code", subfield[0])
                 data_subfield.text = translate(subfield[1])
 
     return root
