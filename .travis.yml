@@ -4,7 +4,6 @@ cache: pip
 python:
   - "2.7"
   - "3.3"
-    dist: "trusty"
   - "3.4"
   - "3.5"
   - "3.6"
@@ -13,6 +12,11 @@ python:
   - "3.8-dev"
   - "pypy"
   - "pypy3"
+
+matrix:
+  include:
+    - python: 3.3
+      dist: "trusty"
 
 script:
   - python setup.py test
