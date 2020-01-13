@@ -8,12 +8,22 @@ import six
 from six import Iterator
 
 from pymarc.constants import DIRECTORY_ENTRY_LEN, END_OF_RECORD, LEADER_LEN
-from pymarc.exceptions import (BadSubfieldCodeWarning, BaseAddressInvalid,
-                               BaseAddressNotFound, FieldNotFound,
-                               NoFieldsFound, RecordDirectoryInvalid,
-                               RecordLeaderInvalid)
-from pymarc.field import (END_OF_FIELD, SUBFIELD_INDICATOR, Field, RawField,
-                          map_marc8_field)
+from pymarc.exceptions import (
+    BadSubfieldCodeWarning,
+    BaseAddressInvalid,
+    BaseAddressNotFound,
+    FieldNotFound,
+    NoFieldsFound,
+    RecordDirectoryInvalid,
+    RecordLeaderInvalid,
+)
+from pymarc.field import (
+    END_OF_FIELD,
+    SUBFIELD_INDICATOR,
+    Field,
+    RawField,
+    map_marc8_field,
+)
 from pymarc.leader import Leader
 from pymarc.marc8 import marc8_to_unicode
 
