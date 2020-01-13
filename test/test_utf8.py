@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
-import unittest
-import pymarc
 import os
+import unittest
+
+import pymarc
 
 
 class MARCUnicodeTest(unittest.TestCase):
@@ -37,7 +36,7 @@ class MARCUnicodeTest(unittest.TestCase):
             os.remove("test/write-utf8-test.dat")
 
     def test_combining_diacritic(self):
-        """issue 74: raises UnicodeEncodeError on Python 2"""
+        """Issue 74: raises UnicodeEncodeError on Python 2."""
         reader = pymarc.MARCReader(open("test/diacritic.dat", "rb"))
         record = next(reader)
         str(record)

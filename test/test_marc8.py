@@ -1,14 +1,9 @@
-# coding: utf-8
+import os
 from unittest import TestCase, makeSuite
 
-import os
-import codecs
-import logging
+from six import binary_type, text_type, unichr
 
-from six import unichr
-from six import text_type, binary_type
-
-from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
+from pymarc import Field, MARCReader, MARCWriter, Record, marc8_to_unicode
 
 
 class MARC8Test(TestCase):
@@ -56,7 +51,7 @@ class MARC8Test(TestCase):
         with open("test/bad_eacc_encoding.dat", "rb") as fh:
             reader = MARCReader(fh, to_unicode=True, hide_utf8_warnings=True)
             try:
-                r = next(reader)
+                next(reader)
                 self.assertFalse("Was able to decode invalid MARC8")
             except UnicodeDecodeError:
                 self.assertTrue("Caught UnicodeDecodeError as expected")

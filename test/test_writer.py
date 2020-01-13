@@ -1,8 +1,10 @@
-import unittest
-import pymarc
 import os
 import textwrap
-from six import BytesIO, StringIO, u, binary_type
+import unittest
+
+from six import BytesIO, StringIO, binary_type, u
+
+import pymarc
 
 try:
     # the json module was included in the stdlib in python 2.6
@@ -18,9 +20,7 @@ except ImportError:
 
 class JSONWriterTest(unittest.TestCase):
     def test_close_true(self):
-        """
-        If close_fh is true, then the file handle is also closed.
-        """
+        """If close_fh is true, then the file handle is also closed."""
         file_handle = StringIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.JSONWriter(file_handle)
@@ -31,9 +31,7 @@ class JSONWriterTest(unittest.TestCase):
         )
 
     def test_close_false(self):
-        """
-        If close_fh is false, then the file handle is NOT closed.
-        """
+        """If close_fh is false, then the file handle is NOT closed."""
         file_handle = StringIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.JSONWriter(file_handle)
@@ -232,8 +230,7 @@ class JSONWriterTest(unittest.TestCase):
 
 class MARCWriterTest(unittest.TestCase):
     def test_write(self):
-
-        # write a record off to a file
+        """Write a record off to a file."""
         file_handle = open("test/writer-test.dat", "wb")
         writer = pymarc.MARCWriter(file_handle)
         record = pymarc.Record()
@@ -247,16 +244,14 @@ class MARCWriterTest(unittest.TestCase):
 
         # read it back in
         reader = pymarc.MARCReader(open("test/writer-test.dat", "rb"))
-        r = next(reader)
+        next(reader)
         reader.close()
 
         # remove it
         os.remove("test/writer-test.dat")
 
     def test_close_true(self):
-        """
-        If close_fh is true, then the file handle is also closed.
-        """
+        """If close_fh is true, then the file handle is also closed."""
         file_handle = BytesIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.MARCWriter(file_handle)
@@ -267,9 +262,7 @@ class MARCWriterTest(unittest.TestCase):
         )
 
     def test_close_false(self):
-        """
-        If close_fh is false, then the file handle is NOT closed.
-        """
+        """If close_fh is false, then the file handle is NOT closed."""
         file_handle = BytesIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.MARCWriter(file_handle)
@@ -375,9 +368,7 @@ class TextWriterTest(unittest.TestCase):
             file_handle.close()
 
     def test_close_true(self):
-        """
-        If close_fh is true, then the file handle is also closed.
-        """
+        """If close_fh is true, then the file handle is also closed."""
         file_handle = StringIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.TextWriter(file_handle)
@@ -388,9 +379,7 @@ class TextWriterTest(unittest.TestCase):
         )
 
     def test_close_false(self):
-        """
-        If close_fh is false, then the file handle is NOT closed.
-        """
+        """If close_fh is false, then the file handle is NOT closed."""
         file_handle = StringIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.TextWriter(file_handle)
@@ -541,9 +530,7 @@ class XMLWriterTest(unittest.TestCase):
             file_handle.close()
 
     def test_close_true(self):
-        """
-        If close_fh is true, then the file handle is also closed.
-        """
+        """If close_fh is true, then the file handle is also closed."""
         file_handle = BytesIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.XMLWriter(file_handle)
@@ -554,9 +541,7 @@ class XMLWriterTest(unittest.TestCase):
         )
 
     def test_close_false(self):
-        """
-        If close_fh is false, then the file handle is NOT closed.
-        """
+        """If close_fh is false, then the file handle is NOT closed."""
         file_handle = BytesIO()
         self.assertFalse(file_handle.closed, "The file handle should be open")
         writer = pymarc.XMLWriter(file_handle)

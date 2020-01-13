@@ -1,6 +1,6 @@
 import unittest
+
 import pymarc
-import os
 
 
 class OrderedFieldsTest(unittest.TestCase):

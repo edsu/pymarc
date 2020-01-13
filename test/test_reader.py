@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 import re
 import unittest
 
 import six
+
 import pymarc
 
 
@@ -16,7 +16,7 @@ class MARCReaderBaseTest(object):
     def test_string(self):
         # basic test of stringification
         starts_with_leader = re.compile("^=LDR")
-        has_numeric_tag = re.compile("\n=\d\d\d ")
+        has_numeric_tag = re.compile(r"\n=\d\d\d ")
         for record in self.reader:
             text = str(record)
             self.assertTrue(starts_with_leader.search(text), "got leader")
@@ -24,10 +24,7 @@ class MARCReaderBaseTest(object):
 
 
 class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
-    """
-    Tests for the pymarc.MARCReader class which provides iterator
-    based access to a MARC file.
-    """
+    """Tests MARCReader which provides iterator based access to a MARC file."""
 
     def setUp(self):
         self.reader = pymarc.MARCReader(open("test/test.dat", "rb"))
@@ -111,11 +108,7 @@ class MARCReaderStringTest(unittest.TestCase, MARCReaderBaseTest):
 
 
 class MARCReaderFilePermissiveTest(unittest.TestCase):
-    """
-    Tests for the pymarc.MARCReader class which provides iterator
-    based access to a MARC file in a permissive way
-
-    """
+    """Tests MARCReader which provides iterator based access in a permissive way."""
 
     def setUp(self):
         self.reader = pymarc.MARCReader(
@@ -127,7 +120,9 @@ class MARCReaderFilePermissiveTest(unittest.TestCase):
             self.reader.close()
 
     def test_permissive_mode(self):
-        """In bad_records.mrc we expect following records in the given order
+        """Test permissive mode.
+
+        In bad_records.mrc we expect following records in the given order :
 
         * working record
         * BaseAddressInvalid (base_address (99937) >= len(marc))

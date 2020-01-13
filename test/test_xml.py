@@ -1,10 +1,7 @@
-import sys
 import pymarc
 import unittest
 
-from os.path import getsize
 from six import BytesIO
-from six.moves import cStringIO as StringIO
 
 
 class XmlTest(unittest.TestCase):
@@ -82,8 +79,7 @@ class XmlTest(unittest.TestCase):
         self.assertEqual(len(a), 2)
 
     def test_xml_namespaces(self):
-        """ Tests the 'namespace' parameter of the record_to_xml() method
-        """
+        """Tests the 'namespace' parameter of the record_to_xml() method."""
         # get a test record
         fh = open("test/test.dat", "rb")
         record = next(pymarc.reader.MARCReader(fh))

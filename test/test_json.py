@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-
 import unittest
+
+from six import string_types as basestring
+
 import pymarc
 
 try:
     import json
 except ImportError:
     import simplejson as json
-
-from six import string_types as basestring
 
 
 class JsonReaderTest(unittest.TestCase):
@@ -20,9 +19,12 @@ class JsonReaderTest(unittest.TestCase):
             self.reader = pymarc.JSONReader(fh)
 
     def testRoundtrip(self):
-        """Tests that result of loading records from the test file
+        """Test from and to json.
+
+        Tests that result of loading records from the test file
         produces objects deeply equal to the result of loading
-        marc-in-json files directly"""
+        marc-in-json files directly
+        """
         recs = list(self.reader)
         self.assertEqual(
             len(self.in_json), len(recs), "Incorrect number of records found"
@@ -33,7 +35,7 @@ class JsonReaderTest(unittest.TestCase):
             self.assertEqual(comp, deserialized)
 
     def testOneRecord(self):
-        """Tests case when in source json there is only one record not wrapped in list"""
+        """Tests case when in source json there is only 1 record not wrapped in list."""
         data = json.dumps(self.in_json[0])
         reader = pymarc.JSONReader(data)
         self.assertEqual([rec.as_dict() for rec in reader][0], self.in_json[0])

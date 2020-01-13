@@ -82,7 +82,7 @@ class FieldTest(unittest.TestCase):
 
     def test_non_integer_tag(self):
         # make sure this doesn't throw an exception
-        field = Field(tag="3 0", indicators=[0, 1], subfields=["a", "foo"])
+        Field(tag="3 0", indicators=[0, 1], subfields=["a", "foo"])
 
     def test_add_subfield(self):
         field = Field(tag="245", indicators=[0, 1], subfields=["a", "foo"])
@@ -156,7 +156,7 @@ class FieldTest(unittest.TestCase):
 
     def test_iter_over_controlfield(self):
         try:
-            l = [subfield for subfield in self.controlfield]
+            [subfield for subfield in self.controlfield]
         except AttributeError as e:
             self.fail("Error during iteration: %s" % e)
 
