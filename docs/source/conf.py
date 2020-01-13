@@ -72,6 +72,7 @@ with open(os.path.join(os.path.dirname(__file__), "../../setup.py")) as setup_fi
     for line in setup_file:
         if line.startswith("version"):
             __, version = line.split(" = ")
+            version = version.replace('"', "")
             break
 release = version
 
