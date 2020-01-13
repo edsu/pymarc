@@ -1,17 +1,29 @@
-dist: "xenial"
-
 language: python
-script: python setup.py test
+cache: pip
 
-matrix:
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.8-dev"
+  - "pypy"
+  - "pypy3"
+
+jobs:
   include:
-    - python: "2.7"
-    - python: "3.3"
-      dist: "trusty"
-    - python: "3.4"
-    - python: "3.5"
-    - python: "3.6"
-    - python: "3.7"
-    - python: "3.8-dev"
-    - python: "pypy"
-    - python: "pypy3"
+    - stage: lint
+      name: "Check linting with flake8"
+      install: pip install -r requirements.dev.txt
+      script: find . -name \*.py -exec flake8 {} +
+      python: "3.7"
+    - stage: lint
+      name: "Check format with black"
+      install: pip install -r requirements.dev.txt
+      script: find . -name \*.py -exec black --quiet --diff {} +
+      python: "3.7"
+    - stage: test
+      script: python setup.py test
