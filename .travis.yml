@@ -13,6 +13,13 @@ python:
   - "pypy"
   - "pypy3"
 
+script:
+  - python setup.py test
+
+stages:
+  - lint
+  - test
+
 jobs:
   include:
     - stage: lint
@@ -26,4 +33,4 @@ jobs:
       script: find . -name \*.py -exec black --quiet --diff {} +
       python: "3.7"
     - stage: test
-      script: python setup.py test
+      name: "Run unit tests"
