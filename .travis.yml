@@ -1,22 +1,17 @@
 language: python
-cache: pip
-
-python:
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.8-dev"
-  - "pypy"
-  - "pypy3"
 
 matrix:
   include:
-    - python: 3.3
+    - python: "2.7"
+    - python: "pypy"
+    - python: "pypy3"
+    - python: "3.3"
       dist: "trusty"
+    - python: "3.4"
+    - python: "3.5"
+    - python: "3.6"
+    - python: "3.7"
+    - python: "3.8"
 
 script:
   - python setup.py test
@@ -38,4 +33,3 @@ jobs:
       script: find . -name \*.py -exec black --quiet --diff {} +
       python: "3.7"
     - stage: test
-      name: "Run unit tests"
