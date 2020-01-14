@@ -14,14 +14,14 @@ It should work under python 2.x and 3.x. It provides an API for reading, writing
 and modifying MARC records. It was mostly designed to be an emergency
 eject seat, for getting your data assets out of MARC and into some kind
 of saner representation. However over the years it has been used to
-create and modify MARC records, since despite repeated
-calls (https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page)
-for it to die as a format, MARC seems to be living quite happily as a
-zombie.
+create and modify MARC records, since despite `repeated calls`_ for it to die as a
+format, MARC seems to be living quite happily as a zombie.
 
 Below are some common examples of how you might want to use pymarc. If
 you run across an example that you think should be here please send a
 pull request.
+
+.. _repeated calls: https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page
 
 Reading
 ~~~~~~~
@@ -224,6 +224,28 @@ Leader
     :members:
     :undoc-members:
     :show-inheritance:
+
+Contributing
+============
+
+Feel free to `report bugs`_ you have encountered or `suggest new features`_.
+
+For any new development, please respect the standards in place on the project:
+
+* formatting with black_
+* validated by flake8_ 
+  and (coming soon) mypy_
+* tested with unittest_
+* compatible from python 3.3 to python 3.8
+
+To install development dependencies: `pip install -r requirements.dev.txt`.
+
+.. _report bugs: https://github.com/edsu/pymarc/issues
+.. _suggest new features: https://github.com/edsu/pymarc/pulls
+.. _black: https://github.com/psf/black
+.. _flake8: http://flake8.pycqa.org/en/latest
+.. _mypy: http://mypy-lang.org
+.. _unittest: https://docs.python.org/fr/3/library/unittest.html
 
 Indices and tables
 ==================
