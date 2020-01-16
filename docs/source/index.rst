@@ -142,6 +142,7 @@ archaic MARC8 encoding. Also they will be able to use JSON and XML tools
 to get at the data they want instead of some crazy MARC processing
 library like, ahem, pymarc.
 
+
 API Docs
 ========
 
@@ -225,27 +226,6 @@ Leader
     :undoc-members:
     :show-inheritance:
 
-Contributing
-============
-
-Feel free to `report bugs`_ you have encountered or `suggest new features`_.
-
-For any new development, please respect the standards in place on the project:
-
-* formatting with black_
-* validated by flake8_ 
-  and (coming soon) mypy_
-* tested with unittest_
-* compatible from python 3.3 to python 3.8
-
-To install development dependencies: `pip install -r requirements.dev.txt`.
-
-.. _report bugs: https://github.com/edsu/pymarc/issues
-.. _suggest new features: https://github.com/edsu/pymarc/pulls
-.. _black: https://github.com/psf/black
-.. _flake8: http://flake8.pycqa.org/en/latest
-.. _mypy: http://mypy-lang.org
-.. _unittest: https://docs.python.org/fr/3/library/unittest.html
 
 Indices and tables
 ==================
