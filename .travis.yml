@@ -13,11 +13,11 @@ jobs:
     - stage: lint
       name: "Check linting with flake8"
       install: pip install -r requirements.dev.txt
-      script: find . -name \*.py -exec flake8 {} +
+      script: flake8 .
     - stage: lint
       name: "Check format with black"
       install: pip install -r requirements.dev.txt
-      script: find . -name \*.py -exec black --quiet --diff {} +
+      script: black --quiet --diff .
     # Unit tests
     - stage: test
       name: "Unit tests python 2.7"
