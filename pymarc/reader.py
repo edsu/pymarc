@@ -3,14 +3,13 @@ import os
 import sys
 import json
 
-from six import Iterator
 from six import BytesIO, StringIO
 
 from pymarc import Record, Field
 from pymarc.exceptions import PymarcException, RecordLengthInvalid
 
 
-class Reader(Iterator):
+class Reader:
     """A base class for all iterating readers in the pymarc package."""
 
     def __iter__(self):

@@ -5,7 +5,6 @@ import unicodedata
 import warnings
 
 import six
-from six import Iterator
 
 from pymarc.constants import DIRECTORY_ENTRY_LEN, END_OF_RECORD, LEADER_LEN
 from pymarc.exceptions import (
@@ -45,7 +44,7 @@ isbn_regex = re.compile(r"([0-9\-xX]+)")
 
 
 @six.python_2_unicode_compatible
-class Record(Iterator):
+class Record:
     """A class for representing a MARC record.
 
     Each Record object is made up of multiple Field objects. You'll probably want to look

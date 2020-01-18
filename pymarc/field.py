@@ -2,12 +2,11 @@
 
 import logging
 
-from six import Iterator
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
 
 
-class Field(Iterator):
+class Field:
     """Field() pass in the field tag, indicators and subfields for the tag.
 
     .. code-block:: python
