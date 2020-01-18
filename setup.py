@@ -34,7 +34,6 @@ setup(
     author_email="ehs@pobox.com",
     license="http://www.opensource.org/licenses/bsd-license.php",
     packages=["pymarc"],
-    install_requires=["six>=1.9.0"],
     description="Read, write and modify MARC bibliographic data",
     long_description=long_description,
     long_description_content_type="text/markdown",
