@@ -4,7 +4,6 @@ import re
 import unicodedata
 import warnings
 
-import six
 
 from pymarc.constants import DIRECTORY_ENTRY_LEN, END_OF_RECORD, LEADER_LEN
 from pymarc.exceptions import (
@@ -26,7 +25,8 @@ from pymarc.field import (
 from pymarc.leader import Leader
 from pymarc.marc8 import marc8_to_unicode
 
-izip_longest = six.moves.zip_longest
+
+from itertools import zip_longest
 
 try:
     # the json module was included in the stdlib in python 2.6
@@ -43,7 +43,6 @@ except ImportError:
 isbn_regex = re.compile(r"([0-9\-xX]+)")
 
 
-@six.python_2_unicode_compatible
 class Record:
     """A class for representing a MARC record.
 
@@ -444,7 +443,7 @@ class Record:
                 fd["subfields"] = []
                 fd["ind1"] = field.indicator1
                 fd["ind2"] = field.indicator2
-                for tag, value in izip_longest(*[iter(field.subfields)] * 2):
+                for tag, value in zip_longest(*[iter(field.subfields)] * 2):
                     fd["subfields"].append({tag: value})
                 record["fields"].append({field.tag: fd})
         return record  # as dict
