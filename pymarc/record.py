@@ -117,7 +117,7 @@ class Record(Iterator):
         """
         # join is significantly faster than concatenation
         text_list = ["=LDR  %s" % self.leader]
-        text_list.extend([six.text_type(field) for field in self.fields])
+        text_list.extend([str(field) for field in self.fields])
         text = "\n".join(text_list) + "\n"
         return text
 

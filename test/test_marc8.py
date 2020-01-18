@@ -2,7 +2,6 @@
 import os
 from unittest import TestCase, makeSuite
 
-from six import binary_type, text_type
 
 from pymarc import Field, MARCReader, MARCWriter, Record, marc8_to_unicode
 
@@ -112,7 +111,7 @@ class MARC8Test(TestCase):
             record = next(reader)
             self.assertEqual(type(record), Record)
             utitle = record["240"]["a"]
-            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(type(utitle), str)
             self.assertEqual(
                 utitle,
                 u"De la solitude a"
@@ -149,7 +148,7 @@ class MARC8Test(TestCase):
             record = next(reader)
             self.assertEqual(type(record), Record)
             utitle = record["240"]["a"]
-            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(type(utitle), str)
             self.assertEqual(
                 utitle,
                 u"De la solitude a"

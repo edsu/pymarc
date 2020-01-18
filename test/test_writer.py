@@ -2,7 +2,7 @@ import os
 import textwrap
 import unittest
 
-from six import BytesIO, StringIO, binary_type, u
+from six import BytesIO, StringIO, u
 
 import pymarc
 
@@ -398,9 +398,7 @@ class XMLWriterTest(unittest.TestCase):
             <collection xmlns="http://www.loc.gov/MARC21/slim">
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace("\n", "")
-        if str != binary_type:
-            expected = expected.encode()
+        expected = textwrap.dedent(expected[1:]).replace("\n", "").encode()
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)
@@ -418,9 +416,7 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace("\n", "")
-        if str != binary_type:
-            expected = expected.encode()
+        expected = textwrap.dedent(expected[1:]).replace("\n", "").encode()
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)
@@ -447,9 +443,7 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace("\n", "")
-        if str != binary_type:
-            expected = expected.encode()
+        expected = textwrap.dedent(expected[1:]).replace("\n", "").encode()
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)
@@ -498,9 +492,7 @@ class XMLWriterTest(unittest.TestCase):
             </record>
             </collection>
         """
-        expected = textwrap.dedent(expected[1:]).replace("\n", "")
-        if str != binary_type:
-            expected = expected.encode()
+        expected = textwrap.dedent(expected[1:]).replace("\n", "").encode()
         file_handle = BytesIO()
         try:
             writer = pymarc.XMLWriter(file_handle)

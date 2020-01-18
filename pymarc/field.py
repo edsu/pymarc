@@ -3,8 +3,6 @@
 import logging
 
 from six import Iterator
-from six import text_type
-
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
 
@@ -37,7 +35,7 @@ class Field(Iterator):
             indicators = []
         if subfields is None:
             subfields = []
-        indicators = [text_type(x) for x in indicators]
+        indicators = [str(x) for x in indicators]
 
         # attempt to normalize integer tags if necessary
         try:

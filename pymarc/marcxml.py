@@ -4,7 +4,6 @@ import unicodedata
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
 
-import six
 
 from pymarc import Field, MARC8ToUnicode, Record
 
@@ -161,7 +160,7 @@ def record_to_xml_node(record, quiet=False, namespace=False):
     marc8 = MARC8ToUnicode(quiet=quiet)
 
     def translate(data):
-        if type(data) == six.text_type:
+        if type(data) == str:
             return data
         else:
             return marc8.translate(data)
