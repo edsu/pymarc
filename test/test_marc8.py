@@ -2,7 +2,7 @@
 import os
 from unittest import TestCase, makeSuite
 
-from six import binary_type, text_type, unichr
+from six import binary_type, text_type
 
 from pymarc import Field, MARCReader, MARCWriter, Record, marc8_to_unicode
 
@@ -14,7 +14,7 @@ class MARC8Test(TestCase):
             r = next(reader)
             self.assertEqual(type(r), Record)
             utitle = r["240"]["a"]
-            self.assertEqual(type(utitle), binary_type)
+            self.assertEqual(type(utitle), bytes)
             self.assertEqual(utitle, b"De la solitude \xe1a la communaut\xe2e.")
 
     def test_marc8_reader_to_unicode(self):
@@ -23,7 +23,7 @@ class MARC8Test(TestCase):
             r = next(reader)
             self.assertEqual(type(r), Record)
             utitle = r["240"]["a"]
-            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(type(utitle), str)
             self.assertEqual(utitle, u"De la solitude \xe0 la communaut\xe9.")
 
     def test_marc8_reader_to_1251(self):
@@ -32,7 +32,7 @@ class MARC8Test(TestCase):
             r = next(reader)
             self.assertEqual(type(r), Record)
             utitle = r["245"]["a"]
-            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(type(utitle), str)
             self.assertEqual(utitle, u"Основы гидравлического расчета инженерных сетей")
 
     def test_marc8_reader_to_1251_without_1251(self):
@@ -43,7 +43,7 @@ class MARC8Test(TestCase):
                 r = next(reader)
                 self.assertEqual(type(r), Record)
                 utitle = r["245"]["a"]
-                self.assertEqual(type(utitle), text_type)
+                self.assertEqual(type(utitle), str)
                 self.assertEqual(utitle, u"Психологический тренинг с подростками")
             except AssertionError:
                 self.assertTrue("Was enable to decode invalid MARC")
@@ -63,7 +63,7 @@ class MARC8Test(TestCase):
             r = next(reader)
             self.assertEqual(type(r), Record)
             upublisher = r["260"]["b"]
-            self.assertEqual(type(upublisher), text_type)
+            self.assertEqual(type(upublisher), str)
             self.assertEqual(upublisher, u"La Soci\xe9t\x1b,")
 
     def test_marc8_to_unicode(self):
@@ -85,7 +85,7 @@ class MARC8Test(TestCase):
 
     def test_writing_unicode(self):
         record = Record()
-        record.add_field(Field(245, ["1", "0"], ["a", unichr(0x1234)]))
+        record.add_field(Field(245, ["1", "0"], ["a", chr(0x1234)]))
         record.leader = "         a              "
         writer = MARCWriter(open("test/foo", "wb"))
         writer.write(record)
@@ -93,7 +93,7 @@ class MARC8Test(TestCase):
 
         reader = MARCReader(open("test/foo", "rb"), to_unicode=True)
         record = next(reader)
-        self.assertEqual(record["245"]["a"], unichr(0x1234))
+        self.assertEqual(record["245"]["a"], chr(0x1234))
         reader.close()
 
         os.remove("test/foo")
@@ -104,7 +104,7 @@ class MARC8Test(TestCase):
             record = next(reader)
             self.assertEqual(type(record), Record)
             utitle = record["240"]["a"]
-            self.assertEqual(type(utitle), binary_type)
+            self.assertEqual(type(utitle), bytes)
             self.assertEqual(utitle, b"De la solitude a\xcc\x80 la communaute\xcc\x81.")
 
         with open("test/utf8_with_leader_flag.dat", "rb") as fh:
@@ -116,9 +116,9 @@ class MARC8Test(TestCase):
             self.assertEqual(
                 utitle,
                 u"De la solitude a"
-                + unichr(0x0300)
+                + chr(0x0300)
                 + " la communaute"
-                + unichr(0x0301)
+                + chr(0x0301)
                 + ".",
             )
 
@@ -128,7 +128,7 @@ class MARC8Test(TestCase):
             record = next(reader)
             self.assertEqual(type(record), Record)
             utitle = record["240"]["a"]
-            self.assertEqual(type(utitle), binary_type)
+            self.assertEqual(type(utitle), bytes)
             self.assertEqual(utitle, b"De la solitude a\xcc\x80 la communaute\xcc\x81.")
 
         with open("test/utf8_without_leader_flag.dat", "rb") as fh:
@@ -136,7 +136,7 @@ class MARC8Test(TestCase):
             record = next(reader)
             self.assertEqual(type(record), Record)
             utitle = record["240"]["a"]
-            self.assertEqual(type(utitle), text_type)
+            self.assertEqual(type(utitle), str)
             # unless you force utf-8 characters will get lost and
             # warnings will appear in the terminal
             self.assertEqual(utitle, "De la solitude a   la communaute .")
@@ -153,9 +153,9 @@ class MARC8Test(TestCase):
             self.assertEqual(
                 utitle,
                 u"De la solitude a"
-                + unichr(0x0300)
+                + chr(0x0300)
                 + " la communaute"
-                + unichr(0x0301)
+                + chr(0x0301)
                 + ".",
             )
 

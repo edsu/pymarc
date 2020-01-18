@@ -6,7 +6,6 @@ see http://www.loc.gov/marc/specifications/speccharmarc8.html
 import sys
 import unicodedata
 
-from six import unichr
 from pymarc import marc8_mapping
 
 
@@ -137,7 +136,7 @@ class MARC8ToUnicode:
                 pos += 1
 
             if code_point < 0x20 or (code_point > 0x80 and code_point < 0xA0):
-                uni = unichr(code_point)
+                uni = chr(code_point)
                 continue
 
             try:
@@ -148,7 +147,7 @@ class MARC8ToUnicode:
             except KeyError:
                 try:
                     uni = marc8_mapping.ODD_MAP[code_point]
-                    uni_list.append(unichr(uni))
+                    uni_list.append(chr(uni))
                     # we can short circuit because we know these mappings
                     # won't be involved in combinings.  (i hope?)
                     continue
@@ -163,9 +162,9 @@ class MARC8ToUnicode:
                 cflag = False
 
             if cflag:
-                combinings.append(unichr(uni))
+                combinings.append(chr(uni))
             else:
-                uni_list.append(unichr(uni))
+                uni_list.append(chr(uni))
                 if len(combinings) > 0:
                     uni_list.extend(combinings)
                     combinings = []
