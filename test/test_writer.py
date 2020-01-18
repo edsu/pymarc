@@ -2,7 +2,7 @@ import os
 import textwrap
 import unittest
 
-from six import BytesIO, StringIO
+from io import BytesIO, StringIO
 
 import pymarc
 

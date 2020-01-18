@@ -1,7 +1,7 @@
 import pymarc
 import unittest
 
-from six import BytesIO
+from io import BytesIO
 
 
 class XmlTest(unittest.TestCase):

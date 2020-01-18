@@ -3,7 +3,7 @@ import os
 import sys
 import json
 
-from six import BytesIO, StringIO
+from io import BytesIO, StringIO
 
 from pymarc import Record, Field
 from pymarc.exceptions import PymarcException, RecordLengthInvalid
