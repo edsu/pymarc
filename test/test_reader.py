@@ -2,8 +2,6 @@
 import re
 import unittest
 
-import six
-
 import pymarc
 
 
@@ -99,11 +97,11 @@ class MARCReaderFileTest(unittest.TestCase, MARCReaderBaseTest):
 
 class MARCReaderStringTest(unittest.TestCase, MARCReaderBaseTest):
     def setUp(self):
-        fh = open("test/test.dat")
+        fh = open("test/test.dat", "rb")
         raw = fh.read()
         fh.close()
 
-        self.reader = pymarc.reader.MARCReader(six.b(raw))
+        self.reader = pymarc.reader.MARCReader(raw)
 
     # inherit same tests from MARCReaderBaseTest
 
