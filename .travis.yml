@@ -20,24 +20,8 @@ jobs:
       script: black --check --diff .
     # Unit tests
     - stage: test
-      name: "Unit tests python 2.7"
-      python: "2.7"
-    - stage: test
-      name: "Unit tests pypy"
-      python: "pypy"
-    - stage: test
       name: "Unit tests pypy3"
       python: "pypy3"
-    - stage: test
-      name: "Unit tests python 3.3"
-      python: "3.3"
-      dist: "trusty"
-    - stage: test
-      name: "Unit tests python 3.4"
-      python: "3.4"
-    - stage: test
-      name: "Unit tests python 3.5"
-      python: "3.5"
     - stage: test
       name: "Unit tests python 3.6"
       python: "3.6"
