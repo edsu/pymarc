@@ -1,5 +1,3 @@
-Copyright 2005-2019 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers
-
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
@@ -20,3 +18,47 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Copyright for this project is held by its many contributors, including:
+
+Adam Constabaris <ajconsta@ncsu.edu>
+André Nesse <an@macpro.lan>
+Chris Adams <chris@improbable.org>
+Dan Chudnov <dchud@umich.edu>
+Dan Michael O. Heggø <danmichaelo@gmail.com>
+Dan Scott <dan@coffeecode.net>
+David Chouinard <david@davidchouinard.com>
+Ed Hill <hill.charles2@gmail.com>
+Ed Summers <ehs@pobox.com>
+Edward Betts <edward@4angle.com>
+Eric Hellman <eric@hellman.net>
+Gabriel Farrell <gsf747@gmail.com>
+Geoffrey Spear <geoffspear@gmail.com>
+Godmar Back <godmar@gmail.com>
+Helga <cdg013@gmail.com>
+James Tayson <james.taysom@gmail.com>
+Jay Luker <lbjay@reallywow.com>
+Jim Nicholls <jim.nicholls@gmail.com>
+Karol Sikora <me@karolsikora.me>
+Lucas Souza <lucassouzaufpa@gmail.com>
+Mark A. Matienzo <mark@matienzo.org>
+Martin Czygan <martin.czygan@gmail.com>
+Michael B. Klein <mbklein@gmail.com>
+Michael J. Giarlo <leftwing@alumni.rutgers.edu>
+Mikhail Terekhov <termim@gmail.com>
+Nick Ruest <ruestn@gmail.com>
+Pierre Verkest <pverkest@anybox.fr>
+Radim Řehůřek <radimrehurek@seznam.cz>
+Renaud Boyer <rboyer@anybox.fr>
+Robert Marchman <robert.l.marchman@dartmouth.edu>
+Sean Chen <schen@law.duke.edu>
+Simon Hohl <simon.hohl@dainst.org>
+Ted Lawless <tlawless@tuscola.(none)>
+Victor Seva <vseva@dlsi.ua.es>
+Will Earp <will.earp@icloud.com>
+cclauss <cclauss@bluewin.ch>
+cyperus-papyrus <cdg013@gmail.com>
+gitgovdoc <bwebb@gpo.gov>
+mmh <maherma@asdeguiaingenieria.com>
+nemobis <federicoleva@tiscali.it>
+wrCisco <lbjma@tiscali.it>
