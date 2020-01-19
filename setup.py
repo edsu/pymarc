@@ -1,6 +1,8 @@
-version = '3.2.0'
+"""Pymarc setup."""
 
 from setuptools import setup
+
+version = "3.2.0"
 
 classifiers = """
 Intended Audience :: Education
@@ -20,22 +22,23 @@ Programming Language :: Python :: 3.7
 Topic :: Text Processing :: General
 """
 
+
 with open("README.md") as f:
     long_description = f.read()
 
 setup(
-    name = 'pymarc',
-    version = version,
-    url = 'http://github.com/edsu/pymarc',
-    author = 'Ed Summers',
-    author_email = 'ehs@pobox.com',
-    license = 'http://www.opensource.org/licenses/bsd-license.php',
-    packages = ['pymarc'],
-    install_requires = ['six>=1.9.0',],
-    description = 'Read, write and modify MARC bibliographic data',
-    long_description = long_description,
-    long_description_content_type = "text/markdown",
-    classifiers = list(filter(None, classifiers.split('\n'))),
-    test_suite = 'test',
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*',
+    name="pymarc",
+    version=version,
+    url="http://github.com/edsu/pymarc",
+    author="Ed Summers",
+    author_email="ehs@pobox.com",
+    license="http://www.opensource.org/licenses/bsd-license.php",
+    packages=["pymarc"],
+    install_requires=["six>=1.9.0"],
+    description="Read, write and modify MARC bibliographic data",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    classifiers=list(filter(None, classifiers.split("\n"))),
+    test_suite="test",
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*",
 )

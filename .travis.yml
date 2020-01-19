@@ -1,17 +1,49 @@
-dist: "xenial"
-
 language: python
-script: python setup.py test
 
-matrix:
+script:
+  - python setup.py test
+
+stages:
+  - lint
+  - test
+
+jobs:
   include:
-    - python: "2.7"
-    - python: "3.3"
+    # Linting
+    - stage: lint
+      name: "Check linting with flake8"
+      install: pip install -r requirements.dev.txt
+      script: flake8 .
+    - stage: lint
+      name: "Check format with black"
+      install: pip install -r requirements.dev.txt
+      script: black --check --diff .
+    # Unit tests
+    - stage: test
+      name: "Unit tests python 2.7"
+      python: "2.7"
+    - stage: test
+      name: "Unit tests pypy"
+      python: "pypy"
+    - stage: test
+      name: "Unit tests pypy3"
+      python: "pypy3"
+    - stage: test
+      name: "Unit tests python 3.3"
+      python: "3.3"
       dist: "trusty"
-    - python: "3.4"
-    - python: "3.5"
-    - python: "3.6"
-    - python: "3.7"
-    - python: "3.8-dev"
-    - python: "pypy"
-    - python: "pypy3"
+    - stage: test
+      name: "Unit tests python 3.4"
+      python: "3.4"
+    - stage: test
+      name: "Unit tests python 3.5"
+      python: "3.5"
+    - stage: test
+      name: "Unit tests python 3.6"
+      python: "3.6"
+    - stage: test
+      name: "Unit tests python 3.7"
+      python: "3.7"
+    - stage: test
+      name: "Unit tests python 3.8"
+      python: "3.8"

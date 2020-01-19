@@ -1,0 +1,4 @@
+# linting
+black
+flake8
+flake8-docstrings
