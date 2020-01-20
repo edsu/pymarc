@@ -323,7 +323,7 @@ with open('test/one.dat','rb') as fh:
 }
 ```
 
-If you write To parse a file of MARCJSON records you can:
+If you want to parse a file of MARCJSON records you can:
 
 ```python
 from pymarc import parse_json_to_array
