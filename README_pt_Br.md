@@ -9,8 +9,15 @@ _|          _|_|
 
 [![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
 
-pymarc é uma biblioteca de python para trabalhar com dados bibliográficos codificaos
-[MARC21](https://en.wikipedia.org/wiki/MARC_standards). Isto deve funcionar no python 2.x e 3.x. Fornece uma API para a leitura, escrita e modificação de registros MARC. Ela foi projetada principalmente para ser uma medida de emergência na obtenção dos dados ativos do MARC em outra representação mais segura. Porém, ao longo dos anos, foi utilizado para criar e modificar registros MARC, uma vez que apesar de [diversas chamadas](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page) para que ele moorra como um formato, MARC parece estar vivendo muito feliz como um zumbi.
+pymarc é uma biblioteca de python para trabalhar com dados bibliográficos
+codificaos [MARC21](https://en.wikipedia.org/wiki/MARC_standards). Fornece uma
+API para a leitura, escrita e modificação de registros MARC.  Ela foi projetada
+principalmente para ser uma medida de emergência na obtenção dos dados ativos do
+MARC em outra representação mais segura. Porém, ao longo dos anos, foi utilizado
+para criar e modificar registros MARC, uma vez que apesar de [diversas
+chamadas](https://web.archive.org/web/20170731163019/http://www.marc-must-die.info/index.php/Main_Page)
+para que ele moorra como um formato, MARC parece estar vivendo muito feliz como
+um zumbi.
 
 Abaixo estão alguns exemplos comuns de como você pode querer usar o pymarc. E se você se deparar com um exemplo que  acha que deveria estar por aqui, por facor envie uma pull request.
 
