@@ -59,7 +59,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "pymarc"
-copyright = "2005-2020 Gabriel Farrell, Mark Matienzo, Geoffrey Spear, Ed Summers"
+copyright = "Contributors listed in the accompanying LICENSE file"
 author = "Ed Summers"
 
 # The version info for the project you're documenting, acts as replacement for
