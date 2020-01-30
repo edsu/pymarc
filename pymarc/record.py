@@ -5,6 +5,8 @@
 # file.
 
 """Pymarc Record."""
+from itertools import zip_longest
+import json
 import logging
 import re
 import unicodedata
@@ -30,20 +32,6 @@ from pymarc.field import (
 )
 from pymarc.leader import Leader
 from pymarc.marc8 import marc8_to_unicode
-
-
-from itertools import zip_longest
-
-try:
-    # the json module was included in the stdlib in python 2.6
-    # http://docs.python.org/library/json.html
-    import json
-except ImportError:
-    # simplejson 2.0.9 is available for python 2.4+
-    # http://pypi.python.org/pypi/simplejson/2.0.9
-    # simplejson 1.7.3 is available for python 2.3+
-    # http://pypi.python.org/pypi/simplejson/1.7.3
-    import simplejson as json
 
 
 isbn_regex = re.compile(r"([0-9\-xX]+)")

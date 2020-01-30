@@ -9,14 +9,9 @@
 import unicodedata
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler, feature_namespaces
-
+import xml.etree.ElementTree as ET
 
 from pymarc import Field, MARC8ToUnicode, Record
-
-try:
-    import xml.etree.ElementTree as ET  # builtin in Python 2.5
-except ImportError:
-    import elementtree.ElementTree as ET
 
 
 XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
