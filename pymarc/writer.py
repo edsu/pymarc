@@ -5,24 +5,11 @@
 # file.
 
 """Pymarc Writer."""
+import json
+import xml.etree.ElementTree as ET
+
 import pymarc
 from pymarc import Record, WriteNeedsRecord
-
-try:
-    import xml.etree.ElementTree as ET  # builtin in Python 2.5
-except ImportError:
-    import elementtree.ElementTree as ET
-
-try:
-    # the json module was included in the stdlib in python 2.6
-    # http://docs.python.org/library/json.html
-    import json
-except ImportError:
-    # simplejson 2.0.9 is available for python 2.4+
-    # http://pypi.python.org/pypi/simplejson/2.0.9
-    # simplejson 1.7.3 is available for python 2.3+
-    # http://pypi.python.org/pypi/simplejson/1.7.3
-    import simplejson as json
 
 
 class Writer(object):

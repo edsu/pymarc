@@ -4,16 +4,10 @@
 # propagated, or distributed according to the terms contained in the LICENSE
 # file.
 
+import json
 import unittest
 
-from six import string_types as basestring
-
 import pymarc
-
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 
 class JsonReaderTest(unittest.TestCase):
@@ -74,20 +68,16 @@ class JsonTest(unittest.TestCase):
     def test_as_json_types(self):
         rd = self._record.as_dict()
         self.assertTrue(isinstance(rd, dict))
-        self.assertTrue(isinstance(rd["leader"], basestring))
+        self.assertTrue(isinstance(rd["leader"], str))
         self.assertTrue(isinstance(rd["fields"], list))
         self.assertTrue(isinstance(rd["fields"][0], dict))
         self.assertTrue(isinstance(rd["fields"][0], dict))
-        self.assertTrue(isinstance(rd["fields"][0]["245"]["ind1"], basestring))
-        self.assertTrue(isinstance(rd["fields"][0]["245"]["ind2"], basestring))
+        self.assertTrue(isinstance(rd["fields"][0]["245"]["ind1"], str))
+        self.assertTrue(isinstance(rd["fields"][0]["245"]["ind2"], str))
         self.assertTrue(isinstance(rd["fields"][0]["245"]["subfields"], list))
         self.assertTrue(isinstance(rd["fields"][0]["245"]["subfields"][0], dict))
-        self.assertTrue(
-            isinstance(rd["fields"][0]["245"]["subfields"][0]["a"], basestring)
-        )
-        self.assertTrue(
-            isinstance(rd["fields"][0]["245"]["subfields"][1]["c"], basestring)
-        )
+        self.assertTrue(isinstance(rd["fields"][0]["245"]["subfields"][0]["a"], str))
+        self.assertTrue(isinstance(rd["fields"][0]["245"]["subfields"][1]["c"], str))
 
     def test_as_json_simple(self):
         record = json.loads(self._record.as_json())
